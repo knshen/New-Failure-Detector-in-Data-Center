@@ -15,6 +15,10 @@ public class Analyzer {
 	Map<Integer, String> id2ip = new HashMap<Integer, String>();
 	Map<String, Integer> ip2id = new HashMap<String, Integer>();
 	
+	// out parameters
+	Map<Integer, Map<Integer, List<Double>>> hb = new HashMap<Integer, Map<Integer, List<Double>>>();
+	
+	
 	public Analyzer() throws IOException {
 		for(int i=12; i<=131; i++)
 			servers.add(i);
@@ -23,6 +27,10 @@ public class Analyzer {
 		
 		topo = new TopoMaker("topo.txt").make(num_nodes);
 		getIP();
+		
+		for(int server_id : servers) {
+			hb.put(server_id, new HashMap<Integer, List<Double>>());
+		}
 	}
 	
 	private void getIP() throws IOException {
@@ -65,11 +73,46 @@ public class Analyzer {
 		return list;
 	}
 	
+	/**
+	 * deal with server failure
+	 * @throws IOException
+	 */
+	public void detect() throws IOException {
+		File files[] = new File(dir).listFiles();
+		for(File file : files) {
+			String file_name = file.getName();
+			String check[] = file_name.split("-");
+			if(check[0].equals("topo") && Integer.parseInt(check[1]) >= 12) {
+				int server_id = Integer.parseInt(check[1]);
+				List<Packet> list = readDumpFile(file.getAbsolutePath());
+				// deal with packets
+				for(Packet pkt : list) {
+					//send packets
+					if(pkt.src.equals(id2ip.get(server_id)))
+						continue;
+					if(pkt.dest.equals(id2ip.get(server_id))) {
+						int slave_id = ip2id.get(pkt.src);
+						Map<Integer, List<Double>> map = hb.get(server_id);
+						if(!map.containsKey(slave_id))
+							map.put(slave_id, new ArrayList<Double>());
+						map.get(slave_id).add(pkt.time);
+					}
+					
+				}
+				
+			}
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
 		Analyzer alr = new Analyzer();
+		/*
 		List<Packet> list = alr.readDumpFile(dir + "topo-131-1");
 		for(Packet pkt : list)
 			System.out.println(pkt);
+		*/
+		alr.detect();
+		System.out.println();
 	}
 
 }
