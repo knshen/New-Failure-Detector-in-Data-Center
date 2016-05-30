@@ -16,7 +16,7 @@ public class Analyzer {
 	Map<String, Integer> ip2id = new HashMap<String, Integer>();
 	
 	// out parameters
-	Map<Integer, Map<Integer, List<Double>>> hb = new HashMap<Integer, Map<Integer, List<Double>>>();
+	public Map<Integer, Map<Integer, List<Double>>> hb = new HashMap<Integer, Map<Integer, List<Double>>>();
 	
 	
 	public Analyzer() throws IOException {
@@ -74,10 +74,10 @@ public class Analyzer {
 	}
 	
 	/**
-	 * deal with server failure
+	 * get heart beat data with timestamp
 	 * @throws IOException
 	 */
-	public void detect() throws IOException {
+	public void formalize() throws IOException {
 		File files[] = new File(dir).listFiles();
 		for(File file : files) {
 			String file_name = file.getName();
@@ -111,7 +111,16 @@ public class Analyzer {
 		for(Packet pkt : list)
 			System.out.println(pkt);
 		*/
-		alr.detect();
+		alr.formalize();
+		Map<Integer, List<Double>> data = alr.hb.get(20);
+		for(Map.Entry<Integer, List<Double>> entry : data.entrySet()) {
+			System.out.println("server #" + entry.getKey() + "   " + "message number: " + entry.getValue().size());
+			List<Double> sw = entry.getValue();
+			for(Double msg : sw) {
+				System.out.print(msg + " ");
+			}
+			System.out.println();
+		}
 		System.out.println();
 	}
 
