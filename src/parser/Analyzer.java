@@ -6,7 +6,7 @@ import java.util.*;
 import topo.TopoMaker;
 
 public class Analyzer {
-	public static String dir = "dump//";
+	public static String dir = "z://dump1//";
 	
 	int num_nodes = 132;
 	List<Integer> servers = new ArrayList<Integer>();
@@ -16,6 +16,11 @@ public class Analyzer {
 	Map<String, Integer> ip2id = new HashMap<String, Integer>();
 	
 	// out parameters
+	/**
+	 * key -> key1 [msg1, msg2, ...]
+	 *     -> key2 [msg1, msg2, ...]
+	 *     -> key3 [msg1, msg2, ...]
+	 */
 	public Map<Integer, Map<Integer, List<Double>>> hb = new HashMap<Integer, Map<Integer, List<Double>>>();
 	
 	
