@@ -6,7 +6,7 @@ import java.util.*;
 import topo.TopoMaker;
 
 public class Analyzer {
-	public static String dir = "z://dump1//";
+	public static String dir = "z://dump5//";
 	
 	int num_nodes = 132;
 	List<Integer> servers = new ArrayList<Integer>();

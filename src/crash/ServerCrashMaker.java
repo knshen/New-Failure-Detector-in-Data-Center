@@ -46,7 +46,7 @@ public class ServerCrashMaker {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		ServerCrashMaker.make(2, 3600, 120, 12);
+		ServerCrashMaker.make(2, 10 * 60, 120, 12);
 
 	}
 

@@ -3,28 +3,29 @@ package evaluation;
 import java.util.*;
 
 public class Evaluator {
-	public double avgDetectTime(List<Double> crash_time, List<Double> report_time) {
+	public static double avgDetectTime(Map<Integer, Double> crash_time, Map<Integer, Double> report_time) {
 		double sum = 0;
-		for(int i=0; i<crash_time.size(); i++) {
-			sum += (report_time.get(i) - crash_time.get(i));
+		for(Map.Entry<Integer, Double> entry : crash_time.entrySet()) {
+			sum += (report_time.get(entry.getKey()) - entry.getValue());
 		}
-		return sum / (double)crash_time.size();
+		
+		return sum / crash_time.size();
 	}
 	
-	public int numMsgs(int k, int num_servers) {
+	public static int numMsgs(int k, int num_servers) {
 		return k * num_servers;
 	}
 	
-	public double serverPrecision(int num_report, int num_crashes) {
+	public static double serverPrecision(int num_report, int num_crashes) {
 		return num_crashes / (double)num_report;
 	}
 	
 	/*
-	public double linkPrecision(int num_true, int num_fail) {
+	public static double linkPrecision(int num_true, int num_fail) {
 		
 	}
 	
-	public double linkRecall() {
+	public static double linkRecall() {
 	
 	*/
 	

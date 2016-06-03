@@ -90,7 +90,7 @@ public class FD {
 			double fail_pro = chenDecideIsCrash(slide_win, now, interval, seq);
 			
 			if(fail_pro >= threshold) {
-				System.out.println("fail probability: " + fail_pro);
+				//System.out.println("fail probability: " + fail_pro);
 				return now;
 			}
 				
