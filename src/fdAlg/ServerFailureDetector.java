@@ -3,8 +3,10 @@ package fdAlg;
 import java.util.*;
 import java.io.*;
 
+import crash.MessageLossMaker;
 import evaluation.Evaluator;
 import parser.Analyzer;
+import util.Pair;
 
 public class ServerFailureDetector {
 	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
@@ -31,7 +33,7 @@ public class ServerFailureDetector {
 		br.close();
 	}
 
-	public Map<Integer, Double> detect() throws IOException {
+	public Map<Integer, Double> detect(boolean haveLoss, List<Pair<Integer, Integer>> relations) throws IOException {
 		// key is reported at time [...]
 		Map<Integer, Double> final_alerts = new HashMap<Integer, Double>();
 		Map<Integer, List<Double>> alerts = new HashMap<Integer, List<Double>>();
@@ -39,11 +41,18 @@ public class ServerFailureDetector {
 
 		Analyzer alr = new Analyzer();
 		alr.formalize();
+		
+		/////////////
+		if(haveLoss) {
+			MessageLossMaker.make(alr, 2, 60, relations);
+		}
+		
 		for (int i = 12; i <= 131; i++) {
 			// i: master
 			Map<Integer, List<Double>> map = alr.hb.get(i);
 			for (Map.Entry<Integer, List<Double>> entry : map.entrySet()) {
-				double res = fd.chenDetect(entry.getValue(), 10, 2, 60, 0.1,
+				////////
+				double res = fd.chenDetect(entry.getValue(), 100, 2, 60, 0.1,
 						0.001);
 				if (res != -1
 						&& (!crashes.containsKey(i) || crashes.get(i) > res)) {
@@ -56,8 +65,8 @@ public class ServerFailureDetector {
 						alerts.put(entry.getKey(), list);
 					}
 
-					// System.out.println(i + " report crash of " +
-					// entry.getKey() + " at time " + res);
+					 System.out.println(i + " report crash of " +
+					 entry.getKey() + " at time " + res);
 				}
 
 			}
@@ -67,9 +76,9 @@ public class ServerFailureDetector {
 		for (Map.Entry<Integer, List<Double>> entry : alerts.entrySet()) {
 			Collections.sort(entry.getValue());
 			if (entry.getValue().size() >= 2) {
-				final_alerts.put(entry.getKey(), entry.getValue().get(0));
+				final_alerts.put(entry.getKey(), entry.getValue().get(1));
 				System.out.println("server " + entry.getKey()
-						+ " crashed at time: " + entry.getValue().get(0));
+						+ " crashed at time: " + entry.getValue().get(1));
 			}
 
 		}
@@ -78,8 +87,13 @@ public class ServerFailureDetector {
 
 	public static void main(String[] args) throws IOException {
 		ServerFailureDetector sfd = new ServerFailureDetector();
-		sfd.readCrashFile("server-crash-1min.txt");
-		Map<Integer, Double> alerts = sfd.detect();
+		////////
+		//sfd.readCrashFile("server-crash-1min.txt");
+		
+		List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>();
+		list.add(new Pair<Integer, Integer>(41, 40));
+		list.add(new Pair<Integer, Integer>(42, 41));
+		Map<Integer, Double> alerts = sfd.detect(true, list);
 
 		System.out.println(Evaluator.avgDetectTime(sfd.crashes, alerts));
 	}
