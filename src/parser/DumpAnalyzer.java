@@ -5,8 +5,8 @@ import java.util.*;
 
 import topo.TopoMaker;
 
-public class Analyzer {
-	public static String dir = "z://dump3//";
+public class DumpAnalyzer {
+	public static String dir;
 
 	int num_nodes = 132;
 	List<Integer> servers = new ArrayList<Integer>();
@@ -22,7 +22,8 @@ public class Analyzer {
 	 */
 	public Map<Integer, Map<Integer, List<Double>>> hb = new HashMap<Integer, Map<Integer, List<Double>>>();
 
-	public Analyzer() throws IOException {
+	public DumpAnalyzer(String dir) throws IOException {
+		this.dir = dir;
 		for (int i = 12; i <= 131; i++)
 			servers.add(i);
 		for (int i = 0; i < 12; i++)
@@ -110,7 +111,7 @@ public class Analyzer {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Analyzer alr = new Analyzer();
+		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
 		/*
 		 * List<Packet> list = alr.readDumpFile(dir + "topo-131-1"); for(Packet
 		 * pkt : list) System.out.println(pkt);

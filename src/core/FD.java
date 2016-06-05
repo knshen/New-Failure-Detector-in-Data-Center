@@ -1,4 +1,4 @@
-package fdAlg;
+package core;
 
 import java.util.*;
 import java.io.*;
@@ -8,7 +8,7 @@ import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 
-import parser.Analyzer;
+import parser.DumpAnalyzer;
 
 public class FD {
 	public FD() {
@@ -132,7 +132,7 @@ public class FD {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Analyzer alr = new Analyzer();
+		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
 		alr.formalize();
 		// 64 -> 100
 		List<Double> data1 = alr.hb.get(64).get(100);

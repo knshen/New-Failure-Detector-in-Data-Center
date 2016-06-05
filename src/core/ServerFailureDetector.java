@@ -1,11 +1,11 @@
-package fdAlg;
+package core;
 
 import java.util.*;
 import java.io.*;
 
 import crash.MessageLossMaker;
 import evaluation.Evaluator;
-import parser.Analyzer;
+import parser.DumpAnalyzer;
 import util.Pair;
 
 public class ServerFailureDetector {
@@ -39,7 +39,7 @@ public class ServerFailureDetector {
 		Map<Integer, List<Double>> alerts = new HashMap<Integer, List<Double>>();
 		FD fd = new FD();
 
-		Analyzer alr = new Analyzer();
+		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
 		alr.formalize();
 		
 		/////////////

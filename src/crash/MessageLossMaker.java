@@ -2,7 +2,7 @@ package crash;
 
 import java.util.*;
 
-import parser.Analyzer;
+import parser.DumpAnalyzer;
 import util.Pair;
 
 public class MessageLossMaker {
@@ -16,7 +16,7 @@ public class MessageLossMaker {
 	 * @param list
 	 *            : pair(A, B) means: A -> B && A lose some messages of B
 	 */
-	public static void make(Analyzer alr, double start, double end,
+	public static void make(DumpAnalyzer alr, double start, double end,
 			List<Pair<Integer, Integer>> list) {
 		final int num_loss = 2;
 
