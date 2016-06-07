@@ -40,7 +40,7 @@ public class ServerFailureDetector {
 		FD fd = new FD();
 
 		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
-		alr.formalize();
+		alr.getServerPackets();
 		
 		/////////////
 		if(haveLoss) {
