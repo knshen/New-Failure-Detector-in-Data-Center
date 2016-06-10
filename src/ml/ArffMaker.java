@@ -50,19 +50,21 @@ public class ArffMaker {
 	}
 
 	public static void randomSplit(List<List<Integer>> data,
-			List<String> classes, List<String> class_values, double factor)
-			throws IOException {
+			List<String> classes, List<String> class_values, double factor,
+			boolean isShuffle) throws IOException {
 		int train_size = (int) (data.size() * factor);
 		int test_size = data.size() - train_size;
 
-		// shuffle
-		for (int k = 0; k < 10000; k++) {
-			int i = (int) (Math.random() * data.size());
-			int j = (int) (Math.random() * data.size());
-			Collections.swap(data, i, j);
-			Collections.swap(classes, i, j);
+		if(isShuffle) {
+			// shuffle
+			for (int k = 0; k < 10000; k++) {
+				int i = (int) (Math.random() * data.size());
+				int j = (int) (Math.random() * data.size());
+				Collections.swap(data, i, j);
+				Collections.swap(classes, i, j);
+			}
 		}
-
+	
 		List<List<Integer>> train_data = new ArrayList<List<Integer>>();
 		List<String> train_classes = new ArrayList<String>();
 		List<List<Integer>> test_data = new ArrayList<List<Integer>>();

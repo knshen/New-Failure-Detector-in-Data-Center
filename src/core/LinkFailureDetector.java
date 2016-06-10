@@ -4,12 +4,14 @@ import java.util.*;
 import java.io.*;
 
 import ml.ArffMaker;
+import ml.ClassifyModeller;
 import parser.DumpAnalyzer;
 import util.Edge;
 import util.Util;
 
 public class LinkFailureDetector {
-	
+	/////////////
+	public static final int check_interval = 2;
 	public static final List<String> directions = new ArrayList<String>();
 	public List<String> class_values = new ArrayList<String>();
 	public List<List<Integer>> instances = new ArrayList<List<Integer>>();
@@ -21,22 +23,23 @@ public class LinkFailureDetector {
 				directions.add(i + "-->" + j);
 	}
 	
-	public void dataConstructor() throws IOException {
-		/////////////
-		final int check_interval = 2;
-		
+	public void dataConstructor() throws IOException {	
 		DumpAnalyzer da = null;
 		File dir = new File("z://");
 		class_values.add("normal");
 		for(File file : dir.listFiles()) {
 			if(file.isDirectory() && file.getName().startsWith("link")) {
+				//System.out.println("# " + file.getName());
+				
 				da = new DumpAnalyzer(file.getAbsolutePath());
 				List<List<Map<String, Integer>>> res = da.getRSPackets(check_interval, 59);
 				
 				// form instances	
 				String class_value = file.getName().replaceAll(" ", "");
 				
-				class_values.add(class_value);
+				if(!class_value.endsWith("test")) {
+					class_values.add(class_value);
+				}
 				
 				int period = 0;
 				for(List<Map<String, Integer>> dump_data : res) {
@@ -48,7 +51,11 @@ public class LinkFailureDetector {
 						}
 					}
 					if(period >= Math.ceil(30.0 / check_interval) - 1)
-						classes.add(class_value);
+						if(!class_value.endsWith("test")) 
+							classes.add(class_value);
+						else
+							classes.add("normal");
+						
 					else
 						classes.add("normal");
 					instances.add(ins);
@@ -60,9 +67,10 @@ public class LinkFailureDetector {
 	}
 
 	public void detect() throws IOException {
+		ClassifyModeller cm = new ClassifyModeller();
 		dataConstructor();
-		//ArffMaker.make("global.arff", instances, classes, class_values);
-		ArffMaker.randomSplit(instances, classes, class_values, 0.6);
+		//////
+		ArffMaker.randomSplit(instances, classes, class_values, 0.9524, false);
 	}
 	
 	public void try_it() throws IOException {
