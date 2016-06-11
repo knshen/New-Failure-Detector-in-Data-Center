@@ -5,5 +5,9 @@ public class PingPacket {
 	String src; // ip
 	String dest;
 	int seq;
-	String type;
+	//String type;
+	
+	public String toString() {
+		return time + ": " + src + " -> " + dest + " " + seq;
+	}
 }
