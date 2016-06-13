@@ -6,7 +6,7 @@ import java.io.*;
 import ml.ArffMaker;
 import ml.ClassifyModeller;
 import parser.DumpAnalyzer;
-import util.Edge;
+import util.Route;
 import util.Util;
 
 public class LinkFailureDetector {

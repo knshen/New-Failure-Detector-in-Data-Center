@@ -9,12 +9,12 @@ import util.Util;
 public class DumpAnalyzer {
 	public static String dir;
 
-	protected int num_nodes = 132;
+	public int num_nodes = 132;
 	List<Integer> servers = new ArrayList<Integer>();
 	List<Integer> router_switch = new ArrayList<Integer>();
 	public int topo[][] = new int[num_nodes][num_nodes];
-	protected Map<Integer, String> id2ip = new HashMap<Integer, String>();
-	protected Map<String, Integer> ip2id = new HashMap<String, Integer>();
+	public Map<Integer, String> id2ip = new HashMap<Integer, String>();
+	public Map<String, Integer> ip2id = new HashMap<String, Integer>();
 
 	// out parameters
 	/**

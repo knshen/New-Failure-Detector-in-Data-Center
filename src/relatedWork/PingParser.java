@@ -4,18 +4,21 @@ import java.util.*;
 import java.io.*;
 
 import parser.DumpAnalyzer;
+import util.Util;
 
 public class PingParser extends DumpAnalyzer {
 
 	public static final double end = 10;
+	public static final double delay = 0.1; // single hop delay
+
 	Map<Integer, Set<String>> special_ip = new HashMap<Integer, Set<String>>();
 	String dir;
 
 	/*
-	 * node 0: [0->1, 0->2, ... 0->131] node 1: [1->0, 0->2, ... 1->131] ...
+	 * node 0: [0->0, 0->1, ... 0->131] node 1: [1->0, 1->1, ... 1->131] ...
 	 * node 131: [131->0, 131->1, ... 131->130]
 	 */
-	List<List<Integer>> success_pings = null;
+	public List<List<Integer>> success_pings = null;
 
 	public PingParser(String dir) throws IOException {
 		super(dir);
@@ -56,10 +59,26 @@ public class PingParser extends DumpAnalyzer {
 	}
 
 	public void getPingData() throws IOException {
+		int dis[][] = new int[num_nodes][num_nodes];
+		for (int i = 0; i < num_nodes; i++) {
+			for (int j = i; j < num_nodes; j++) {
+				if (topo[i][j] == 1) {
+					dis[i][j] = 1;
+					dis[j][i] = 1;
+				} else if (i != j) {
+					dis[i][j] = 999;
+					dis[j][i] = 999;
+				}
+			}
+		}
+		int hops[][] = Util.floyd(dis);
+
 		File f_dir = new File(dir);
 		for (File file : f_dir.listFiles()) {
 			if (file.getName().startsWith("ping")) {
-				int node_id = Integer.parseInt(file.getName().split("-")[1]);
+				int node_id = Integer.parseInt(file.getName().split("-")[1]); // ping
+																				// source
+																				// id
 				List<PingPacket> replys = readPingDumpFile(file
 						.getAbsolutePath());
 				for (PingPacket ppkt : replys) {
@@ -67,9 +86,15 @@ public class PingParser extends DumpAnalyzer {
 							ppkt.dest))
 							|| ppkt.dest.equals(id2ip.get(node_id))) {
 						int ping_dest_id = ip2id.get(ppkt.src);
-						int pings = success_pings.get(node_id)
-								.get(ping_dest_id);
-						success_pings.get(node_id).set(ping_dest_id, pings + 1);
+						double arrive_time = ppkt.time;
+						if ((arrive_time - (int) arrive_time) < (2 * hops[node_id][ping_dest_id] + 0.5)
+								* delay) {
+							int pings = success_pings.get(node_id).get(
+									ping_dest_id);
+							success_pings.get(node_id).set(ping_dest_id,
+									pings + 1);
+						}
+
 					}
 				}
 			}
@@ -77,7 +102,7 @@ public class PingParser extends DumpAnalyzer {
 
 	}
 
-	public void print() {
+	private void print() {
 		for (List<Integer> list : success_pings) {
 			for (int num : list) {
 				System.out.print(num + " ");
@@ -125,8 +150,8 @@ public class PingParser extends DumpAnalyzer {
 	}
 
 	public static void main(String args[]) throws IOException {
-		PingParser pp = new PingParser("z://ping1//");
+		PingParser pp = new PingParser("z://ping2//");
 		pp.getPingData();
-
+		pp.print();
 	}
 }
