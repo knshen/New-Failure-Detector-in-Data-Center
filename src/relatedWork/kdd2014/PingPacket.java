@@ -1,4 +1,4 @@
-package relatedWork;
+package relatedWork.kdd2014;
 
 public class PingPacket {
 	double time;

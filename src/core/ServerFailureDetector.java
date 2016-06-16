@@ -10,7 +10,12 @@ import util.Pair;
 
 public class ServerFailureDetector {
 	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
-
+	public DumpAnalyzer alr = null;
+			
+	public ServerFailureDetector(String dir) throws IOException {
+		alr = new DumpAnalyzer(dir);
+	}
+	
 	private int distance(int id1, int id2) {
 		int rackId1 = (id1 - 12) / 20;
 		int rackId2 = (id2 - 12) / 20;
@@ -38,9 +43,8 @@ public class ServerFailureDetector {
 		Map<Integer, Double> final_alerts = new HashMap<Integer, Double>();
 		Map<Integer, List<Double>> alerts = new HashMap<Integer, List<Double>>();
 		FD fd = new FD();
-
-		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
-		alr.getServerPackets();
+	
+		alr.getServerPackets("topo");
 		
 		/////////////
 		if(haveLoss) {
@@ -86,7 +90,7 @@ public class ServerFailureDetector {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ServerFailureDetector sfd = new ServerFailureDetector();
+		ServerFailureDetector sfd = new ServerFailureDetector("z://dump3//");
 		////////
 		//sfd.readCrashFile("server-crash-1min.txt");
 		

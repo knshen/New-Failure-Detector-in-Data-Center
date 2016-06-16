@@ -84,12 +84,12 @@ public class DumpAnalyzer {
 	 * 
 	 * @throws IOException
 	 */
-	public void getServerPackets() throws IOException {
+	public void getServerPackets(String mark) throws IOException {
 		File files[] = new File(dir).listFiles();
 		for (File file : files) {
 			String file_name = file.getName();
 			String check[] = file_name.split("-");
-			if (check[0].equals("topo") && Integer.parseInt(check[1]) >= 12) {
+			if (check[0].equals(mark) && Integer.parseInt(check[1]) >= 12) {
 				int server_id = Integer.parseInt(check[1]);
 				List<Packet> list = readDumpFile(file.getAbsolutePath());
 				// deal with packets
@@ -162,7 +162,7 @@ public class DumpAnalyzer {
 		 * List<Packet> list = alr.readDumpFile(dir + "topo-131-1"); for(Packet
 		 * pkt : list) System.out.println(pkt);
 		 */
-		alr.getServerPackets();
+		alr.getServerPackets("topo");
 		Map<Integer, List<Double>> data = alr.hb.get(20);
 		for (Map.Entry<Integer, List<Double>> entry : data.entrySet()) {
 			System.out.println("server #" + entry.getKey() + "   "

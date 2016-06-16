@@ -133,7 +133,7 @@ public class FD {
 
 	public static void main(String[] args) throws IOException {
 		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
-		alr.getServerPackets();
+		alr.getServerPackets("topo");
 		// 64 -> 100
 		List<Double> data1 = alr.hb.get(64).get(100);
 		// 65 -> 100

@@ -1,4 +1,4 @@
-package relatedWork;
+package relatedWork.kdd2014;
 
 import java.util.*;
 import java.io.*;
@@ -40,7 +40,8 @@ public class AzureLocator {
 
 	public Map<Route, BiTreeNode> paths = new HashMap<Route, BiTreeNode>();
 	public double pro_i_j_e[][][];
-
+	public double pro_i_j_v[][][];
+	
 	public AzureLocator(String dir) throws IOException {
 		pp = new PingParser(dir);
 		dis = new int[pp.num_nodes][pp.num_nodes];
@@ -58,13 +59,45 @@ public class AzureLocator {
 				}
 			}
 		}
+		
 		pro_i_j_e = new double[pp.num_nodes][pp.num_nodes][edges.size()];
+		pro_i_j_v = new double[pp.num_nodes][pp.num_nodes][pp.num_nodes];
+		pp.getPingData();
 	}
 
-	public List<Double> locate() throws IOException {
-		pp.getPingData();
+	/**
+	 * locate device failure
+	 * @return
+	 */
+	public List<Double> locateDeviceFailure() {
+		List<Double> v_e = new ArrayList<Double>();
+		
+		for(int device_id=0; device_id<pp.num_nodes; device_id++) {
+			double numerator = 0; 
+			double denominator = 0;
+			
+			for(int i=0; i<pp.num_nodes; i++) {
+				for(int j=0; j<pp.num_nodes; j++) {
+					// i ----ping----> j
+					if(i == j)
+						continue;
+					double pr = pro_i_j_v[i][j][device_id];
+					numerator += (pp.total_pings.get(i).get(j) - pp.success_pings.get(i).get(j)) * pr;
+					denominator += pp.total_pings.get(i).get(j) * pr * pr;
+				}
+			}
+			v_e.add(numerator / denominator);
+		}
+		
+		return v_e;
+	}
+	
+	/**
+	 * locate link failure 
+	 * @return 
+	 */
+	public List<Double> locateLinkFailure() {
 		List<Double> x_e = new ArrayList<Double>();
-		final int total_pings = (int)(pp.end - 2);
 		
 		for(Edge edge : edges) {
 			int index = find.get(edge);
@@ -73,9 +106,11 @@ public class AzureLocator {
 			
 			for(int i=0; i<pp.num_nodes; i++) {
 				for(int j=0; j<pp.num_nodes; j++) {
+					if(i == j)
+						continue;
 					double pr = pro_i_j_e[i][j][find.get(edge)];
-					numerator += (total_pings - pp.success_pings.get(i).get(j)) * pr;
-					denominator += total_pings * pr * pr;
+					numerator += (pp.total_pings.get(i).get(j) - pp.success_pings.get(i).get(j)) * pr;
+					denominator += pp.total_pings.get(i).get(j) * pr * pr;
 				}
 			}
 			
@@ -85,7 +120,7 @@ public class AzureLocator {
 		return x_e;
 	}
 
-	public void computeEdgePro() {
+	public void computeEdgeAndVertexPro() {
 		// System.out.println(edges.size());
 		for (Map.Entry<Route, BiTreeNode> entry : paths.entrySet()) {
 			Route rou = entry.getKey();
@@ -95,6 +130,7 @@ public class AzureLocator {
 
 			while (!queue.isEmpty()) {
 				BiTreeNode node = queue.poll();
+				pro_i_j_v[rou.from][rou.to][node.id] += node.pro;
 				if (node.parent != null) {
 					this.pro_i_j_e[rou.from][rou.to][find.get(new Edge(
 							node.parent.id, node.id))] += node.pro;
@@ -103,6 +139,7 @@ public class AzureLocator {
 					queue.offer(bn);
 			}
 		}
+		
 	}
 
 	private void adjustPathPro(BiTreeNode root) {
@@ -165,19 +202,27 @@ public class AzureLocator {
 
 	}
 
-
 	public static void main(String[] args) throws IOException {
-		AzureLocator al = new AzureLocator("z://ping2//");
-		al.getAllPath();
-		al.computeEdgePro();
+		AzureLocator al = new AzureLocator("z://ping1//");
+		al.getAllPath(); //get all possible shortest paths from i to j
+		al.computeEdgeAndVertexPro(); // compute pro_i_i_e && pro_i_j_v
+		
 		// Util.printBiTree(al.paths.get(new Route(12, 72)));
 	
-		List<Double> failure = al.locate();
-		int i = 0;
-		for(Edge edge : al.edges) {
-			System.out.println(edge + ": " + failure.get(i++));
+		// failure locator
+		List<Double> link_failure = al.locateLinkFailure(); 
+		List<Double> device_failure = al.locateDeviceFailure();
+		
+		for(int i=0; i<al.edges.size(); i++) {
+			Edge edge = al.edges.get(i);
+			System.out.println(edge + ": " + link_failure.get(i));
 		}
 		
+		System.out.println("------------------------------");
+		
+		for(int i=0; i<device_failure.size(); i++) {
+			System.out.println("node " + i + ": " + device_failure.get(i));
+		}
 		System.out.println();
 
 	}

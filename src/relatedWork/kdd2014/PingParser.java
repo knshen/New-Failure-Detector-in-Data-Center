@@ -1,4 +1,4 @@
-package relatedWork;
+package relatedWork.kdd2014;
 
 import java.util.*;
 import java.io.*;
@@ -8,28 +8,37 @@ import util.Util;
 
 public class PingParser extends DumpAnalyzer {
 
-	public static final double end = 10;
 	public static final double delay = 0.1; // single hop delay
-
+	public static final double ping_send_interval = 2;
+	public static final double amend = 0.015;
+	
 	Map<Integer, Set<String>> special_ip = new HashMap<Integer, Set<String>>();
 	String dir;
 
 	/*
-	 * node 0: [0->0, 0->1, ... 0->131] node 1: [1->0, 1->1, ... 1->131] ...
+	 * node 0: [0->0, 0->1, ... 0->131] 
+	 * node 1: [1->0, 1->1, ... 1->131] ...
 	 * node 131: [131->0, 131->1, ... 131->130]
 	 */
 	public List<List<Integer>> success_pings = null;
-
+	public List<List<Integer>> total_pings = null;
+	
 	public PingParser(String dir) throws IOException {
 		super(dir);
 		this.dir = dir;
 		success_pings = new ArrayList<List<Integer>>();
+		total_pings = new ArrayList<List<Integer>>();
+		
 		for (int i = 0; i < num_nodes; i++) {
-			List<Integer> list = new ArrayList<Integer>();
-			for (int j = 0; j < num_nodes; j++)
-				list.add(0);
-
-			success_pings.add(list);
+			List<Integer> list1 = new ArrayList<Integer>();
+			List<Integer> list2 = new ArrayList<Integer>();
+			for (int j = 0; j < num_nodes; j++) {
+				list1.add(0);
+				list2.add(0);
+			}
+				
+			success_pings.add(list1);
+			total_pings.add(list2);
 		}
 
 		readSpecial();
@@ -86,9 +95,12 @@ public class PingParser extends DumpAnalyzer {
 							ppkt.dest))
 							|| ppkt.dest.equals(id2ip.get(node_id))) {
 						int ping_dest_id = ip2id.get(ppkt.src);
-						double arrive_time = ppkt.time;
-						if ((arrive_time - (int) arrive_time) < (2 * hops[node_id][ping_dest_id] + 0.5)
-								* delay) {
+						
+						// decide whether it is delayed?
+						double send_time = ppkt.seq * ping_send_interval + 2;
+						double rtt = ppkt.time - send_time;	
+						//if(true) {
+						if (rtt < (2 * hops[node_id][ping_dest_id] + 0.5) * delay) {
 							int pings = success_pings.get(node_id).get(
 									ping_dest_id);
 							success_pings.get(node_id).set(ping_dest_id,
@@ -120,16 +132,27 @@ public class PingParser extends DumpAnalyzer {
 			String tokens[] = line.split(" ");
 			if (!clean(tokens[1]).equals("IP"))
 				continue;
+			
 			String type = clean(tokens[7]);
-			if (!type.equals("reply"))
-				continue;
-
+			
 			double time = Double.parseDouble(clean(tokens[0]));
 			String src_ip = clean(tokens[2]);
 			String dest_ip = clean(tokens[4]);
 			int seq = Integer.parseInt(clean(tokens[11]));
+			
+			if (!type.equals("reply")) {
+				// request
+				int now = total_pings.get(ip2id.get(src_ip)).get(ip2id.get(dest_ip));
+				if(seq + 1 > now)
+					total_pings.get(ip2id.get(src_ip)).set(ip2id.get(dest_ip), seq + 1);
+				continue;
+			}
+			// reply
 			PingPacket ppkt = new PingPacket();
-			ppkt.time = time;
+			
+			int src_id = ip2id.get(src_ip);
+			ppkt.time = time - amend * src_id;
+			//ppkt.time = time;
 			ppkt.src = src_ip;
 			ppkt.dest = dest_ip;
 			ppkt.seq = seq;
@@ -150,7 +173,7 @@ public class PingParser extends DumpAnalyzer {
 	}
 
 	public static void main(String args[]) throws IOException {
-		PingParser pp = new PingParser("z://ping2//");
+		PingParser pp = new PingParser("z://ping1//");
 		pp.getPingData();
 		pp.print();
 	}
