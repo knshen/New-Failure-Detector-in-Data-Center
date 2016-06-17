@@ -11,6 +11,9 @@ import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import parser.DumpAnalyzer;
 
 public class FD {
+	// parameters
+	public static final double time_unit = 0.0001;
+	
 	public FD() {
 
 	}
@@ -22,7 +25,7 @@ public class FD {
 		int pos = 0;
 
 		// time unit : 0.1 ms = e-4 s
-		for (double now = start; now < end; now += 0.0001) {
+		for (double now = start; now < end; now += time_unit) {
 			if (pos < hb_data.size() && hb_data.get(pos) <= now) {
 				// receive message
 				this.addToSlideWin(slide_win, hb_data.get(pos), win_size);
@@ -87,7 +90,7 @@ public class FD {
 		int seq = 0;
 		int pos = 0;
 		// time unit : e-4s = 0.1ms
-		for (double now = start; now < end; now += 0.0001) {
+		for (double now = start; now < end; now += time_unit) {
 			if (pos < hb_data.size() && hb_data.get(pos) <= now) {
 				addToSlideWin(slide_win, hb_data.get(pos), win_size);
 				pos++;

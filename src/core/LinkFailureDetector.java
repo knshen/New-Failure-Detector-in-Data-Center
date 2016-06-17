@@ -10,8 +10,9 @@ import util.Route;
 import util.Util;
 
 public class LinkFailureDetector {
-	/////////////
+	// parameters
 	public static final int check_interval = 2;
+	
 	public static final List<String> directions = new ArrayList<String>();
 	public List<String> class_values = new ArrayList<String>();
 	public List<List<Integer>> instances = new ArrayList<List<Integer>>();

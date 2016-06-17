@@ -8,7 +8,12 @@ import util.Util;
 
 public class ToRSFailureDetector {
 	List<Integer> crash_tor = new ArrayList<Integer>();
-
+	String dir;
+	
+	public ToRSFailureDetector(String dir) {
+		this.dir = dir;
+	}
+	
 	public void defineCrash() {
 		crash_tor.add(6);
 	}
@@ -20,8 +25,8 @@ public class ToRSFailureDetector {
 		 */
 		Map<Integer, Double> final_alert = new HashMap<Integer, Double>();
 		// //////////
-		DumpAnalyzer alr = new DumpAnalyzer("z://tor-6//");
-		alr.getServerPackets();
+		DumpAnalyzer alr = new DumpAnalyzer(dir);
+		alr.getServerPackets("tor");
 		Map<Integer, List<Integer>> rule = Util.getRule();
 		FD fd = new FD();
 
@@ -64,7 +69,7 @@ public class ToRSFailureDetector {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ToRSFailureDetector tfd = new ToRSFailureDetector();
+		ToRSFailureDetector tfd = new ToRSFailureDetector("z://tor-6//");
 		tfd.detect();
 
 	}

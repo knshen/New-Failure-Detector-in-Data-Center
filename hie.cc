@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include   <map>
 #include <cstdlib>
 #include <boost/algorithm/string.hpp>
 #include <utility>
@@ -23,17 +24,19 @@ using namespace std;
 using namespace ns3;
 using namespace boost;
 
+
 vector<vector<bool> > readNxNMatrix (std::string adj_mat_file_name);
 void saveIP(vector<Ipv4Address> ips);
-vector < vector<int> > readRuleFile(string fileName);
 vector < pair<int, double> > readServerCrashFile(string fileName);
 
-NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
+
+NS_LOG_COMPONENT_DEFINE ("HierarchyGenericTopologyCreation");
+
 
 int main (int argc, char *argv[])
 {
 	// global configure
-	string server_crash_file_name = "/home/knshen/server-crash-10min.txt";
+	string server_crash_file_name = "/home/knshen/server-crash-1min.txt";
 	string fileName = "/home/knshen/topo.txt";
 	string rulePath = "/home/knshen/rule.txt";
 	uint32_t linkCount = 0;
@@ -61,7 +64,7 @@ int main (int argc, char *argv[])
 	// assign IP address
 	Ipv4AddressHelper ipv4_n;
 	ipv4_n.SetBase ("10.0.0.0", "255.255.255.252");
-	vector<Ipv4Address> ips;
+	vector<Ipv4Address> ips(num_nodes);
 
 	// create links
 	for (size_t i = 0; i < matrix.size (); i++)
@@ -73,23 +76,26 @@ int main (int argc, char *argv[])
 				NodeContainer n_links = NodeContainer (nodes.Get (i), nodes.Get (j));
 				NetDeviceContainer n_devs = p2p.Install (n_links);
 				Ipv4InterfaceContainer ic = ipv4_n.Assign (n_devs);
-				if (j >= 12)
-					ips.push_back(ic.GetAddress(1));
+				ips[i] = ic.GetAddress(0);
+				ips[j] = ic.GetAddress(1);
+				/*
+				if(i < 12)
+					cout<<i<<": "<<ips[i]<<endl;
+				if(j < 12)
+					cout<<j<<": "<<ips[j]<<endl;
+				*/
 				ipv4_n.NewNetwork ();
 				linkCount++;
 			}
 
 		}
 	}
-	//cout << "# of nodes: " << num_nodes << endl;
-	//cout << "# of links: " << linkCount << endl;
-	//cout << "# of servers: " << ips.size() << endl;
-	//saveIP(ips);
-	// set routing database
+
+
 	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
 	// install udp application
-	// server (receiver)
+	// install servers:
 	vector<ApplicationContainer> serverApps; // size = num_nodes = 132
 	UdpServerHelper echoServer(9999);
 	for (int i = 0; i < num_nodes; i++)
@@ -101,95 +107,98 @@ int main (int argc, char *argv[])
 		//sa.Stop (Seconds (86401.0)); // server run one day
 	}
 
-	vector< vector<int> > masters = readRuleFile(rulePath);
-	// client (sender)
-	vector< vector<ApplicationContainer> > apps;
-	/*
-	12 : [master1, master2, master3]
-	13 : [master1, master2, master3]
-	...
-	131 : [master1, master2, master3]
-	*/
-	for (int i = 12; i <= 131; i++)
+	// install clients:
+	// one lead per rack
+	double end_time = 60.0;
+	vector< vector<ApplicationContainer> > clients;
+	for(int i=0; i<num_nodes; i++)
 	{
-		// for each server k = 3
-		//vector<UdpClientHelper> apps;
-		vector<ApplicationContainer> tmp;
-		for (uint32_t j = 0; j < masters[i - 12].size(); j++)
+		vector<ApplicationContainer> ve;
+		clients.push_back(ve);
+	}
+		
+	vector<int> leaders;
+
+	for (int i = 0; i < 6; i++)
+		leaders.push_back(12 + i * 20);
+
+	for (int i = 0; i < 6; ++i)
+	{
+		for (int j = 0; j < 6; ++j)
 		{
-			UdpClientHelper echoClient(ips[masters[i - 12][j] - 12], 9999);
+			if (i == j)
+				continue;
+			UdpClientHelper echoClient(ips[leaders[j]], 9999);
+			//cout << leaders[j] << " -> " << leaders[i] <<endl;
 			echoClient.SetAttribute ("MaxPackets", UintegerValue (900000));
 			echoClient.SetAttribute ("Interval", TimeValue (Seconds (0.1))); // every 100ms
 			echoClient.SetAttribute ("PacketSize", UintegerValue (100)); // 100 Byte
-			ApplicationContainer ac = echoClient.Install(nodes.Get(i));
+			ApplicationContainer ac = echoClient.Install(nodes.Get(leaders[i]));
 			ac.Start (Seconds (2.0));
-			ac.Stop(Seconds(60.0));
-			tmp.push_back(ac);
+			//ac.Stop(Seconds(end_time));
+			clients[leaders[i]].push_back(ac);
 		}
-		apps.push_back(tmp);
+	}
 
+	for (int i = 12; i < num_nodes; i++)
+	{
+		if ((i - 12) % 20 == 0)
+			// I am a leader
+			continue;
+
+		int leader = leaders[(i - 12) / 20];
+		UdpClientHelper echoClient(ips[leader], 9999);
+		//cout << leader << " -> " << i <<endl;
+		echoClient.SetAttribute ("MaxPackets", UintegerValue (900000));
+		echoClient.SetAttribute ("Interval", TimeValue (Seconds (0.1))); // every 100ms
+		echoClient.SetAttribute ("PacketSize", UintegerValue (100)); // 100 Byte
+		ApplicationContainer ac = echoClient.Install(nodes.Get(i));
+		ac.Start (Seconds (2.0));
+		//ac.Stop(Seconds(end_time));
+		clients[i].push_back(ac);
+		
 	}
 
 
-	/*
-	// define server crash events
-	// #1 server crash
+	// define server crash:
 	vector < pair<int, double> > server_crash = readServerCrashFile(server_crash_file_name);
+
 	set<int> ids;
 	for (uint32_t i = 0; i < server_crash.size(); i++)
 		ids.insert(server_crash[i].first);
-
-	for (uint32_t i = 0; i < apps.size(); i++)
+	
+	for(int i=12; i<num_nodes; i++)
 	{
 		set<int>::iterator it;
-		it = ids.find(i + 12);
+		it = ids.find(i);
 		if (it != ids.end())
 		{
-			// crash !
+			// crash
+			
 			// find the exact crash time
 			double crash_time = 0;
-			for(uint32_t k=0; k<server_crash.size(); k++)
+			for(uint32_t j=0; j<server_crash.size(); j++)
 			{
-				if(server_crash[k].first == i + 12.0)
-					crash_time = server_crash[k].second;
+				if(server_crash[j].first == i)
+					crash_time = server_crash[j].second;
 			}
-			//cout<< "crash time: "<<crash_time<<endl;
-			for (uint32_t j = 0; j < apps[i].size(); j++)
-				apps[i][j].Stop(Seconds(crash_time));
+			cout<<"crash: "<<i<<"   crash time: "<<crash_time<<endl;
+			
+			for (uint32_t j = 0; j < clients[i].size(); j++)
+				clients[i][j].Stop(Seconds(crash_time));
+			
 		}
 		else
 		{
-			// no crash!
-			for (uint32_t j = 0; j < apps[i].size(); j++)
-				apps[i][j].Stop(Seconds(600.0));
+			// no crash
+			for (uint32_t j = 0; j < clients[i].size(); j++)
+				clients[i][j].Stop(Seconds(end_time));
 		}
-
 	}
-	*/
 
-	
-	// #2  link crash
-	Ptr<Ipv4> link1 = nodes.Get(0)->GetObject<Ipv4>();
-	Ptr<Ipv4> link2 = nodes.Get(3)->GetObject<Ipv4>();
-	uint32_t index1 = 1;
-	uint32_t index2 = 4;
-	double time1 = 10;
-	double time2 = 30;
-	Simulator::Schedule(Seconds(time1), &Ipv4::SetDown, link1, index1);
-  	Simulator::Schedule(Seconds(time2), &Ipv4::SetDown, link2, index2);
-	
-	/*
-	// #3 ToR Switch crash
-	int crash_tor_id = 6;
-	Ptr<Ipv4> tor = nodes.Get(crash_tor_id)->GetObject<Ipv4>();
-	double time = 30;
-	for(uint32_t index=1; index<=22; index++)
-		Simulator::Schedule(Seconds(time), &Ipv4::SetDown, tor, index);
-	*/
-	
 
 	// dump
-	p2p.EnablePcapAll ("topo");
+	p2p.EnablePcapAll ("hie");
 	//AsciiTraceHelper ascii;
 	//p2p.EnableAsciiAll (ascii.CreateFileStream ("topo.tr"));
 	Simulator::Run ();
@@ -228,34 +237,6 @@ void saveIP(vector<Ipv4Address> ips)
 	{
 		cout << (12 + i) << ": " << ips[i] << endl;
 	}
-}
-
-vector < vector<int> > readRuleFile(string fileName)
-{
-	vector < vector<int> > res;
-	ifstream rule_file;
-	rule_file.open (fileName.c_str (), ios::in);
-
-	while (!rule_file.eof())
-	{
-		vector<int> tmp;
-		string line;
-		getline(rule_file, line);
-		vector<string> tokens;
-		vector<string> masters;
-		if (line == "")
-			break;
-		boost::split(tokens, line, boost::is_any_of(":"));
-		boost::split(masters, tokens[1], boost::is_any_of(" "));
-		//cout << tokens[1] << endl;
-		for (uint32_t i = 0; i < masters.size(); i++)
-			tmp.push_back(atoi(masters[i].c_str()));
-
-		res.push_back(tmp);
-	}
-
-	rule_file.close ();
-	return res;
 }
 
 vector< vector<bool> > readNxNMatrix (std::string adj_mat_file_name)

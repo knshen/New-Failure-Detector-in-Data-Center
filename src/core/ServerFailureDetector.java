@@ -9,6 +9,13 @@ import parser.DumpAnalyzer;
 import util.Pair;
 
 public class ServerFailureDetector {
+	
+	// parameters
+	public static final int win_size = 100;
+	public static final double end_time = 60.0;
+	public static final double fail_threshold = 0.001;
+	public static final double interval = 0.1;
+	
 	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
 	public DumpAnalyzer alr = null;
 			
@@ -56,8 +63,8 @@ public class ServerFailureDetector {
 			Map<Integer, List<Double>> map = alr.hb.get(i);
 			for (Map.Entry<Integer, List<Double>> entry : map.entrySet()) {
 				////////
-				double res = fd.chenDetect(entry.getValue(), 100, 2, 60, 0.1,
-						0.001);
+				double res = fd.chenDetect(entry.getValue(), win_size, 2, end_time, interval,
+						fail_threshold);
 				if (res != -1
 						&& (!crashes.containsKey(i) || crashes.get(i) > res)) {
 					if (alerts.containsKey(entry.getKey()))

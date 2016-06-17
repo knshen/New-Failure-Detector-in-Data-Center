@@ -1,10 +1,10 @@
 package parser;
 
 public class Packet {
-	double time;
-	String src; // ip
-	String dest; // ip
-	int length; // byte
+	public double time;
+	public String src; // ip
+	public String dest; // ip
+	public int length; // byte
 
 	public String toString() {
 		return time + ": " + src + " -> " + dest;

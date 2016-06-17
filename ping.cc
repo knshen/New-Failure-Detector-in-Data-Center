@@ -28,7 +28,7 @@ void saveIP(vector<Ipv4Address> ips);
 vector < vector<int> > readRuleFile(string fileName);
 vector < pair<int, double> > readServerCrashFile(string fileName);
 
-NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
+NS_LOG_COMPONENT_DEFINE ("PingGenericTopologyCreation");
 
 int main (int argc, char *argv[])
 {
@@ -61,7 +61,7 @@ int main (int argc, char *argv[])
 	// assign IP address
 	Ipv4AddressHelper ipv4_n;
 	ipv4_n.SetBase ("10.0.0.0", "255.255.255.252");
-	vector<Ipv4Address> ips;
+	vector<Ipv4Address> ips(num_nodes);
 
 	// create links
 	for (size_t i = 0; i < matrix.size (); i++)
@@ -73,63 +73,73 @@ int main (int argc, char *argv[])
 				NodeContainer n_links = NodeContainer (nodes.Get (i), nodes.Get (j));
 				NetDeviceContainer n_devs = p2p.Install (n_links);
 				Ipv4InterfaceContainer ic = ipv4_n.Assign (n_devs);
-				if (j >= 12)
-					ips.push_back(ic.GetAddress(1));
+				ips[i] = ic.GetAddress(0);
+				ips[j] = ic.GetAddress(1);
+				/*
+				if(i < 12)
+					cout<<i<<": "<<ips[i]<<endl;
+				if(j < 12)
+					cout<<j<<": "<<ips[j]<<endl;
+				*/
 				ipv4_n.NewNetwork ();
 				linkCount++;
 			}
 
 		}
 	}
-	//cout << "# of nodes: " << num_nodes << endl;
-	//cout << "# of links: " << linkCount << endl;
-	//cout << "# of servers: " << ips.size() << endl;
-	//saveIP(ips);
-	// set routing database
+
+
 	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
-	// install udp application
-	// server (receiver)
-	vector<ApplicationContainer> serverApps; // size = num_nodes = 132
-	UdpServerHelper echoServer(9999);
+	/*
+	V4PingHelper ping = V4PingHelper (ips[12]);
+	ping.SetAttribute ("Interval", TimeValue (Seconds (2))); 
+	NodeContainer pingers;
+	for(int i=0; i<num_nodes; i++) 
+	{
+		if(i == 12)
+			continue;
+		pingers.Add(nodes.Get(i));
+	}
+	
+	ApplicationContainer app = ping.Install(pingers);
+	app.Start(Seconds(2));
+	app.Stop(Seconds(6));
+	*/
+
+	
+	vector< vector<ApplicationContainer> > apps;
+	for(int i = 0; i < num_nodes; i++)
+	{
+		vector<ApplicationContainer> ve;
+		apps.push_back(ve);
+	}
+
+	// create ping apps
 	for (int i = 0; i < num_nodes; i++)
 	{
-		ApplicationContainer sa = echoServer.Install (nodes.Get(i));
-		sa.Start (Seconds (1.0));
-		sa.Stop(Seconds(86400.0));
-		serverApps.push_back(sa);
-		//sa.Stop (Seconds (86401.0)); // server run one day
-	}
-
-	vector< vector<int> > masters = readRuleFile(rulePath);
-	// client (sender)
-	vector< vector<ApplicationContainer> > apps;
-	/*
-	12 : [master1, master2, master3]
-	13 : [master1, master2, master3]
-	...
-	131 : [master1, master2, master3]
-	*/
-	for (int i = 12; i <= 131; i++)
-	{
-		// for each server k = 3
-		//vector<UdpClientHelper> apps;
-		vector<ApplicationContainer> tmp;
-		for (uint32_t j = 0; j < masters[i - 12].size(); j++)
+		for (int j = 0; j < num_nodes; j++)
 		{
-			UdpClientHelper echoClient(ips[masters[i - 12][j] - 12], 9999);
-			echoClient.SetAttribute ("MaxPackets", UintegerValue (900000));
-			echoClient.SetAttribute ("Interval", TimeValue (Seconds (0.1))); // every 100ms
-			echoClient.SetAttribute ("PacketSize", UintegerValue (100)); // 100 Byte
-			ApplicationContainer ac = echoClient.Install(nodes.Get(i));
-			ac.Start (Seconds (2.0));
-			ac.Stop(Seconds(60.0));
-			tmp.push_back(ac);
+			// j -----ping-----> i
+			V4PingHelper ping = V4PingHelper (ips[i]);
+			ping.SetAttribute ("Interval", TimeValue (Seconds (2))); 
+			NodeContainer pingers;
+			if (j != i)
+				pingers.Add(nodes.Get(j));
+			apps[i].push_back(ping.Install(pingers));	
 		}
-		apps.push_back(tmp);
-
 	}
 
+	for (int i = 0; i < num_nodes; i++)
+	{
+		for(int j = 0; j < num_nodes; j++)
+		{
+			apps[i][j].Start (Seconds (2.0 + i * 0.015));
+			apps[i][j].Stop(Seconds (20.0 + i * 0.015));
+		}
+		
+	}
+	
 
 	/*
 	// define server crash events
@@ -169,15 +179,18 @@ int main (int argc, char *argv[])
 
 	
 	// #2  link crash
+	// link1: 0 -- 2
+	// link2: 3 -- 7
 	Ptr<Ipv4> link1 = nodes.Get(0)->GetObject<Ipv4>();
 	Ptr<Ipv4> link2 = nodes.Get(3)->GetObject<Ipv4>();
 	uint32_t index1 = 1;
 	uint32_t index2 = 4;
-	double time1 = 10;
-	double time2 = 30;
+	double time1 = 2;
+	double time2 = 2;
 	Simulator::Schedule(Seconds(time1), &Ipv4::SetDown, link1, index1);
-  	Simulator::Schedule(Seconds(time2), &Ipv4::SetDown, link2, index2);
+	Simulator::Schedule(Seconds(time2), &Ipv4::SetDown, link2, index2);
 	
+
 	/*
 	// #3 ToR Switch crash
 	int crash_tor_id = 6;
@@ -186,10 +199,10 @@ int main (int argc, char *argv[])
 	for(uint32_t index=1; index<=22; index++)
 		Simulator::Schedule(Seconds(time), &Ipv4::SetDown, tor, index);
 	*/
-	
+
 
 	// dump
-	p2p.EnablePcapAll ("topo");
+	p2p.EnablePcapAll ("ping", false);
 	//AsciiTraceHelper ascii;
 	//p2p.EnableAsciiAll (ascii.CreateFileStream ("topo.tr"));
 	Simulator::Run ();
