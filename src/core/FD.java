@@ -9,13 +9,14 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 
 import parser.DumpAnalyzer;
+import util.TimePeriod;
 
 public class FD {
 	// parameters
 	public static final double time_unit = 0.0001;
+	public static final double end_time = 60.0;
 	
 	public FD() {
-
 	}
 
 	public double phiAccrualDetect(List<Double> hb_data, int win_size,
@@ -83,14 +84,16 @@ public class FD {
 	 * @param alpha
 	 * @return detected crash time, -1 for no crash
 	 */
-	public double chenDetect(List<Double> hb_data, int win_size, double start,
+	public List<TimePeriod> chenDetect(List<Double> hb_data, int win_size, double start,
 			double end, double interval, double threshold) {
+		List<TimePeriod> res = new ArrayList<TimePeriod>();
 		List<Double> slide_win = new ArrayList<Double>();
 
+		boolean think_crash = false;
 		int seq = 0;
 		int pos = 0;
 		// time unit : e-4s = 0.1ms
-		for (double now = start; now < end; now += time_unit) {
+		for (double now = start; now <= end; now += time_unit) {
 			if (pos < hb_data.size() && hb_data.get(pos) <= now) {
 				addToSlideWin(slide_win, hb_data.get(pos), win_size);
 				pos++;
@@ -100,11 +103,19 @@ public class FD {
 
 			if (fail_pro >= threshold) {
 				// System.out.println("fail probability: " + fail_pro);
-				return now;
+				if(think_crash)
+					res.get(res.size()-1).end = now;
+				else
+					res.add(new TimePeriod(now, now));
+				think_crash = true;
 			}
+			else {
+				think_crash = false;
+			}
+				
 
 		}
-		return -1;
+		return res;
 	}
 
 	private void addToSlideWin(List<Double> slide_win, double data, int win_size) {
@@ -135,21 +146,14 @@ public class FD {
 	}
 
 	public static void main(String[] args) throws IOException {
-		DumpAnalyzer alr = new DumpAnalyzer("z://dump3//");
+		DumpAnalyzer alr = new DumpAnalyzer("z://dump1//");
 		alr.getServerPackets("topo");
-		// 64 -> 100
-		List<Double> data1 = alr.hb.get(64).get(100);
-		// 65 -> 100
-		List<Double> data2 = alr.hb.get(65).get(100);
-		// 101 -> 100
-		List<Double> data3 = alr.hb.get(101).get(100);
-
+		
+		List<Double> data1 = alr.hb.get(29).get(28);
 		FD fd = new FD();
-		System.out.println("--------------------------------------------");
-		System.out.println(fd.chenDetect(data1, 100, 2, 61, 0.1, 0.01));
-		System.out.println(fd.chenDetect(data2, 100, 2, 61, 0.1, 0.01));
-		System.out.println(fd.chenDetect(data3, 100, 2, 61, 0.1, 0.01));
-
+		
+		System.out.println(fd.chenDetect(data1, 100, 2, fd.end_time, 0.1, 0.001));
+		
 		// System.out.println(fd.phiAccrualDetect(data1, 1000, 2, 601, 0.1,
 		// 100));
 		System.out.println();

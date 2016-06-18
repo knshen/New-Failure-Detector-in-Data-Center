@@ -7,22 +7,25 @@ import crash.MessageLossMaker;
 import evaluation.Evaluator;
 import parser.DumpAnalyzer;
 import util.Pair;
+import util.TimePeriod;
+import util.Util;
 
 public class ServerFailureDetector {
-	
+
 	// parameters
 	public static final int win_size = 100;
 	public static final double end_time = 60.0;
 	public static final double fail_threshold = 0.001;
 	public static final double interval = 0.1;
-	
+	public static final double time_unit = 0.0001;
+
 	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
 	public DumpAnalyzer alr = null;
-			
+
 	public ServerFailureDetector(String dir) throws IOException {
 		alr = new DumpAnalyzer(dir);
 	}
-	
+
 	private int distance(int id1, int id2) {
 		int rackId1 = (id1 - 12) / 20;
 		int rackId2 = (id2 - 12) / 20;
@@ -45,68 +48,95 @@ public class ServerFailureDetector {
 		br.close();
 	}
 
-	public Map<Integer, Double> detect(boolean haveLoss, List<Pair<Integer, Integer>> relations) throws IOException {
-		// key is reported at time [...]
-		Map<Integer, Double> final_alerts = new HashMap<Integer, Double>();
-		Map<Integer, List<Double>> alerts = new HashMap<Integer, List<Double>>();
-		FD fd = new FD();
-	
+	public Map<Integer, List<TimePeriod>> detect(int K, boolean haveLoss, List<Pair<Integer, Integer>> relations, double loss_rate) throws IOException {
+		/**
+		 * i: time periods that report crash of node i 
+		 */
+		Map<Integer, List<TimePeriod>> final_report = new HashMap<Integer, List<TimePeriod>>();
+		FD fd = new FD();	
 		alr.getServerPackets("topo");
 		
-		/////////////
+		///////////// enable message loss?
 		if(haveLoss) {
-			MessageLossMaker.make(alr, 2, 60, relations);
+			MessageLossMaker.make(alr, 2, end_time, relations, loss_rate);
+		}
+
+		for (int i = 12; i <= 131; i++) {
+			// i: slave (monitorable object)
+			// crash report for the server i
+			List<TimePeriod> crash_report = new ArrayList<TimePeriod>();
+			
+			List<List<TimePeriod>> ress = new ArrayList<List<TimePeriod>>();
+			for(int master : alr.send_rule.get(i)) {
+				List<TimePeriod> res = fd.chenDetect(alr.hb.get(master).get(i), win_size, 2, end_time, interval, fail_threshold);
+				ress.add(res);
+			}
+			
+			for(double time = 2; time <= end_time; time += time_unit) {
+				int alerts = 0;
+				for(int k = 0; k < ress.size(); k++) {
+					// k = 0,1,2
+					int master_id = alr.send_rule.get(i).get(k);
+					if(!isCrashNow(master_id, time) && Util.isInPeriod(ress.get(k), time)) {
+						//System.out.println(master_id + " report crash of " + i + " at time: " + time);
+						alerts++;
+					}
+						
+				}
+				
+				if(alerts >= (K+1) / 2) {
+					// server i is decided to be crash !!!
+					if(crash_report.size() == 0)
+						crash_report.add(new TimePeriod(time, time));
+					else {
+						if((time - crash_report.get(crash_report.size()-1).end) > 1.1 * time_unit) {
+							crash_report.add(new TimePeriod(time, time));
+						}
+						else {
+							crash_report.get(crash_report.size()-1).end = time;
+						}
+					}
+				}
+			}
+			
+			final_report.put(i, crash_report);
+			//System.out.println(i + "  " + crash_report);
 		}
 		
-		for (int i = 12; i <= 131; i++) {
-			// i: master
-			Map<Integer, List<Double>> map = alr.hb.get(i);
-			for (Map.Entry<Integer, List<Double>> entry : map.entrySet()) {
-				////////
-				double res = fd.chenDetect(entry.getValue(), win_size, 2, end_time, interval,
-						fail_threshold);
-				if (res != -1
-						&& (!crashes.containsKey(i) || crashes.get(i) > res)) {
-					if (alerts.containsKey(entry.getKey()))
-						alerts.get(entry.getKey()).add(res);
+		return final_report;
+	}
 
-					else {
-						List<Double> list = new ArrayList<Double>();
-						list.add(res);
-						alerts.put(entry.getKey(), list);
-					}
+	private boolean isCrashNow(int id, double now) {
+		if (crashes.containsKey(id) && crashes.get(id) <= now)
+			return true;
 
-					 System.out.println(i + " report crash of " +
-					 entry.getKey() + " at time " + res);
-				}
-
-			}
-
-		}
-		// analyze
-		for (Map.Entry<Integer, List<Double>> entry : alerts.entrySet()) {
-			Collections.sort(entry.getValue());
-			if (entry.getValue().size() >= 2) {
-				final_alerts.put(entry.getKey(), entry.getValue().get(1));
-				System.out.println("server " + entry.getKey()
-						+ " crashed at time: " + entry.getValue().get(1));
-			}
-
-		}
-		return final_alerts;
+		return false;
 	}
 
 	public static void main(String[] args) throws IOException {
 		ServerFailureDetector sfd = new ServerFailureDetector("z://dump3//");
-		////////
-		//sfd.readCrashFile("server-crash-1min.txt");
 		
-		List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>();
-		list.add(new Pair<Integer, Integer>(41, 40));
-		list.add(new Pair<Integer, Integer>(42, 41));
-		Map<Integer, Double> alerts = sfd.detect(true, list);
+		//sfd.readCrashFile("server-crash-1min.txt");
 
-		System.out.println(Evaluator.avgDetectTime(sfd.crashes, alerts));
+		List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>();
+		for(int i=0; i<sfd.alr.send_rule.size(); i++) {
+			List<Integer> pair = sfd.alr.send_rule.get(i);
+			if(pair != null)
+				for(int master : pair) {
+					list.add(new Pair(master, i));
+				}		
+		}
+		///
+		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, list, 0.01);
+
+		
+		for(Map.Entry<Integer, List<TimePeriod>> entry : alerts.entrySet()) {
+			if(entry.getValue().size() > 0)
+				System.out.println(entry.getKey());
+		}
+		
+		System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, sfd.crashes));
+		System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, sfd.crashes));
 	}
 
 }

@@ -12,11 +12,16 @@ public class DumpAnalyzer {
 	public int num_nodes = 132;
 	List<Integer> servers = new ArrayList<Integer>();
 	List<Integer> router_switch = new ArrayList<Integer>();
+	
 	public int topo[][] = new int[num_nodes][num_nodes];
 	public Map<Integer, String> id2ip = new HashMap<Integer, String>();
 	public Map<String, Integer> ip2id = new HashMap<String, Integer>();
-
-	// out parameters
+	/**
+	 * 12 is monitored by [...]
+	 * 13 is monitored by [...]
+	 */
+	public List<List<Integer>> send_rule = new ArrayList<List<Integer>>();
+	
 	/**
 	 * key -> key1 [msg1, msg2, ...] -> key2 [msg1, msg2, ...] -> key3 [msg1,
 	 * msg2, ...]
@@ -36,8 +41,26 @@ public class DumpAnalyzer {
 		for (int server_id : servers) {
 			hb.put(server_id, new HashMap<Integer, List<Double>>());
 		}
+		
+		for(int i=0; i<router_switch.size(); i++)
+			send_rule.add(null);
+		getRule();
 	}
-
+	
+	private void getRule() throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(new File("rule.txt")));
+		String line = "";
+		while((line = br.readLine()) != null) {
+			int slave = Integer.parseInt(line.split(":")[0]);
+			List<Integer> masters = new ArrayList<Integer>();
+			String tokens[] = line.split(":")[1].split(" ");
+			for(String str : tokens)
+				masters.add(Integer.parseInt(str));
+			send_rule.add(masters);
+		}
+		br.close();
+	}
+	
 	private void getIP() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(
 				new File("ip.txt")));

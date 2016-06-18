@@ -38,8 +38,7 @@ public class ToRSFailureDetector {
 			for (Map.Entry<Integer, List<Double>> entry : map.entrySet()) {
 				int slave_id = entry.getKey();
 				// ///////////////
-				double res = fd.chenDetect(entry.getValue(), 100, 2, 60, 0.1,
-						0.001);
+				double res = fd.chenDetect(entry.getValue(), 100, 2, 60, 0.1, 0.001);
 
 				if (res != -1)
 					if (crash_reports.containsKey(i))

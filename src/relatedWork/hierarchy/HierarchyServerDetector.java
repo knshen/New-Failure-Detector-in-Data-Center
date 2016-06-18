@@ -18,7 +18,9 @@ public class HierarchyServerDetector extends ServerFailureDetector {
 	}
 	
 	public void detect() throws IOException {
-		this.detect(false, null);
+		final int K = 1;
+		final double loss_rate = 0.001;
+		this.detect(K, false, null, loss_rate);
 	}
 	
 	public static void main(String[] args) throws IOException {

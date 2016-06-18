@@ -5,9 +5,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-
+import java.util.*;
 
 public class Util {
+	
+	public static boolean isInPeriod(List<TimePeriod> list, double time) {
+		for(TimePeriod tp : list) {
+			if(time >= tp.begin && time <= tp.end)
+				return true;
+		}
+		return false;
+	}
 	
 	public static int getRackIdByServerId(int server_id) {
 		return (server_id - 12) / 20;
