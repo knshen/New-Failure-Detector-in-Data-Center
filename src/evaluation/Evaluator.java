@@ -9,7 +9,29 @@ public class Evaluator {
 	public static final double end_time = 60.0;
 	
 	public static double avgDetectionTime(Map<Integer, List<TimePeriod>> alerts, Map<Integer, Double> crashes) {
-		return 0.0;
+		double res = 0.0;
+		int num_crash = crashes.size();
+		
+		for(Map.Entry<Integer, Double> entry : crashes.entrySet()) {
+			int crash_id = entry.getKey();
+			double real_time = entry.getValue();
+			
+			double suspect_time = -1;
+			for(TimePeriod tp : alerts.get(crash_id)) {
+				if(tp.end >= real_time) {
+					suspect_time = tp.begin;
+					break;
+				}
+			}
+			if(suspect_time == -1) {
+				num_crash--;
+				System.err.println("ignore a real crash!");
+			}
+			else if(suspect_time - real_time >= 0)
+				res += (suspect_time - real_time);
+		}
+		
+		return res / num_crash;
 	}
 	
 	public static double avgQueryAccuracyPro(Map<Integer, List<TimePeriod>> alerts, Map<Integer, Double> crashes) {

@@ -3,36 +3,44 @@ package relatedWork.gossip;
 import java.io.*;
 import java.util.*;
 
+import crash.MessageLossMaker;
+import evaluation.Evaluator;
 import parser.DumpAnalyzer;
 import parser.Packet;
 import util.Pair;
+import util.TimePeriod;
 
 public class GossipDetector {
 	DumpAnalyzer da = null;
 	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
 
 	// parameters
-	public static final double end = 60.0;
+	public static final double end_time = 60.0;
 	public static final double time_unit = 0.0001;
 	public static final double t_gossip = 0.1;
-	public static final double t_fail = 1;
-	public static final double t_clean = 2;
+	public static final double t_fail = 0.5; ////////////
+	public static final double factor = 0.5; //////////////
+	//public static final double t_clean = 2;
 
 	/**
-	 * node 12 receive msg: [(time, node), (time, node)...] node 13 receive msg:
-	 * [(time, node), (time, node)...] ... node 131 receive msg: [(time, node),
-	 * (time, node)...]
+	 * node 12 receive msg: [(time, node), (time, node)...] 
+	 * node 13 receive msg: [(time, node), (time, node)...] 
+	 * ... 
+	 * node 131 receive msg: [(time, node),(time, node)...]
 	 */
 	public Map<Integer, List<Pair<Double, Integer>>> msgs = new HashMap<Integer, List<Pair<Double, Integer>>>();
 	public List<LiveList> heartbeat_status = new ArrayList<LiveList>();
 
-	public GossipDetector(String dump_dir) throws IOException {
+	public GossipDetector(String dump_dir, boolean haveCrash, String crash_path) throws IOException {
 		da = new DumpAnalyzer(dump_dir);
 		for (int i = 0; i < da.num_nodes; i++)
 			heartbeat_status.add(new LiveList(i, da.num_nodes));
 
 		for (int i = 12; i <= 131; i++)
 			msgs.put(i, new ArrayList<Pair<Double, Integer>>());
+		
+		if(haveCrash)
+			readCrashFile(crash_path);
 	}
 
 	private List<Packet> readDumpFile(String path) throws IOException {
@@ -104,20 +112,26 @@ public class GossipDetector {
 		br.close();
 	}
 
-	public void detect() {
+	public Map<Integer, List<TimePeriod>> detect(boolean haveLoss, double loss_rate) throws IOException {
+		Map<Integer, List<TimePeriod>> alerts = new HashMap<Integer, List<TimePeriod>>();
+		for(int i = 12; i < da.num_nodes; i++)
+			alerts.put(i, new ArrayList<TimePeriod>());
+		
+		getGossipMsgData("gossip");
+		
+		if(haveLoss) {
+			MessageLossMaker.make(msgs, 2, end_time, loss_rate);
+		}
+		
 		// update heartbeat_status repeatedly
-		for (double time = 2.0; time <= end; time += time_unit) {
+		for (double time = 2.0; time <= end_time; time += time_unit) {
 			for (int i = 12; i < da.num_nodes; i++) {
 				// i: lcoal_id
 				int index = findRecentMsg(i, time);
-				if (index == -1
-						|| (crashes.containsKey(i) && crashes.get(i) <= time))
+				if (index == -1 || isCrashNow(i, time))
 					// no new message or crashed already
 					continue;
-				
-				//if(i == 12)
-				//	System.out.println();
-				
+								
 				// update self
 				heartbeat_status.get(i).last_time.set(i, time);
 				// have new message
@@ -133,29 +147,44 @@ public class GossipDetector {
 					else
 						heartbeat_status.get(i).isFail.set(j, false);
 
-					if ((time - heartbeat_status.get(i).last_time.get(j)) >= t_clean)
-						heartbeat_status.get(i).isClean.set(j, true);
 				}
 
-				// report possible crash
-				for (int j = 12; j < da.num_nodes; j++) {
-					if (i == j)
-						continue;
-					
-					//if (heartbeat_status.get(i).isFail.get(j) == true)
-					//	System.out.println("#node " + i
-					//			+ " report crash of #node " + j + " at time: "
-					//			+ time);
-					if(heartbeat_status.get(i).isClean.get(j) == true)
-						System.err.println("#node " + i
-								+ " clean up #node " + j + " at time: "
-								+ time);
+			} // finish update status at time
+			
+			// report possible crash
+			for (int node = 12; node < da.num_nodes; node++) {
+				// node: node in checking
+				int num_fails = 0;
+				for(int j = 12; j < da.num_nodes; j++) {
+					if (!isCrashNow(j, time) && heartbeat_status.get(j).isFail.get(node) == true)
+						num_fails++;
+				}
+				
+				if(num_fails >= factor * (da.num_nodes - 12))	{
+					//System.out.println("server" + node + " is reported crash at time " + time);
+					List<TimePeriod> list = alerts.get(node);
+					if(list.size() == 0)
+						list.add(new TimePeriod(time, time));
+					else {
+						TimePeriod tp = list.get(list.size()-1);
+						if((time - tp.end) >= 1.1 * time_unit)
+							list.add(new TimePeriod(time, time));
+						else
+							list.get(list.size()-1).end = time;
+					}
 					
 				}
+					
 			}
+		} // end time for
 
-		}
+		return alerts;
+	}
 
+	private boolean isCrashNow(int id, double now) {
+		if (crashes.containsKey(id) && crashes.get(id) <= now)
+			return true;
+		return false;
 	}
 
 	private void merge(int local_id, int from_id) {
@@ -193,16 +222,26 @@ public class GossipDetector {
 	}
 
 	public static void main(String[] args) throws IOException {
-		GossipDetector gd = new GossipDetector("z://gossip1//");
-		gd.readCrashFile("server-crash-1min.txt");
-
-		gd.getGossipMsgData("gossip");
-		gd.detect();
+		//// is there exist server crash
+		long a = System.currentTimeMillis();
+		GossipDetector gd = new GossipDetector(
+				"z://serverCrashDump//gossip-1//", 
+				true,
+				"z://crashFile//server-crash-1.txt");
 		
-		for(LiveList ll : gd.heartbeat_status) {
-			System.out.println(ll.last_time);
+		//// have message loss? loss rate?
+		Map<Integer, List<TimePeriod>> alerts = gd.detect(false, 0.0001);
+		for(Map.Entry<Integer, List<TimePeriod>> entry : alerts.entrySet()) {
+			if(entry.getValue().size() > 0)
+				System.out.println(entry.getKey() + "  " + entry.getValue().size());	
 		}
-		System.out.println();
+		
+		System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, gd.crashes));
+		System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, gd.crashes));
+		System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, gd.crashes));
+
+		long b = System.currentTimeMillis();
+		System.out.println("runtime: " + (b-a)/1000 + "s");
 	}
 
 }

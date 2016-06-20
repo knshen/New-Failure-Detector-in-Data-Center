@@ -38,7 +38,7 @@ public class ServerCrashMaker {
 
 	private static void write(List<Fault> events) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(
-				"server-crash.txt")));
+				"server-crash-60.txt")));
 		for (Fault fault : events) {
 			String line = fault.server_id + " " + fault.time + "\n";
 			bw.write(line);
@@ -48,7 +48,9 @@ public class ServerCrashMaker {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ServerCrashMaker.make(2, 10 * 60, 120, 12);
+		final double end_time = 60.0;
+		int crash_number = 60;
+		ServerCrashMaker.make(2, end_time, 120, crash_number);
 
 	}
 

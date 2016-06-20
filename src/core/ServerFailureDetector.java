@@ -19,11 +19,14 @@ public class ServerFailureDetector {
 	public static final double interval = 0.1;
 	public static final double time_unit = 0.0001;
 
-	Map<Integer, Double> crashes = new HashMap<Integer, Double>();
+	public Map<Integer, Double> crashes = new HashMap<Integer, Double>();
 	public DumpAnalyzer alr = null;
 
-	public ServerFailureDetector(String dir) throws IOException {
-		alr = new DumpAnalyzer(dir);
+	public ServerFailureDetector(String dump_dir, boolean haveCrash, String crash_path) throws IOException {
+		alr = new DumpAnalyzer(dump_dir);
+		if(haveCrash)
+			////////
+			readCrashFile(crash_path);
 	}
 
 	private int distance(int id1, int id2) {
@@ -114,10 +117,12 @@ public class ServerFailureDetector {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ServerFailureDetector sfd = new ServerFailureDetector("z://dump3//");
+		///// is there exist server crash ? crash file path?
+		ServerFailureDetector sfd = new ServerFailureDetector(
+				"z://serverCrashDump//dump-60//", 
+				true, 
+				"z://crashFile//server-crash-60.txt");
 		
-		//sfd.readCrashFile("server-crash-1min.txt");
-
 		List<Pair<Integer, Integer>> list = new ArrayList<Pair<Integer, Integer>>();
 		for(int i=0; i<sfd.alr.send_rule.size(); i++) {
 			List<Integer> pair = sfd.alr.send_rule.get(i);
@@ -126,17 +131,18 @@ public class ServerFailureDetector {
 					list.add(new Pair(master, i));
 				}		
 		}
-		///
-		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, list, 0.01);
+		///// enable message loss? loss rate?
+		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, false, list, 0.1);
 
 		
 		for(Map.Entry<Integer, List<TimePeriod>> entry : alerts.entrySet()) {
 			if(entry.getValue().size() > 0)
-				System.out.println(entry.getKey());
+				System.out.println(entry.getKey() + "  " + entry.getValue().size());
 		}
 		
 		System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, sfd.crashes));
 		System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, sfd.crashes));
+		System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, sfd.crashes));
 	}
 
 }
