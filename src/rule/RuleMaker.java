@@ -3,74 +3,102 @@ package rule;
 import java.util.*;
 import java.io.*;
 
+import util.Util;
+
 public class RuleMaker {
-	public static final String path = "rule.txt";
 
-	public RuleMaker() {
-
-	}
-
-	public Map<Integer, List<Integer>> make() {
-		return simpleRule();
-	}
-
-	public Map<Integer, List<Integer>> simpleRule() {
-		// send relation: key is monitored by each element in value
+	public Map<Integer, List<Integer>> make(int start_server_id,
+			List<List<Integer>> racks, int K) {
+		// key: is monitored by(send msg to) [...]
 		Map<Integer, List<Integer>> rule = new HashMap<Integer, List<Integer>>();
-		for (int i = 12; i <= 131; i++) {
-			List<Integer> masters = new ArrayList<Integer>();
-			if (i == 31 || i == 51 || i == 71 || i == 91 || i == 111
-					|| i == 131)
-				masters.add(i - 19);
-			else
-				masters.add(i + 1);
+		final int num_rack = racks.size();
+		final int num_server_each_rack = racks.get(0).size();
+		final int num_server = num_rack * num_server_each_rack;
 
-			if (i >= 12 && i <= 31) {
-				masters.add(20 + i);
-				masters.add(40 + i);
-				masters.add(60 + i);
-				masters.add(80 + i);
-				masters.add(100 + i);
-			} else if (i >= 32 && i <= 51) {
-				masters.add(20 + i);
-				masters.add(40 + i);
-				masters.add(60 + i);
-				masters.add(80 + i);
-				masters.add(i - 20);
-			} else if (i >= 52 && i <= 71) {
-				masters.add(20 + i);
-				masters.add(40 + i);
-				masters.add(60 + i);
-				masters.add(i - 20);
-				masters.add(i - 40);
-			} else if (i >= 72 && i <= 91) {
-				masters.add(20 + i);
-				masters.add(40 + i);
-				masters.add(i - 60);
-				masters.add(i - 20);
-				masters.add(i - 40);
-
-			} else if (i >= 92 && i <= 111) {
-				masters.add(20 + i);
-				masters.add(i - 80);
-				masters.add(i - 60);
-				masters.add(i - 20);
-				masters.add(i - 40);
-			} else if (i >= 112 && i <= 131) {
-				masters.add(i - 100);
-				masters.add(i - 80);
-				masters.add(i - 60);
-				masters.add(i - 20);
-				masters.add(i - 40);
+		final int IN_RACK = K - 1;
+		
+		Map<Integer, Integer> remain_slaves = new HashMap<Integer, Integer>();
+		for(int i = start_server_id; i < start_server_id + num_server; i++)
+			remain_slaves.put(i, K);
+		
+		for (int i = 0; i < num_rack; i++) {
+			int first_id = i * num_server_each_rack + start_server_id;
+			int last_id = i * num_server_each_rack + start_server_id + num_server_each_rack - 1;
+			
+			for(int j = 0; j < num_server_each_rack; j++) {
+				List<Integer> list = new ArrayList<Integer>(K);
+				int node_id = first_id + j;
+				int x = IN_RACK;
+				for(int k=first_id; k<=last_id; k++) {
+					if(x <= 0)
+						break;
+					if(node_id != k && remain_slaves.get(k) > 0) {
+						x --;
+						remain_slaves.put(k, remain_slaves.get(k)-1);
+						list.add(k);
+					}
+				}
+				rule.put(node_id, list);
 			}
 
-			rule.put(i, masters);
-		} // end for
+		}
+		
+		int z = (K - IN_RACK) * num_server_each_rack / (num_rack - 1);
+		List<List<Integer>> rs_rack = new ArrayList<List<Integer>>();
+		for(int i=0; i<num_rack; i++) {
+			List<Integer> list = new ArrayList<Integer>();
+			for(int j=0; j<num_rack; j++) {
+				if(i == j) 
+					list.add(0);
+				else
+					list.add(z);		
+			}
+			rs_rack.add(list);
+		}
+		
+		for(int i = 0; i < num_rack; i++) {
+			int first_id = i * num_server_each_rack + start_server_id;
+			int last_id = i * num_server_each_rack + start_server_id + num_server_each_rack - 1;
 
+			for(int j = 0; j < num_server_each_rack; j++) {
+				// rack id: i
+				int node_id = first_id + j;
+				int x = K - IN_RACK; // cross rack
+		
+				for(int k=0; k<num_rack; k++) {				
+					if(x == 0)
+						break;
+					if(rs_rack.get(k).get(i) <= 0) 
+						continue;
+								
+					int first_id_rack_k = k * num_server_each_rack + start_server_id;
+					int last_id_rack_k = k * num_server_each_rack + start_server_id + num_server_each_rack - 1;
+				
+					for(int y=first_id_rack_k; y<=last_id_rack_k; y++) {
+						if(remain_slaves.get(y) > 0) {
+							remain_slaves.put(y, remain_slaves.get(y)-1);
+							rule.get(node_id).add(y);
+							x--;
+							rs_rack.get(k).set(i, rs_rack.get(k).get(i) - 1);
+							
+							if(x == 0 || rs_rack.get(k).get(i) <= 0)
+								break;
+						}
+					}
+				}
+			}
+		}
+		
 		return rule;
 	}
 
-	public void save(Map<Integer, List<Integer>> rule) throws IOException {
+	/**
+	 * write monitor rule to rule.txt
+	 * 
+	 * @param rule
+	 * @throws IOException
+	 */
+	public void save(Map<Integer, List<Integer>> rule, String path) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)));
 		for (Map.Entry<Integer, List<Integer>> entry : rule.entrySet()) {
 			int key = entry.getKey();
@@ -87,83 +115,58 @@ public class RuleMaker {
 		bw.close();
 	}
 
-	public void clean() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"rule.txt")));
-		String line = br.readLine();
-		List<String> list = new ArrayList<String>();
-
-		while (line != null) {
-			String tmp[] = line.split(":");
-			String tmp1[] = tmp[1].trim().split("\t");
-			list.add(tmp[0].trim() + ":" + tmp1[0] + " " + tmp1[1] + " "
-					+ tmp1[2]);
-			line = br.readLine();
+	/**
+	 * reverse the send rule : detection rule
+	 * @param send_rule
+	 * @return
+	 */
+	public Map<Integer, List<Integer>> detectionRule(Map<Integer, List<Integer>> send_rule) {
+		// key -> [...]
+		Map<Integer, List<Integer>> rule = new HashMap<Integer, List<Integer>>();
+		for(Map.Entry<Integer, List<Integer>> entry : send_rule.entrySet()) {
+			int slave = entry.getKey();
+			for(int master : entry.getValue()) {
+				if(rule.containsKey(master))
+					rule.get(master).add(slave);
+				else {
+					 List<Integer> list = new ArrayList<Integer>();
+					 list.add(slave);
+					 rule.put(master, list);
+				}
+			}
 		}
-		br.close();
-
-		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(
-				"rule.txt")));
-		for (String str : list) {
-			bw.write(str + "\n");
-		}
-
-		bw.flush();
-		bw.close();
+		
+		return rule;
 	}
-
-	public void check() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"rule.txt")));
-		String line = br.readLine();
-		Map<Integer, List<Integer>> detect = new HashMap<Integer, List<Integer>>();
-		while (line != null) {
-			int slave = Integer.parseInt(line.split(":")[0]);
-			int master1 = Integer.parseInt(line.split(":")[1].split(" ")[0]);
-			int master2 = Integer.parseInt(line.split(":")[1].split(" ")[1]);
-			int master3 = Integer.parseInt(line.split(":")[1].split(" ")[2]);
-
-			if (detect.containsKey(master1))
-				detect.get(master1).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				detect.put(master1, list);
-			}
-
-			if (detect.containsKey(master2))
-				detect.get(master2).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				detect.put(master2, list);
-			}
-
-			if (detect.containsKey(master3))
-				detect.get(master3).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				detect.put(master3, list);
-			}
-			line = br.readLine();
-		}
-
-		for (Map.Entry<Integer, List<Integer>> entry : detect.entrySet()) {
-			if (entry.getValue().size() != 3) {
-				System.err.println("errorrrrrr");
-			}
-			System.out.println(entry.getKey() + "  " + entry.getValue());
-		}
-
-		br.close();
+	
+	private boolean constraintCheck() {
+		return true;
 	}
 
 	public static void main(String[] args) throws IOException {
 		RuleMaker rm = new RuleMaker();
-		// rm.save(rm.make());
-		// rm.clean();
-		rm.check();
+
+		List<List<Integer>> racks = new ArrayList<List<Integer>>();
+		int server_id = 12;
+		for (int i = 0; i < 6; i++) {
+			List<Integer> list = new ArrayList<Integer>();
+			for (int j = 0; j < 20; j++) {
+				list.add(server_id++);
+			}
+			racks.add(list);
+		}
+		
+		Map<Integer, List<Integer>> send_rule = rm.make(12, racks, 6);
+		rm.save(send_rule, "z://ruleFile//rule-6.txt");
+		
+		Map<Integer, List<Integer>> re_rule = rm.detectionRule(send_rule);
+		
+		
+		for(Map.Entry<Integer, List<Integer>> entry : send_rule.entrySet()) {
+			System.out.println(entry.getKey() + "  " + entry.getValue());
+		}
+		
+		System.out.println();
 	}
 
 }

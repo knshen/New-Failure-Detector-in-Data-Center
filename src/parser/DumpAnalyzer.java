@@ -7,6 +7,9 @@ import topo.TopoMaker;
 import util.Util;
 
 public class DumpAnalyzer {
+	// parameters:
+	public static final String rule_path = "z://ruleFile//rule-5.txt";
+	
 	public static String dir;
 
 	public int num_nodes = 132;
@@ -48,7 +51,7 @@ public class DumpAnalyzer {
 	}
 	
 	private void getRule() throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File("rule.txt")));
+		BufferedReader br = new BufferedReader(new FileReader(new File(rule_path)));
 		String line = "";
 		while((line = br.readLine()) != null) {
 			int slave = Integer.parseInt(line.split(":")[0]);

@@ -9,6 +9,17 @@ import java.util.*;
 
 public class Util {
 	
+	public static int C_N_M(int n, int m) {
+		return factorial(n) / (factorial(m) * factorial(n - m));
+	}
+	
+	public static int factorial(int n) {
+		int res = 1;
+		for(int i=1; i<=n; i++)
+			res *= i;
+		return res;
+	}
+	
 	public static boolean isInPeriod(List<TimePeriod> list, double time) {
 		for(TimePeriod tp : list) {
 			if(time >= tp.begin && time <= tp.end)
@@ -19,6 +30,13 @@ public class Util {
 	
 	public static int getRackIdByServerId(int server_id) {
 		return (server_id - 12) / 20;
+	}
+	
+	public static int howManyDistinctRack(List<Integer> servers) {
+		Set<Integer> set = new HashSet<Integer>();
+		for(int server : servers)
+			set.add(getRackIdByServerId(server));
+		return set.size();
 	}
 	
 	public static int[][] floyd(int dis[][]) {
@@ -62,44 +80,24 @@ public class Util {
 		return sends;
 	}
 	
-	public static Map<Integer, List<Integer>> getRule() throws IOException {
+	public static Map<Integer, List<Integer>> getDetectRule(List<List<Integer>> send_rule) {
+		// key -> [...]
 		Map<Integer, List<Integer>> rule = new HashMap<Integer, List<Integer>>();
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"rule.txt")));
-		String line = "";
-		while ((line = br.readLine()) != null) {
-			int slave = Integer.parseInt(line.split(":")[0]);
-			int m1 = Integer.parseInt(line.split(":")[1].split(" ")[0]);
-			int m2 = Integer.parseInt(line.split(":")[1].split(" ")[1]);
-			int m3 = Integer.parseInt(line.split(":")[1].split(" ")[2]);
-
-			if (rule.containsKey(m1))
-				rule.get(m1).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				rule.put(m1, list);
+		for(int i=0; i<send_rule.size(); i++) {
+			List<Integer> masters = send_rule.get(i);
+			if(masters == null)
+				continue;
+			for(int master : masters) {
+				if(rule.containsKey(master))
+					rule.get(master).add(i);
+				else {
+					List<Integer> slaves = new ArrayList<Integer>();
+					slaves.add(i);
+					rule.put(master, slaves);
+				}
 			}
-
-			if (rule.containsKey(m2))
-				rule.get(m2).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				rule.put(m2, list);
-			}
-
-			if (rule.containsKey(m3))
-				rule.get(m3).add(slave);
-			else {
-				List<Integer> list = new ArrayList<Integer>();
-				list.add(slave);
-				rule.put(m3, list);
-			}
-
 		}
-
-		br.close();
+		
 		return rule;
 	}
 
@@ -166,4 +164,17 @@ public class Util {
 		return res;
 	}
 
+	public static void main(String args[]) {
+		double p = 0.001;
+		
+		for(int k=2; k<=6; k++) {
+			int m = 1 + k - (k+1) / 2;
+			double pro = 0;
+			for(; m<=k; m++) {
+				pro += Util.C_N_M(k, m) * Math.pow(p, m) * Math.pow(1-p, k-m);
+			}
+			System.out.println("k = " + k + ": " + pro);
+		}
+		System.out.println();
+	}
 }

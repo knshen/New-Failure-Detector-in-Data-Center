@@ -19,7 +19,7 @@ public class HierarchyServerDetector extends ServerFailureDetector {
 	List<List<Integer>> send_rule_hie = new ArrayList<List<Integer>>();
 	
 	public HierarchyServerDetector(String dump_dir, boolean haveCrash, String crash_path) throws IOException {
-		super(dump_dir, haveCrash, crash_path);
+		super(dump_dir, haveCrash, crash_path, false, null);
 		alr.getServerPackets("hie");
 		/*
 		for(Map.Entry<Integer, Map<Integer, List<Double>>> entry : alr.hb.entrySet()) {
@@ -132,14 +132,32 @@ public class HierarchyServerDetector extends ServerFailureDetector {
 		return false;
 	}
 
+	public void run() throws IOException {
+		int crash_num[] = new int[]{1,5,10,15,20,25,30,35,40,45,50,55,60};
+		for(int k : crash_num) {
+			HierarchyServerDetector hsd = new HierarchyServerDetector(
+					"z://serverCrashDump//hie-" + k + "//", 
+					true,
+					"z://crashFile//server-crash-" + k + ".txt");
+			//// enable message loss? loss rate?
+			Map<Integer, List<TimePeriod>> alerts = hsd.detectInHierarchy(true, 0.001);
+			System.out.println(k + ":");
+			System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, hsd.crashes));
+			System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, hsd.crashes));
+			System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, hsd.crashes));
+			System.out.println();
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
 		//// is there exist server crash?
 		HierarchyServerDetector hsd = new HierarchyServerDetector(
-				"z://serverCrashDump//hie-50//", 
-				true,
-				"z://crashFile//server-crash-50.txt");
+				"z://serverCrashDump//hie-0//", 
+				false,
+				"z://crashFile//server-crash-60.txt");
+	/*
 		//// enable message loss? loss rate?
-		Map<Integer, List<TimePeriod>> alerts = hsd.detectInHierarchy(false, 0.2);
+		Map<Integer, List<TimePeriod>> alerts = hsd.detectInHierarchy(true, 0.0005);
 		
 		for(Map.Entry<Integer, List<TimePeriod>> entry : alerts.entrySet()) {
 			if(entry.getValue().size() > 0)
@@ -150,7 +168,8 @@ public class HierarchyServerDetector extends ServerFailureDetector {
 		System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, hsd.crashes));
 		System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, hsd.crashes));
 
-		System.out.println();
+		System.out.println(); */
+		hsd.run();
 	}
 
 }

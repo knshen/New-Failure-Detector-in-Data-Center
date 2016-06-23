@@ -13,21 +13,20 @@ class Fault {
 	}
 }
 
-public class ServerCrashMaker {
-	public ServerCrashMaker() {
+public class DeviceCrashMaker {
+	public DeviceCrashMaker() {
 
 	}
 
-	public static void make(double start, double end, int num_server,
+	public static void make(int base, int total_num, double start, double end,
 			int num_fault) throws IOException {
-		int base = 12;
 		List<Fault> events = new ArrayList<Fault>();
 		Set<Integer> have_crash = new HashSet<Integer>();
 
 		for (int i = 0; i < num_fault; i++) {
-			int si = (int) (Math.random() * 120) + base;
+			int si = (int) (Math.random() * total_num) + base;
 			while (have_crash.contains(si)) {
-				si = (int) (Math.random() * 120) + base;
+				si = (int) (Math.random() * total_num) + base;
 			}
 			have_crash.add(si);
 			double time = Math.random() * (end - start) + start;
@@ -38,7 +37,7 @@ public class ServerCrashMaker {
 
 	private static void write(List<Fault> events) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(
-				"server-crash-60.txt")));
+				"tor-crash-3.txt")));
 		for (Fault fault : events) {
 			String line = fault.server_id + " " + fault.time + "\n";
 			bw.write(line);
@@ -49,8 +48,8 @@ public class ServerCrashMaker {
 
 	public static void main(String[] args) throws IOException {
 		final double end_time = 60.0;
-		int crash_number = 60;
-		ServerCrashMaker.make(2, end_time, 120, crash_number);
+		int crash_number = 3;
+		DeviceCrashMaker.make(0, 6, 2, end_time, crash_number);
 
 	}
 

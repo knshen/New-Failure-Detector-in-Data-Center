@@ -37,7 +37,7 @@ public class MessageLossMaker {
 		}
 
 		final int num_loss = (int) (total_num_msg * loss_rate);
-		System.out.println("total losed msg number: " + num_loss);
+		//System.out.println("total losed msg number: " + num_loss);
 
 		for (int i = 0; i < num_loss; i++) {
 			int relation_id = (int) (Math.random() * list.size());
@@ -52,9 +52,11 @@ public class MessageLossMaker {
 				if (msgs.get(j) >= start_to_lose_time)
 					break;
 
-			System.err.println("#server" + master
-					+ " lose a messages of #server" + slave + " from time "
-					+ start_to_lose_time);
+			//System.err.println("#server" + master
+			//		+ " lose a messages of #server" + slave + " from time "
+			//		+ start_to_lose_time);
+			if(j >= msgs.size())
+				j--;
 			msgs.remove(j);
 		}
 	}
