@@ -202,8 +202,12 @@ public class AzureLocator {
 
 	}
 
+	public void run() throws IOException {
+		
+	}
+	
 	public static void main(String[] args) throws IOException {
-		AzureLocator al = new AzureLocator("z://ping1//");
+		AzureLocator al = new AzureLocator("z://linkCrashDump//ping-2-1//");
 		al.getAllPath(); //get all possible shortest paths from i to j
 		al.computeEdgeAndVertexPro(); // compute pro_i_i_e && pro_i_j_v
 		
@@ -218,11 +222,12 @@ public class AzureLocator {
 			System.out.println(edge + ": " + link_failure.get(i));
 		}
 		
+		/*
 		System.out.println("------------------------------");
 		
 		for(int i=0; i<device_failure.size(); i++) {
 			System.out.println("node " + i + ": " + device_failure.get(i));
-		}
+		} */
 		System.out.println();
 
 	}
