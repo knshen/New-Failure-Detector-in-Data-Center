@@ -2,6 +2,7 @@ package evaluation;
 
 import java.util.*;
 
+import util.Item;
 import util.TimePeriod;
 
 public class Evaluator {
@@ -95,8 +96,39 @@ public class Evaluator {
 		return false;
 	}
 	
-	public static void main(String[] args) {
-
+	/**
+	 * smaller, better
+	 * @param suspects
+	 * @param size
+	 * @return
+	 */
+	public static double discrimination(List<Item> suspects) {
+		//final int num_states = suspects.size() - 1;
+		double pro4Links = 0;
+		for(int i=0; i<suspects.size(); i++) {
+			if(!suspects.get(i).item_name.equals("normal"))
+				pro4Links += suspects.get(i).value;
+		}
+		
+		double res = 0;
+		for(int i=0; i<suspects.size(); i++) {
+			if(suspects.get(i).item_name.equals("normal"))
+				continue;
+			double pro = suspects.get(i).value / pro4Links;
+			res += pro * ((Math.log(pro)) / (Math.log(2)));		
+		}
+		return res * -1;
 	}
+	
+	public static void main(String[] args) {
+		List<Item> sus = new ArrayList<Item>();
+		sus.add(new Item("aa", 0.96));
+		sus.add(new Item("aa", 0.01));
+		sus.add(new Item("aa", 0.01));
+		sus.add(new Item("aa", 0.01));
+		sus.add(new Item("aa", 0.01));
+		
+		System.out.println(Evaluator.discrimination(sus));
+	} 
 
 }

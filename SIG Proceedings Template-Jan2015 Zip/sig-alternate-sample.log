@@ -1,14 +1,14 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (MiKTeX 2.9) (preloaded format=xelatex 2016.6.17)  24 JUN 2016 16:18
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (MiKTeX 2.9) (preloaded format=xelatex 2016.6.17)  25 JUN 2016 20:25
 entering extended mode
 **sig-alternate-sample.tex
 
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\sig-alternate-sampl
-e.tex"
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-sample.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for loaded.
 
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\sig-alternate-05-20
-15.cls" (D:\CTEX\MiKTeX\tex\latex\graphics\epsfig.sty
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-05-2015.cls" (D:\CTEX\MiKTeX\tex\latex\graphics\epsfig.sty
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
 (D:\CTEX\MiKTeX\tex\latex\graphics\graphicx.sty
@@ -221,10 +221,10 @@ LaTeX Info: Redefining \cite on input line 1408.
 \Urlmuskip=\muskip11
 Package: url 2004/03/15  ver 3.1  Verb mode for urls, etc.
 )
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\acmcopyright.sty"
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\a
+cmcopyright.sty"
 Package: acmcopyright 2014/06/29 v1.2 Copyright statemens for ACM classes
-
-(D:\CTEX\MiKTeX\tex\latex\xkeyval\xkeyval.sty
+ (D:\CTEX\MiKTeX\tex\latex\xkeyval\xkeyval.sty
 Package: xkeyval 2008/08/13 v2.6a package option processing (HA)
 
 (D:\CTEX\MiKTeX\tex\generic\xkeyval\xkeyval.tex
@@ -249,8 +249,8 @@ File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 Requested font "aer9" at 9.0pt
  -> aer9
 ))
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\sig-alternate-sampl
-e.aux")
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-sample.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
@@ -385,52 +385,7 @@ m/n/9 and \T1/aett/m/n/9 \alig-nau-
 [1
 
 
-]
-
-LaTeX Warning: Citation `Lamport:LaTeX' on page \thepage  undefined on input li
-ne 334.
-
-
-LaTeX Warning: Citation `Lamport:LaTeX' on page \thepage  undefined on input li
-ne 349.
-
-
-LaTeX Warning: Citation `bowman:reasoning' on page \thepage  undefined on input
- line 376.
-
-
-LaTeX Warning: Citation `clark:pct' on page \thepage  undefined on input line 3
-76.
-
-
-LaTeX Warning: Citation `braams:babel' on page \thepage  undefined on input lin
-e 376.
-
-
-LaTeX Warning: Citation `herlihy:methodology' on page \thepage  undefined on in
-put line 376.
-
-
-LaTeX Warning: Citation `clark:pct' on page \thepage  undefined on input line 3
-77.
-
-
-LaTeX Warning: Citation `salas:calculus' on page \thepage  undefined on input l
-ine 378.
-
-
-LaTeX Warning: Citation `Lamport:LaTeX' on page \thepage  undefined on input li
-ne 378.
-
-
-LaTeX Warning: Citation `Lamport:LaTeX' on page \thepage  undefined on input li
-ne 384.
-
-
-LaTeX Warning: Citation `Lamport:LaTeX' on page \thepage  undefined on input li
-ne 395.
-
-[2]
+] [2]
 File: flies.eps Graphic file (type eps)
  <flies.eps>
 Overfull \hbox (67.14749pt too wide) in paragraph at lines 472--473
@@ -459,26 +414,30 @@ m/m/it/9 x\OT1/cmr/m/n/9 ) \OMS/cmsy/m/n/9 ^^A [] [] \OT1/cmr/m/n/9 = 0 \OMS/cm
 sy/m/n/9 ^^A \OML/cmm/m/it/9 L \OT1/cmr/m/n/9 = 0\OML/cmm/m/it/9 ;
  []
 
-
-LaTeX Warning: Citation `salas:calculus' on page \thepage  undefined on input l
-ine 567.
-
 [3]
-No file sig-alternate-sample.bbl.
-[4]
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\sig-alternate-sampl
-e.aux")
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-sample.bbl"
+Overfull \hbox (21.02989pt too wide) in paragraph at lines 1--1
+\T1/aer/m/n/9 (The Kumquat Con-sor-tium, e-mail: \T1/aett/bx/n/9 jp-kumquat@con
+sortium.net\T1/aer/m/n/9 ). 
+ []
+
+) [4] [5
+
+]
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-sample.aux")
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 2318 strings out of 430478
- 25248 string characters out of 3191502
+ 2321 strings out of 430478
+ 25480 string characters out of 3191502
  91647 words of memory out of 3000000
- 5406 multiletter control sequences out of 15000+200000
+ 5407 multiletter control sequences out of 15000+200000
  49877 words of font info for 64 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  39i,12n,34p,238b,464s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on sig-alternate-sample.pdf (4 pages).
+Output written on sig-alternate-sample.pdf (5 pages).

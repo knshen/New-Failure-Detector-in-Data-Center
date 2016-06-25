@@ -3,15 +3,17 @@ package core;
 import java.util.*;
 import java.io.*;
 
+import evaluation.Evaluator;
 import ml.ArffMaker;
 import ml.ClassifyModeller;
 import parser.DumpAnalyzer;
+import util.Item;
 import util.Route;
 import util.Util;
 
 public class LinkFailureDetector {
 	// parameters
-	public static final int check_interval = 2;
+	public static final int check_interval = 1;
 	
 	public static final List<String> directions = new ArrayList<String>();
 	public List<String> class_values = new ArrayList<String>();
@@ -24,19 +26,23 @@ public class LinkFailureDetector {
 				directions.add(i + "-->" + j);
 	}
 	
-	public void dataConstructor() throws IOException {	
+	public void dataConstructor(String dump_dir, String mark, boolean isTrain) throws IOException {	
 		DumpAnalyzer da = null;
-		File dir = new File("z://");
+		File dir = new File(dump_dir);
 		class_values.add("normal");
 		for(File file : dir.listFiles()) {
-			if(file.isDirectory() && file.getName().startsWith("link")) {
+			if(file.isDirectory() && file.getName().startsWith(mark)) {
 				//System.out.println("# " + file.getName());
 				
 				da = new DumpAnalyzer(file.getAbsolutePath());
 				List<List<Map<String, Integer>>> res = da.getRSPackets(check_interval, 59);
 				
 				// form instances	
-				String class_value = file.getName().replaceAll(" ", "");
+				String class_value = "";
+				if(isTrain)
+					class_value = file.getName().replaceAll(" ", "");
+				else
+					class_value = "normal";
 				
 				if(!class_value.endsWith("test")) {
 					class_values.add(class_value);
@@ -64,14 +70,33 @@ public class LinkFailureDetector {
 				}
 			}
 		}
-		System.out.println();
+		//System.out.println();
 	}
 
-	public void detect() throws IOException {
+	public void detect(String train_dump_dir, String test_dump_dir, String mark) throws Exception {	
+		// load train data
+		//dataConstructor(train_dump_dir, "link", true);	
+		// ArffMaker.make("train.arff", instances, classes, class_values); 
+		// load test data
+		dataConstructor(test_dump_dir, mark, false);
+		ArffMaker.make("test.arff", instances, classes, class_values); 
+		
 		ClassifyModeller cm = new ClassifyModeller();
-		dataConstructor();
-		//////
-		ArffMaker.randomSplit(instances, classes, class_values, 0.9524, false);
+		List<List<Item>> res = cm.classify();
+		
+		/*
+		for(int i=0; i<res.size(); i++) {
+			for(Item item : res.get(i))
+				System.out.println(item.item_name + ": " + item.value);
+			System.out.println();
+		} */
+		
+		
+		for(int i=1; i<res.size(); i++) {
+			System.out.println(Evaluator.discrimination(res.get(i)));
+		}
+		//System.out.println(Evaluator.discrimination(res.get(i), 21));
+	
 	}
 	
 	public void try_it() throws IOException {
@@ -95,11 +120,16 @@ public class LinkFailureDetector {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		LinkFailureDetector lfd = new LinkFailureDetector();
 		// lfd.try_it();
-		lfd.detect();
 		
+		String mark = "dump-2-1";
+		lfd.detect("z://",
+				"z://LinkCrashDump//",
+				mark);
+		
+		System.out.println();
 	}
 
 }

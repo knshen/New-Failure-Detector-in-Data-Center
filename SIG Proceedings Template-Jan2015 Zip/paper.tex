@@ -78,8 +78,9 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{A Failure Detection Model in Data Center Network}
-
+\title{A Failure Detection Model for Data Center Networks\titlenote{(Produces the permission block, and
+copyright information). For use with
+SIG-ALTERNATE.CLS. Supported by ACM.}}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -125,16 +126,22 @@
 Kai Shen\titlenote{Dr.~Trovato insisted his name be first.}\\
        \affaddr{School of Software}\\
        \affaddr{Shanghai Jiao Tong University}\\
+       \affaddr{Wallamaloo, New Zealand}\\
        \email{knshen@sjtu.edu.cn}
 % 2nd. author
-\alignauthor
-G.K.M. Tobin\titlenote{The secretary disavows
-any knowledge of this author's actions.}\\
-       \affaddr{Institute for Clarity in Documentation}\\
-       \affaddr{P.O. Box 1212}\\
-       \affaddr{Dublin, Ohio 43017-6221}\\
-       \email{webmaster@marysville-ohio.com}
+\alignauthor Charles Palmer\\
+       \affaddr{Palmer Research Laboratories}\\
+       \affaddr{8600 Datapoint Drive}\\
+       \affaddr{San Antonio, Texas 78229}\\
+       \email{cpalmer@prl.com}
 }
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
 
 \maketitle
 \begin{abstract}
@@ -211,23 +218,57 @@ is available on the web page to help you with the
 % We no longer use \terms command
 %\terms{Theory}
 
-\keywords{Failure Detection; Data Center Networks}
+\keywords{ACM proceedings; \LaTeX; text tagging}
 
 \section{Introduction}
+Data center.
+The rest of this paper is organized as follows. Section 2 discusses related work,
 
+\section{Related Work}
+In this section, we will present various relevant works including failure detectors, failure detection architecture in distributed systems and failure localization in data center networks.
 
-\section{Related Works}
+\subsection{Failure Detectors}
+A failure detector(FD) is widely recognized as an oracle to intelligently suspect failed processes \cite{chandra1996unreliable}. The monitored process periodically send heartbeat messages to its detector to prove its liveness.
 
-\section{Data Center Background}
+Chen et al. proposed a FD that provides QoS \cite{chen2002quality}. It estimates the expected arrival time(EAs) of the next heartbeat message according to a slide window storing n most recent arrived messages. EAs determine the deadline that the detector will wait for the next heartbeat before suspecting the monitored process. \textit{Chen FD} can adjust current network condition and set the timeout threshold adaptively by referring to recent heartbeats. Bertier et al. proposed a similar FD \cite{bertier2002implementation}, whereas it uses a dynamic way to compute error margin of \textit{Chen FD}. Other FDs like \textit{$\phi$ Accrual FD} \cite{hayashibara2004varphi} and \textit{Satzger FD} \cite{satzger2007new} can output an accrual failure value at any time which stands for the failure probability of the process.
 
-\section{Failure Detection Model}
-
+\subsection{Failure Detection Architecture}
+A failure detection architecture aims to provide the service of monitoring nodes in large scale distributed systems in a scalable way. Roughly speaking, there are two kinds of architectures. The first one is hierarchical architecture \cite{felber1999failure}, all the nodes are partitioned into different groups, each group has a leader node. Within a group, the leader node is responsible for monitoring all the nodes. Leader nodes periodically send node status information of his group to other leader nodes. Hierarchical architecture can reduce the number of heartbeat messages effectively, but it exists \textit{Single Point of Failure} problem, when the leader node crashes, it needs to select a new leader.
+Another alternative solution is Gossip-Style architecture \cite{van1998gossip}. Each node maintains a list containing the \textit{heartbeat counter} for all the nodes in the system. Every T$_{gossip}$ seconds, each node firstly update \textit{heartbeat counter} of itself and then randomly select another node to send its list to. Upon receiving a message, the node will merge two lists and update each node's \textit{heartbeat counter} with the bigger one. If the \textit{heartbeat counter} does not update after T$_{fail}$ seconds, the node will be marked as crashed. If the \textit{heartbeat counter} does not update after T$_{cleanup}$(T$_{cleanup}$
+$\ge$T$_{fail}$) seconds, it will be removed from the list.
 \section{Evaluation}
 
-\section{Conclusion and Future Works}
+\section{Conclusions}
+This paper proposes a failure detector model for data center networks.
+%\end{document}  % This is where a 'short' article might terminate
 
-\section{Acknowledgement}
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+This work is partially supported by the National High-Technology Research and Development Program of China under Grant No.2014AA01A301.
 
-\section{References}
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{paper}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
 
 \end{document}
+
+
+
+
+
+
+
+

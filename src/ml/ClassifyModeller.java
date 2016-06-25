@@ -3,11 +3,13 @@ package ml;
 import java.util.*;
 import java.io.*;
 
+import util.Item;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 import weka.core.converters.ArffLoader;
 
 public class ClassifyModeller {
@@ -23,7 +25,7 @@ public class ClassifyModeller {
 				"link5-10", "link5-11", "link5-9");
 	}
 
-	public void load() throws IOException {
+	private void load() throws IOException {
 		File file = new File("train.arff");
 		ArffLoader atf = new ArffLoader();
 		atf.setFile(file);
@@ -33,35 +35,41 @@ public class ClassifyModeller {
 		ins_test = atf.getDataSet();
 	}
 
-	public void classify() throws Exception {
+	public List<List<Item>> classify() throws Exception {
+		List<List<Item>> ress = new ArrayList<List<Item>>();
 		load();
 		ins_train.setClassIndex(216);
 		ins_test.setClassIndex(216);
 
-		Classifier cr = new MultilayerPerceptron();
-		cr.buildClassifier(ins_train);
-
-		int correct = 0;
+		File model = new File("ann.model");
+		
+		// Serialize
+		if(!model.exists()) {
+			Classifier cr = new MultilayerPerceptron();
+			cr.buildClassifier(ins_train);
+			SerializationHelper.write("ann.model", cr);
+		}
+			
+		Classifier cr = (Classifier)SerializationHelper.read("ann.model");
+				
 		for (int i = 0; i < ins_test.numInstances(); i++) {
+			// one instance:
+			List<Item> list = new ArrayList<Item>();
+			
 			double res = cr.classifyInstance(ins_test.instance(i));
-			double should = ins_test.instance(i).classValue();
+			//double should = ins_test.instance(i).classValue();
 			double pro[] = cr.distributionForInstance(ins_test.instance(i));
 
 			for(int j=0; j<pro.length; j++) {
-				System.out.print(class_mapping.get(j) + ": " + pro[j] + "	");
+				list.add(new Item(class_mapping.get(j), pro[j]));
+				//System.out.print(class_mapping.get(j) + ": " + pro[j] + "	");
 			}
 			
-			System.out.println();
-			/*
-			if (res == should) {
-				// System.out.println("pro: " + pro[(int)res]);
-				correct++;
-			}*/
+			Collections.sort(list);
+			ress.add(list);
+		} // end for
 
-		}
-
-		// System.out.println("correct ratio: " + (double)correct /
-		// ins_test.numInstances());
+		return ress;
 	}
 
 	public static void main(String[] args) throws Exception {

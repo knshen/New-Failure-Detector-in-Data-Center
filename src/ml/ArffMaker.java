@@ -16,13 +16,9 @@ public class ArffMaker {
 		for (int i = 0; i < num_attr; i++) {
 			bw.write("@ATTRIBUTE attr" + i + " NUMERIC\n");
 		}
-		String str = "";
-		for (int i = 0; i < class_values.size() - 1; i++) {
-			str += class_values.get(i) + ",";
-		}
-		str += class_values.get(class_values.size() - 1);
+		String str = "@ATTRIBUTE class {normal,link0-2,link0-3,link0-4,link0-5,link1-2,link1-3,link1-4,link1-5,link2-6,link2-7,link2-8,link3-6,link3-7,link3-8,link4-10,link4-11,link4-9,link5-10,link5-11,link5-9}";
 
-		bw.write("@ATTRIBUTE class {" + str + "}\n");
+		bw.write(str + "\n");
 		bw.write("@DATA\n");
 
 		int pos = 0;
@@ -55,7 +51,7 @@ public class ArffMaker {
 		int train_size = (int) (data.size() * factor);
 		int test_size = data.size() - train_size;
 
-		if(isShuffle) {
+		if (isShuffle) {
 			// shuffle
 			for (int k = 0; k < 10000; k++) {
 				int i = (int) (Math.random() * data.size());
@@ -64,7 +60,7 @@ public class ArffMaker {
 				Collections.swap(classes, i, j);
 			}
 		}
-	
+
 		List<List<Integer>> train_data = new ArrayList<List<Integer>>();
 		List<String> train_classes = new ArrayList<String>();
 		List<List<Integer>> test_data = new ArrayList<List<Integer>>();

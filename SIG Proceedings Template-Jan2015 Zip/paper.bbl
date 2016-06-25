@@ -1,0 +1,44 @@
+\begin{thebibliography}{1}
+
+\bibitem{bertier2002implementation}
+M.~Bertier, O.~Marin, and P.~Sens.
+\newblock Implementation and performance evaluation of an adaptable failure
+  detector.
+\newblock In {\em Dependable Systems and Networks, 2002. DSN 2002. Proceedings.
+  International Conference on}, pages 354--363. IEEE, 2002.
+
+\bibitem{chandra1996unreliable}
+T.~D. Chandra and S.~Toueg.
+\newblock Unreliable failure detectors for reliable distributed systems.
+\newblock {\em Journal of the ACM (JACM)}, 43(2):225--267, 1996.
+
+\bibitem{chen2002quality}
+W.~Chen, S.~Toueg, and M.~K. Aguilera.
+\newblock On the quality of service of failure detectors.
+\newblock {\em IEEE Transactions on computers}, 51(5):561--580, 2002.
+
+\bibitem{felber1999failure}
+P.~Felber, X.~D{\'e}fago, R.~Guerraoui, and P.~Oser.
+\newblock Failure detectors as first class objects.
+\newblock In {\em Distributed Objects and Applications, 1999. Proceedings of
+  the International Symposium on}, pages 132--141. IEEE, 1999.
+
+\bibitem{hayashibara2004varphi}
+N.~Hayashibara, X.~Defago, R.~Yared, and T.~Katayama.
+\newblock The $\varphi$ accrual failure detector.
+\newblock In {\em Reliable Distributed Systems, 2004. Proceedings of the 23rd
+  IEEE International Symposium on}, pages 66--78. IEEE, 2004.
+
+\bibitem{satzger2007new}
+B.~Satzger, A.~Pietzowski, W.~Trumler, and T.~Ungerer.
+\newblock A new adaptive accrual failure detector for dependable distributed
+  systems.
+\newblock In {\em Proceedings of the 2007 ACM symposium on Applied computing},
+  pages 551--555. ACM, 2007.
+
+\bibitem{van1998gossip}
+R.~Van~Renesse, Y.~Minsky, and M.~Hayden.
+\newblock A gossip-style failure detection service.
+\newblock In {\em Middleware¡¯98}, pages 55--70. Springer, 1998.
+
+\end{thebibliography}

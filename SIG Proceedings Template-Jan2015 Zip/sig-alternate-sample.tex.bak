@@ -78,8 +78,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{Alternate {\ttlit ACM} SIG Proceedings Paper in LaTeX
-Format\titlenote{(Produces the permission block, and
+\title{A Failure Detection Model in Data Center Network\titlenote{(Produces the permission block, and
 copyright information). For use with
 SIG-ALTERNATE.CLS. Supported by ACM.}}
 \subtitle{[Extended Abstract]
@@ -470,7 +469,7 @@ each of these is found in the \textit{Author's Guide}.
 
 \begin{figure}
 \centering
-\includegraphics{fly}
+\includegraphics{flies}
 \caption{A sample black and white graphic.}
 \end{figure}
 
@@ -666,3 +665,11 @@ it useful but please remember not to change it.
 %\balancecolumns % GM June 2007
 % That's all folks!
 \end{document}
+
+
+
+
+
+
+
+

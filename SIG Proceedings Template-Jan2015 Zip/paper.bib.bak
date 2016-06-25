@@ -1,0 +1,97 @@
+@inproceedings{felber1999failure,
+  title={Failure detectors as first class objects},
+  author={Felber, Pascal and D{\'e}fago, Xavier and Guerraoui, Rachid and Oser, Philipp},
+  booktitle={Distributed Objects and Applications, 1999. Proceedings of the International Symposium on},
+  pages={132--141},
+  year={1999},
+  organization={IEEE}
+}
+
+@inproceedings{herodotou2014scalable,
+  title={Scalable near real-time failure localization of data center networks},
+  author={Herodotou, Herodotos and Ding, Bolin and Balakrishnan, Shobana and Outhred, Geoff and Fitter, Percy},
+  booktitle={Proceedings of the 20th ACM SIGKDD international conference on Knowledge discovery and data mining},
+  pages={1689--1698},
+  year={2014},
+  organization={ACM}
+}
+
+@inproceedings{gill2011understanding,
+  title={Understanding network failures in data centers: measurement, analysis, and implications},
+  author={Gill, Phillipa and Jain, Navendu and Nagappan, Nachiappan},
+  booktitle={ACM SIGCOMM Computer Communication Review},
+  volume={41},
+  number={4},
+  pages={350--361},
+  year={2011},
+  organization={ACM}
+}
+
+@inproceedings{kandula2005shrink,
+  title={Shrink: A tool for failure diagnosis in IP networks},
+  author={Kandula, Srikanth and Katabi, Dina and Vasseur, Jean-Philippe},
+  booktitle={Proceedings of the 2005 ACM SIGCOMM workshop on Mining network data},
+  pages={173--178},
+  year={2005},
+  organization={ACM}
+}
+
+@inproceedings{greenberg2009vl2,
+  title={VL2: a scalable and flexible data center network},
+  author={Greenberg, Albert and Hamilton, James R and Jain, Navendu and Kandula, Srikanth and Kim, Changhoon and Lahiri, Parantap and Maltz, David A and Patel, Parveen and Sengupta, Sudipta},
+  booktitle={ACM SIGCOMM computer communication review},
+  volume={39},
+  number={4},
+  pages={51--62},
+  year={2009},
+  organization={ACM}
+}
+
+@article{chen2002quality,
+  title={On the quality of service of failure detectors},
+  author={Chen, Wei and Toueg, Sam and Aguilera, Marcos Kawazoe},
+  journal={IEEE Transactions on computers},
+  volume={51},
+  number={5},
+  pages={561--580},
+  year={2002},
+  publisher={IEEE}
+}
+
+@article{chandra1996unreliable,
+  title={Unreliable failure detectors for reliable distributed systems},
+  author={Chandra, Tushar Deepak and Toueg, Sam},
+  journal={Journal of the ACM (JACM)},
+  volume={43},
+  number={2},
+  pages={225--267},
+  year={1996},
+  publisher={ACM}
+}
+
+@inproceedings{hayashibara2004varphi,
+  title={The $\varphi$ accrual failure detector},
+  author={Hayashibara, Naohiro and Defago, Xavier and Yared, Rami and Katayama, Takuya},
+  booktitle={Reliable Distributed Systems, 2004. Proceedings of the 23rd IEEE International Symposium on},
+  pages={66--78},
+  year={2004},
+  organization={IEEE}
+}
+
+@inproceedings{satzger2007new,
+  title={A new adaptive accrual failure detector for dependable distributed systems},
+  author={Satzger, Benjamin and Pietzowski, Andreas and Trumler, Wolfgang and Ungerer, Theo},
+  booktitle={Proceedings of the 2007 ACM symposium on Applied computing},
+  pages={551--555},
+  year={2007},
+  organization={ACM}
+}
+
+@inproceedings{bertier2002implementation,
+  title={Implementation and performance evaluation of an adaptable failure detector},
+  author={Bertier, Marin and Marin, Olivier and Sens, Pierre},
+  booktitle={Dependable Systems and Networks, 2002. DSN 2002. Proceedings. International Conference on},
+  pages={354--363},
+  year={2002},
+  organization={IEEE}
+}

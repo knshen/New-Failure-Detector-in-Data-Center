@@ -9,6 +9,22 @@ import java.util.*;
 
 public class Util {
 	
+	public static double residual(List<Item> list1, List<Item> list2) {
+		double res = 0;
+		for(Item i1 : list1) {
+			Item other = null;
+			for(int i=0; i<list2.size(); i++) {
+				Item i2 = list2.get(i);
+				if(i2.item_name.equals(i1.item_name)) {
+					other = i2;
+					break;
+				}	
+			}
+			res += (i1.value - other.value) * (i1.value - other.value);
+		}
+		return res;
+	}
+	
 	public static int C_N_M(int n, int m) {
 		return factorial(n) / (factorial(m) * factorial(n - m));
 	}
