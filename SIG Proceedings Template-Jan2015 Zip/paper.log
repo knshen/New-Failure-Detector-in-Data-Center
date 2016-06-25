@@ -1,12 +1,14 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (MiKTeX 2.9) (preloaded format=xelatex 2016.6.17)  24 JUN 2016 16:34
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2016.6.24)  24 JUN 2016 22:13
 entering extended mode
 **paper.tex
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\paper.tex"
+
+("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+aper.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for loaded.
 
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\sig-alternate-05-20
-15.cls" (D:\CTEX\MiKTeX\tex\latex\graphics\epsfig.sty
+("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+ig-alternate-05-2015.cls" (D:\CTEX\MiKTeX\tex\latex\graphics\epsfig.sty
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
 (D:\CTEX\MiKTeX\tex\latex\graphics\graphicx.sty
@@ -25,11 +27,18 @@ Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 (D:\CTEX\MiKTeX\tex\latex\00miktex\graphics.cfg
 File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 )
-Package graphics Info: Driver file: xetex.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(D:\CTEX\MiKTeX\tex\xelatex\xetex-def\xetex.def
-File: xetex.def 2009/11/22 v0.94 LaTeX color/graphics driver for XeTeX (RRM/JK)
+(D:\CTEX\MiKTeX\tex\latex\pdftex-def\pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
+(D:\CTEX\MiKTeX\tex\generic\oberdiek\infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
+)
+(D:\CTEX\MiKTeX\tex\generic\oberdiek\ltxcmds.sty
+Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count79
 ))
 \Gin@req@height=\dimen102
 \Gin@req@width=\dimen103
@@ -125,7 +134,7 @@ Excluding comment 'CCSXML'
 \@dblmaxsep=\dimen117
  (D:\CTEX\MiKTeX\tex\generic\oberdiek\ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is not detected.
+Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
 \aucount=\count93
 \originalaucount=\count94
@@ -137,38 +146,6 @@ Package ifpdf Info: pdfTeX in PDF mode is not detected.
 \addauthors=\toks21
 \addauflag=\count96
 \subtitletext=\toks22
-Requested font "ptmb8t" at 12.0pt
- -> ptmb8t
-Requested font "ptmbi8t" at 12.0pt
- -> ptmbi8t
-Requested font "ptmri8t" at 11.0pt
- -> ptmri8t
-Requested font "ptmbi8t" at 11.0pt
- -> ptmbi8t
-Requested font "phvb8t" at 18.0pt
- -> phvb8t
-Requested font "phvbo8t" at 18.0pt
- -> phvbo8t
-Requested font "phvr8t" at 14.0pt
- -> phvr8t
-Requested font "phvro8t" at 14.0pt
- -> phvro8t
-Requested font "phvb8t" at 14.0pt
- -> phvb8t
-Requested font "phvr8t" at 12.0pt
- -> phvr8t
-Requested font "phvro8t" at 12.0pt
- -> phvro8t
-Requested font "phvr8t" at 10.0pt
- -> phvr8t
-Requested font "phvro8t" at 10.0pt
- -> phvro8t
-Requested font "ptmr8t" at 9.0pt
- -> ptmr8t
-Requested font "ptmri8t" at 8.0pt
- -> ptmri8t
-Requested font "ptmr8t" at 8.0pt
- -> ptmr8t
 \savesection=\count97
 \sectioncntr=\count98
 \c@figure=\count99
@@ -188,8 +165,6 @@ Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
 (Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
 )
-Requested font "cmr9" at 9.0pt
- -> cmr9
 \@acmtitlebox=\box28
 \titlenotecount=\count102
 \tntoks=\toks24
@@ -215,14 +190,14 @@ LaTeX Info: Redefining \cite on input line 1408.
 \copyrtyr=\toks32
 \acmcopyr=\toks33
 \boilerplate=\toks34
-(D:\CTEX\MiKTeX\tex\xelatex\xetexurl\url.sty
+(D:\CTEX\MiKTeX\tex\latex\ltxmisc\url.sty
 \Urlmuskip=\muskip11
-Package: url 2004/03/15  ver 3.1  Verb mode for urls, etc.
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\acmcopyright.sty"
+("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\a
+cmcopyright.sty"
 Package: acmcopyright 2014/06/29 v1.2 Copyright statemens for ACM classes
-
-(D:\CTEX\MiKTeX\tex\latex\xkeyval\xkeyval.sty
+ (D:\CTEX\MiKTeX\tex\latex\xkeyval\xkeyval.sty
 Package: xkeyval 2008/08/13 v2.6a package option processing (HA)
 
 (D:\CTEX\MiKTeX\tex\generic\xkeyval\xkeyval.tex
@@ -243,10 +218,9 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
  (D:\CTEX\MiKTeX\tex\latex\ae\t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
-)
-Requested font "aer9" at 9.0pt
- -> aer9
-)) ("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\paper.aux")
+)))
+("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+aper.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
@@ -259,128 +233,89 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
 LaTeX Font Info:    ... okay on input line 51.
-Requested font "cmr6" at 6.0pt
- -> cmr6
-Requested font "cmmi9" at 9.0pt
- -> cmmi9
-Requested font "cmmi6" at 6.0pt
- -> cmmi6
-Requested font "cmsy9" at 9.0pt
- -> cmsy9
-Requested font "cmsy6" at 6.0pt
- -> cmsy6
-Requested font "cmex9" at 9.0pt
- -> cmex9
-Requested font "cmex7" at 6.0pt
- -> cmex7
-Requested font "cmex7" at 5.0pt
- -> cmex7
-LaTeX Font Info:    Try loading font information for U+msa on input line 149.
-
-(D:\CTEX\MiKTeX\tex\latex\amsfonts\umsa.fd
+ (D:\CTEX\MiKTeX\tex\context\base\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count111
+\scratchdimen=\dimen123
+\scratchbox=\box30
+\nofMPsegments=\count112
+\nofMParguments=\count113
+\everyMPshowfont=\toks38
+\MPscratchCnt=\count114
+\MPscratchDim=\dimen124
+\MPnumerator=\count115
+\makeMPintoPDFobject=\count116
+\everyMPtoPDFconversion=\toks39
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 139.
+ (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-Requested font "msam10" at 9.0pt
- -> msam10
-Requested font "msam7" at 6.0pt
- -> msam7
-Requested font "msam5" at 5.0pt
- -> msam5
-LaTeX Font Info:    Try loading font information for U+msb on input line 149.
+LaTeX Font Info:    Try loading font information for U+msb on input line 139.
 
 (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-Requested font "msbm10" at 9.0pt
- -> msbm10
-Requested font "msbm7" at 6.0pt
- -> msbm7
-Requested font "msbm5" at 5.0pt
- -> msbm5
-LaTeX Font Info:    Try loading font information for U+lasy on input line 149.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 139.
 
 (D:\CTEX\MiKTeX\tex\latex\base\ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-Requested font "lasy9" at 9.0pt
- -> lasy9
-Requested font "lasy6" at 6.0pt
- -> lasy6
-Requested font "lasy5" at 5.0pt
- -> lasy5
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 149.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 139.
 
 (D:\CTEX\MiKTeX\tex\latex\psnfss\t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
-Requested font "ptmr8t" at 7.0pt
- -> ptmr8t
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 149.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 139.
 
 
 (D:\CTEX\MiKTeX\tex\latex\psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 149.
-Requested font "aer8" at 8.0pt
- -> aer8
-Requested font "cmr8" at 8.0pt
- -> cmr8
-Requested font "cmmi8" at 8.0pt
- -> cmmi8
-Requested font "cmsy8" at 8.0pt
- -> cmsy8
-Requested font "cmex8" at 8.0pt
- -> cmex8
-Requested font "msam10" at 8.0pt
- -> msam10
-Requested font "msbm10" at 8.0pt
- -> msbm10
-Requested font "lasy8" at 8.0pt
- -> lasy8
-Requested font "aeti9" at 9.0pt
- -> aeti9
-Requested font "aeti7" at 6.0pt
- -> aeti7
-LaTeX Font Info:    Try loading font information for T1+aett on input line 150.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 139.
 
-
-(D:\CTEX\MiKTeX\tex\latex\ae\t1aett.fd
-File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
-)
-Requested font "aett9" at 9.0pt
- -> aett9
-Requested font "aer6" at 6.0pt
- -> aer6
-
-Overfull \hbox (1.0793pt too wide) in paragraph at lines 151--160
+Overfull \hbox (1.0793pt too wide) in paragraph at lines 141--150
 \T1/aer/m/it/9 Prepar-ing ACM SIG Pro-ceed-ings Us-ing L[]T[]X$\OT1/cmr/m/n/9 2
 []$ \T1/aer/m/it/9 and BibT[]X\T1/aer/m/n/9 .
  []
 
 Excluding 'CCSXML' comment.
-LaTeX Font Info:    Try loading font information for OMS+aer on input line 219.
+LaTeX Font Info:    Try loading font information for OMS+aer on input line 209.
 
  (D:\CTEX\MiKTeX\tex\latex\ae\omsaer.fd
 File: omsaer.fd 1999/12/27
 )
 LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 219.
-Requested font "aebx9" at 9.0pt
- -> aebx9
- [1
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 209.
+ [1{D:/CTEX/UserData/pdftex/config/pdftex.map{Unicode.sfd}{UGBK.sfd}}
 
 
 ]
-("C:\Users\Kai\Desktop\SIG Proceedings Template-Jan2015 Zip\paper.aux") ) 
+("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+aper.aux") ) 
 Here is how much of TeX's memory you used:
- 2286 strings out of 430478
- 24755 string characters out of 3191502
- 87647 words of memory out of 3000000
- 5380 multiletter control sequences out of 15000+200000
- 48217 words of font info for 63 fonts, out of 3000000 for 9000
+ 2852 strings out of 495354
+ 33997 string characters out of 3183859
+ 96016 words of memory out of 3000000
+ 5940 multiletter control sequences out of 15000+200000
+ 60587 words of font info for 86 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 39i,12n,34p,223b,464s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,12n,34p,253b,464s stack positions out of 5000i,500n,10000p,200000b,50000s
+{D:/CTEX/MiKTeX/fonts/enc/dvips/fontname/8r.enc}<D:/CTEX/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmbx9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmmi6.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><D:/CTE
+X/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><D:/CTEX/MiKTeX/fonts/type1/pu
+blic/amsfonts/cm/cmr9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.
+pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><D:/CTEX/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmti7.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmti9.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><D:/CTEX/M
+iKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times
+/utmb8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><D:/CTEX/MiKTeX/fo
+nts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (1 page, 154529 bytes).
+PDF statistics:
+ 63 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-Output written on paper.pdf (1 page).
