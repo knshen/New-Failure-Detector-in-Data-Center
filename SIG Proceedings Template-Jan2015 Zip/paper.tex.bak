@@ -221,14 +221,25 @@ is available on the web page to help you with the
 \keywords{ACM proceedings; \LaTeX; text tagging}
 
 \section{Introduction}
-Data center
+Data center.
+The rest of this paper is organized as follows. Section 2 discusses related work,
 
 \section{Related Work}
-In this section, we will present various relevant works including failure detectors, failure detect architecture in distributed system and failure localization in data center networks.
+In this section, we will present various relevant works including failure detectors, failure detection architecture in distributed systems and failure detection in data center networks.
 
 \subsection{Failure Detectors}
-A failure detector is widely recognized as an oracle to intelligently suspects failed processes \cite{chandra1996unreliable}. Chen et al. proposed a failure detector that provides QoS\cite{chen2002quality}.
-\subsubsection{dfd}
+A failure detector(FD) is widely recognized as an oracle to intelligently suspect failed processes \cite{chandra1996unreliable}. The monitored process periodically send heartbeat messages to its detector to prove its liveness.
+
+Chen et al. proposed a FD that provides QoS \cite{chen2002quality}. It estimates the expected arrival time(EAs) of the next heartbeat message according to a slide window storing n most recent arrived messages. EAs determine the deadline that the detector will wait for the next heartbeat before suspecting the monitored process. \textit{Chen FD} can adjust current network condition and set the timeout threshold adaptively by referring to recent heartbeats. Bertier et al. proposed a similar FD \cite{bertier2002implementation}, whereas it uses a dynamic way to compute error margin of \textit{Chen FD}. Other FDs like \textit{$\phi$ Accrual FD} \cite{hayashibara2004varphi} and \textit{Satzger FD} \cite{satzger2007new} can output a continuous accrual failure value other than a binary value at any time which stands for the failure probability of the process.
+
+\subsection{Failure Detection Architecture}
+A failure detection architecture aims to provide the service of monitoring nodes in large scale distributed systems in a scalable way. Roughly speaking, there are two kinds of architectures. The first one is hierarchical architecture \cite{felber1999failure}, all the nodes are partitioned into different groups, each group has a leader node. Within a group, the leader node is responsible for monitoring all the nodes. Leader nodes periodically send node status information of his group to other leader nodes. Hierarchical architecture can reduce the number of heartbeat messages effectively, but it exists \textit{Single Point of Failure} problem, when the leader node crashes, it needs to select a new leader.
+Another alternative solution is Gossip-Style architecture \cite{van1998gossip}. Each node maintains a list containing the \textit{heartbeat counter} for all the nodes in the system. Every T$_{gossip}$ seconds, each node firstly update \textit{heartbeat counter} of itself and then randomly select another node to send its list to. Upon receiving a message, the node will merge two lists and update each node's \textit{heartbeat counter} with the bigger one. If the \textit{heartbeat counter} does not update after T$_{fail}$ seconds, the node will be marked as crashed. If the \textit{heartbeat counter} does not update after T$_{cleanup}$(T$_{cleanup}$
+$\ge$T$_{fail}$) seconds, it will be removed from the list. This approach has very low bandwidth occupation because it only produces $n$ messages each epoch where $n$ is the size of the system.
+
+\subsection{Failure Detection in Data Center Networks}
+There exists a large body of work on applying statistical approaches to failure localization in data center networks.
+
 
 
 \section{Evaluation}
