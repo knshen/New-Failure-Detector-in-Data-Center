@@ -78,7 +78,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{A Failure Detection Model for Data Center Networks\titlenote{(Produces the permission block, and
+\title{A Failure Detection approach of Data Center Networks\titlenote{(Produces the permission block, and
 copyright information). For use with
 SIG-ALTERNATE.CLS. Supported by ACM.}}
 %
@@ -228,30 +228,112 @@ The rest of this paper is organized as follows. Section 2 discusses related work
 In this section, we will present various relevant works including failure detectors, failure detection architecture in distributed systems and failure detection in data center networks.
 
 \subsection{Failure Detectors}
-A failure detector(FD) is widely recognized as an oracle to intelligently suspect failed processes \cite{chandra1996unreliable}. The monitored process periodically send heartbeat messages to its detector to prove its liveness.
+A failure detector (FD) is widely recognized as an oracle to intelligently suspect failed processes \cite{chandra1996unreliable}. The monitored process periodically send heartbeat messages to its detector to prove its liveness.
 
-Chen et al. proposed a FD that provides QoS \cite{chen2002quality}. It estimates the expected arrival time(EAs) of the next heartbeat message according to a slide window storing n most recent arrived messages. EAs determine the deadline that the detector will wait for the next heartbeat before suspecting the monitored process. \textit{Chen FD} can adjust current network condition and set the timeout threshold adaptively by referring to recent heartbeats. Bertier et al. proposed a similar FD \cite{bertier2002implementation}, whereas it uses a dynamic way to compute error margin of \textit{Chen FD}. Other FDs like \textit{$\phi$ Accrual FD} \cite{hayashibara2004varphi} and \textit{Satzger FD} \cite{satzger2007new} can output a continuous accrual failure value other than a binary value at any time which stands for the failure probability of the process.
+Chen et al. proposed a FD that provides QoS \cite{chen2002quality}. It estimates the expected arrival time (EAs) of the next heartbeat message according to a slide window storing n most recent arrived messages. EAs determine the deadline that the detector will wait for the next heartbeat before suspecting the monitored process. \textit{Chen FD} can adjust current network condition and set the timeout threshold adaptively by referring to recent heartbeats. Bertier et al. proposed a similar FD \cite{bertier2002implementation}, whereas it uses a dynamic way to compute error margin of \textit{Chen FD}. Other FDs like \textit{$\phi$ Accrual FD} \cite{hayashibara2004varphi} and \textit{Satzger FD} \cite{satzger2007new} can output a continuous accrual failure value other than a binary value at any time which stands for the failure probability of the process.
 
 \subsection{Failure Detection Architecture}
-A failure detection architecture aims to provide the service of monitoring nodes in large scale distributed systems in a scalable way. Roughly speaking, there are two kinds of architectures. The first one is hierarchical architecture \cite{felber1999failure}, all the nodes are partitioned into different groups, each group has a leader node. Within a group, the leader node is responsible for monitoring all the nodes. Leader nodes periodically send node status information of his group to other leader nodes. Hierarchical architecture can reduce the number of heartbeat messages effectively, but it exists \textit{Single Point of Failure} problem, when the leader node crashes, it needs to select a new leader.
-Another alternative solution is Gossip-Style architecture \cite{van1998gossip}. Each node maintains a list containing the \textit{heartbeat counter} for all the nodes in the system. Every T$_{gossip}$ seconds, each node firstly update \textit{heartbeat counter} of itself and then randomly select another node to send its list to. Upon receiving a message, the node will merge two lists and update each node's \textit{heartbeat counter} with the bigger one. If the \textit{heartbeat counter} does not update after T$_{fail}$ seconds, the node will be marked as crashed. If the \textit{heartbeat counter} does not update after T$_{cleanup}$(T$_{cleanup}$
+A failure detection architecture aims to provide the service of monitoring nodes in large scale distributed systems in a scalable way.
+Roughly speaking, there are two kinds of architectures. The first one is hierarchical architecture \cite{felber1999failure}, all the nodes are partitioned into different groups, each group has a leader node. Within a group, the leader node is responsible for monitoring all the nodes. Leader nodes periodically send node status information of his group to other leader nodes. Hierarchical architecture can reduce the number of heartbeat messages effectively, but it exists \textit{Single Point of Failure} problem, when the leader node crashes, it needs to select a new leader.
+
+Another alternative solution is Gossip-Style architecture \cite{van1998gossip}. Each node maintains a list containing the \textit{heartbeat counter} for each node in the system. Every T$_{gossip}$ seconds, each node firstly update \textit{heartbeat counter} of itself and then randomly select another node to send its list to. Upon receiving a message, the node will merge two lists and update each node's \textit{heartbeat counter} with the bigger one. If the \textit{heartbeat counter} does not update after T$_{fail}$ seconds, the node will be marked as crashed. If the \textit{heartbeat counter} does not update after T$_{cleanup}$ (T$_{cleanup}$
 $\ge$T$_{fail}$) seconds, it will be removed from the list. This approach has very low bandwidth occupation because it only produces $n$ messages each epoch where $n$ is the size of the system. However, with the increasing of crashing nodes, it needs more time to detect these failures.
 
-\subsection{Failure Detection in Data Center Networks}
-There exists a large body of work on applying statistical approaches to failure localization in data center networks.
+\subsection{Failure Detection in Networks}
+Different from the work mentioned above, failure detection in networks should consider network topology and localize failure positions at IP layer. Gill et al. present the first large-scale survey on failures in data center networks \cite{gill2011understanding}.
+
+Also, there exists a large body of work on applying statistical approaches to failure localization in networks. Sherlock \cite{bahl2007towards} localizes failures to limited network components by capturing dependencies between components. Shrink \cite{kandula2005shrink} leverages Bayesian Network model to diagnose root cause of IP network failures. Herodotou et al. \cite{herodotou2014scalable} actively inject ping traffic into network and analyze the ping results overlaid on top of the network topology. It will generate a ranked list containing the suspected failed device and links along with their failure score that can best explain the observed ping data.
+
+
+\section{Data Center Network Architecture}
+In this section, we will take a brief look at common data center network architecture.
+
+A data center is a facility used to house computer systems and associated components, it usually contains hundreds of thousands devices and links. Modern data centers use hierarchical architecture. Figure 1 depicts a conventional data center network architecture \cite{gill2011understanding, greenberg2009vl2, herodotou2014scalable}. At the bottom layer are racks of servers, typically there are 20 to 40 servers in each rack, and each server in the same rack connects to a Top of Rack (ToR) Switch via a 1 Gbps link. Each ToR then connects to a primary and a backup Aggregation Switch (AS) for redundancy. ASs are connected to Access Routers (ARs) forming a complete bipartite graph. Finally, ARs are connected to Core Routers (CRs).
+
+To limit overheads and to isolate different services, servers are partitioned into virtual LANs (VLANs). All links in the data center use Ethernet as link layer protocol and physical connections are a mix of copper and fiber cables. In addition to the devices in Figure 1, there may exist other devices like load balancers (LBs) and firewalls.
+
+Modern data center usually employs \textit{Equal Cost MultiPath} (ECMP) routing within the data center for fault tolerance, which means that there are multiple paths from source to destination. Thus in this work, we will apply ECMP routing to the simulated network by enabling ECMP routing configurations in NS-3.
+
+% figure
+\begin{figure}
+\centering
+\includegraphics{topology}
+\caption{Conventional Data Center Network Topology}
+\end{figure}
+
+
+\section{Approach Overview}
+In this section, we will introduce the whole design of our failure detection approach.
+
+Different network device should have different quality of service (QoS). Gill et.al \cite{gill2011understanding} have shown the diversity of different devices' failure characteristics. Unfortunately, none of the work in Section 2 treats these devices differently. We firstly divide network devices into two categories.
+
+\begin{itemize}
+\item \textbf{Imperetative Device.} This category includes servers, ToRs and links between ToRs and servers. Typically servers run various user applications and store user data. The crash of servers may cause user-perceived faults. The crash of a ToR will make servers under it unreachable. Also Gill et.al declare that the downtime of ToRs may be very long. Thus the failure detection for these devices must be fast enough besides the accuracy requirement.
+
+\item \textbf{Non-imperetative Device.} It includes other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
+    
+\end{itemize}
+
+% figure
+\begin{figure}
+\centering
+\includegraphics{system}
+\caption{Failure Detection System Architecture}
+\end{figure}
+
+Figure 2 illustrates the entire architecture of our failure detection system. It mainly contains two modules. The servers failure detection system is autonomous and combines centralized structure with decentralized structure. A server can both play the role of a detector and a monitored object. Each server is monitored by multiple FD processes installed on different servers for redundancy. A server can also monitor a group of servers. Once the FD outputs the crash of a server, it will send a crash report message to \textbf{Crash Decider}. \textbf{Crash Decider} will determine the final status of this server.
+
+For the detection of non-imperetative devices, \textbf{Traffic Collector} periodically collects traffic data of routers and switches and send telemetry data to \textbf{Traffic Analysis Worker}. \textbf{Traffic Analysis Worker} finally generate failure alerts by performing analysis on these data.
+
+ 
+
+\section{Failure Detection Approach}
+In this section, we will discuss the detailed design of different modules of the failure detection system respectively.
+
+\subsection{Failure Detection for servers}
+Failure Detection for servers is responsible for reporting the crash of servers effectively and efficiently. Our detection model is based on the assumption that once the server crashes, it never recovers by itself. The QoS of failure detection for servers are as follows:
+
+\begin{itemize}
+\item \textbf{Efficiency.} It measures how fast the system can report the crash of the server after it crashes. The system is more efficient if it takes less time to detect a failure.
+\item \textbf{Completeness.} It measures whether the system can detect all the crashed servers. The system is more complete if it rules out fewer true crashed ones.
+\item \textbf{Soundness.} In some scenarios, the behavior of the network may vary. For example, message loss and message delay may happen sometimes. The detection system should be sound enough to distinguish between such condition and a real crash.
+
+\end{itemize}
+
+\subsubsection{k-detector}
+To meet the requirements mentioned above, this paper proposes a detector model named $k$-detector model which means each server is monitored by $k$ FDs on different servers whereas $k$ is a parameter tuned by users. \textbf{Crash Decider} only
+
+\paragraph{Rationale}
+
+
+\subsubsection{Monitoring Rule Inference}
+
+
+
+
+\subsection{Failure Detection for ToRs}
+
+
+
+
+
+\subsection{Failure Detection for Links}
+
 
 
 
 \section{Evaluation}
+In this section, we will present how we evaluate the efficiency and effectiveness of our approach as well as the experiments results.
+
+\subsection{Experiments Setup}
 
 \section{Conclusions}
 This paper proposes a failure detector model for data center networks.
 %\end{document}  % This is where a 'short' article might terminate
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-This work is partially supported by the National High-Technology Research and Development Program of China under Grant No.2014AA01A301.
 
+\section{Acknowledgments}
+This work is partially supported by the National High-Technology Research and Development Program of China (Grant No.2014AA01A301).
 
 %
 % The following two commands are all you need in the

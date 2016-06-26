@@ -95,3 +95,24 @@
   year={2002},
   organization={IEEE}
 }
+
+@inproceedings{van1998gossip,
+  title={A gossip-style failure detection service},
+  author={Van Renesse, Robbert and Minsky, Yaron and Hayden, Mark},
+  booktitle={Middleware¡¯98},
+  pages={55--70},
+  year={1998},
+  organization={Springer}
+}
+
+@inproceedings{bahl2007towards,
+  title={Towards highly reliable enterprise network services via inference of multi-level dependencies},
+  author={Bahl, Paramvir and Chandra, Ranveer and Greenberg, Albert and Kandula, Srikanth and Maltz, David A and Zhang, Ming},
+  booktitle={ACM SIGCOMM Computer Communication Review},
+  volume={37},
+  number={4},
+  pages={13--24},
+  year={2007},
+  organization={ACM}
+}
+

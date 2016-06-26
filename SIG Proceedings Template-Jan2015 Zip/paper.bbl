@@ -1,4 +1,11 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{bahl2007towards}
+P.~Bahl, R.~Chandra, A.~Greenberg, S.~Kandula, D.~A. Maltz, and M.~Zhang.
+\newblock Towards highly reliable enterprise network services via inference of
+  multi-level dependencies.
+\newblock In {\em ACM SIGCOMM Computer Communication Review}, volume~37, pages
+  13--24. ACM, 2007.
 
 \bibitem{bertier2002implementation}
 M.~Bertier, O.~Marin, and P.~Sens.
@@ -23,11 +30,37 @@ P.~Felber, X.~D{\'e}fago, R.~Guerraoui, and P.~Oser.
 \newblock In {\em Distributed Objects and Applications, 1999. Proceedings of
   the International Symposium on}, pages 132--141. IEEE, 1999.
 
+\bibitem{gill2011understanding}
+P.~Gill, N.~Jain, and N.~Nagappan.
+\newblock Understanding network failures in data centers: measurement,
+  analysis, and implications.
+\newblock In {\em ACM SIGCOMM Computer Communication Review}, volume~41, pages
+  350--361. ACM, 2011.
+
+\bibitem{greenberg2009vl2}
+A.~Greenberg, J.~R. Hamilton, N.~Jain, S.~Kandula, C.~Kim, P.~Lahiri, D.~A.
+  Maltz, P.~Patel, and S.~Sengupta.
+\newblock Vl2: a scalable and flexible data center network.
+\newblock In {\em ACM SIGCOMM computer communication review}, volume~39, pages
+  51--62. ACM, 2009.
+
 \bibitem{hayashibara2004varphi}
 N.~Hayashibara, X.~Defago, R.~Yared, and T.~Katayama.
 \newblock The $\varphi$ accrual failure detector.
 \newblock In {\em Reliable Distributed Systems, 2004. Proceedings of the 23rd
   IEEE International Symposium on}, pages 66--78. IEEE, 2004.
+
+\bibitem{herodotou2014scalable}
+H.~Herodotou, B.~Ding, S.~Balakrishnan, G.~Outhred, and P.~Fitter.
+\newblock Scalable near real-time failure localization of data center networks.
+\newblock In {\em Proceedings of the 20th ACM SIGKDD international conference
+  on Knowledge discovery and data mining}, pages 1689--1698. ACM, 2014.
+
+\bibitem{kandula2005shrink}
+S.~Kandula, D.~Katabi, and J.-P. Vasseur.
+\newblock Shrink: A tool for failure diagnosis in ip networks.
+\newblock In {\em Proceedings of the 2005 ACM SIGCOMM workshop on Mining
+  network data}, pages 173--178. ACM, 2005.
 
 \bibitem{satzger2007new}
 B.~Satzger, A.~Pietzowski, W.~Trumler, and T.~Ungerer.
