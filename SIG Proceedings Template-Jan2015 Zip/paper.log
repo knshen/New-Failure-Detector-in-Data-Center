@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2016.6.17)  26 JUN 2016 22:09
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2016.6.17)  27 JUN 2016 22:15
 entering extended mode
 **paper.tex
 
@@ -218,140 +218,178 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
  (D:\CTEX\MiKTeX\tex\latex\ae\t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
-)))
+))) (D:\CTEX\UserData\tex\latex\algorithms\algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(D:\CTEX\MiKTeX\tex\latex\float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count111
+\float@exts=\toks38
+\float@box=\box30
+\@float@everytoks=\toks39
+\@floatcapt=\box31
+)
+(D:\CTEX\MiKTeX\tex\latex\base\ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks40
+\c@algorithm=\count112
+)
+(D:\CTEX\UserData\tex\latex\algorithms\algorithmic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+\c@ALC@unique=\count113
+\c@ALC@line=\count114
+\c@ALC@rem=\count115
+\c@ALC@depth=\count116
+\ALC@tlm=\skip44
+\algorithmicindent=\skip45
+)
 ("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
 aper.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
  (D:\CTEX\MiKTeX\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count111
+\scratchcounter=\count117
 \scratchdimen=\dimen123
-\scratchbox=\box30
-\nofMPsegments=\count112
-\nofMParguments=\count113
-\everyMPshowfont=\toks38
-\MPscratchCnt=\count114
+\scratchbox=\box32
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count120
 \MPscratchDim=\dimen124
-\MPnumerator=\count115
-\makeMPintoPDFobject=\count116
-\everyMPtoPDFconversion=\toks39
+\MPnumerator=\count121
+\makeMPintoPDFobject=\count122
+\everyMPtoPDFconversion=\toks42
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 146.
+LaTeX Font Info:    Try loading font information for U+msa on input line 149.
  (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 146.
+LaTeX Font Info:    Try loading font information for U+msb on input line 149.
 
 (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 146.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 149.
 
 (D:\CTEX\MiKTeX\tex\latex\base\ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 146.
+Overfull \hbox (525.59998pt too wide) in paragraph at lines 149--149
+ [][][][] 
+ []
 
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 149.
 (D:\CTEX\MiKTeX\tex\latex\psnfss\t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 146.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 149.
 
 
 (D:\CTEX\MiKTeX\tex\latex\psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 146.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 149.
 
-Overfull \hbox (1.0793pt too wide) in paragraph at lines 148--157
+Overfull \hbox (1.0793pt too wide) in paragraph at lines 151--160
 \T1/aer/m/it/9 Prepar-ing ACM SIG Pro-ceed-ings Us-ing L[]T[]X$\OT1/cmr/m/n/9 2
 []$ \T1/aer/m/it/9 and BibT[]X\T1/aer/m/n/9 .
  []
 
 Excluding 'CCSXML' comment.
-LaTeX Font Info:    Try loading font information for OMS+aer on input line 216.
+LaTeX Font Info:    Try loading font information for OMS+aer on input line 219.
 
  (D:\CTEX\MiKTeX\tex\latex\ae\omsaer.fd
 File: omsaer.fd 1999/12/27
 )
 LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 216.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 219.
  [1{D:/CTEX/UserData/pdftex/config/pdftex.map{Unicode.sfd}{UGBK.sfd}}
 
 
 ]
-Overfull \hbox (1.74832pt too wide) in paragraph at lines 248--248
+Overfull \hbox (1.74832pt too wide) in paragraph at lines 251--251
 []\secfnt DATA CEN-TER NET-WORK AR-CHI-TEC-
  []
 
 <topology.pdf, id=20, 281.88089pt x 176.26251pt>
 File: topology.pdf Graphic file (type pdf)
  <use topology.pdf>
-Package pdftex.def Info: topology.pdf used on input line 260.
+Package pdftex.def Info: topology.pdf used on input line 263.
 (pdftex.def)             Requested size: 281.8802pt x 176.26207pt.
 
-Overfull \hbox (41.8802pt too wide) in paragraph at lines 260--261
+Overfull \hbox (41.8802pt too wide) in paragraph at lines 263--264
  [][] 
  []
 
 <system.pdf, id=21, 243.41039pt x 211.93579pt>
 File: system.pdf Graphic file (type pdf)
  <use system.pdf>
-Package pdftex.def Info: system.pdf used on input line 280.
+Package pdftex.def Info: system.pdf used on input line 283.
 (pdftex.def)             Requested size: 243.40977pt x 211.93526pt.
 
-Overfull \hbox (3.40977pt too wide) in paragraph at lines 280--281
+Overfull \hbox (3.40977pt too wide) in paragraph at lines 283--284
  [][] 
  []
 
 [2 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zip
 /topology.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template
 -Jan2015 Zip/system.pdf>]
-Overfull \hbox (3.47081pt too wide) in paragraph at lines 286--287
+Overfull \hbox (3.47081pt too wide) in paragraph at lines 289--290
 []\T1/aer/m/n/9 For the de-tec-tion of non-imperetative de-vices, \T1/aer/bx/n/
 9 Traf-fic Col-
  []
 
 
+Overfull \hbox (15.07552pt too wide) detected at line 365
+\OML/cmm/m/it/9 S[] \OT1/cmr/m/n/9 = []
+ []
+
+[3]
 ("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
-aper.bbl") [3]
+aper.bbl" [4]) [5
+
+]
 ("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
 aper.aux") ) 
 Here is how much of TeX's memory you used:
- 2881 strings out of 495354
- 34594 string characters out of 3183859
- 101055 words of memory out of 3000000
- 5962 multiletter control sequences out of 15000+200000
- 61723 words of font info for 87 fonts, out of 3000000 for 9000
+ 3166 strings out of 495354
+ 37965 string characters out of 3183859
+ 107160 words of memory out of 3000000
+ 6232 multiletter control sequences out of 15000+200000
+ 63214 words of font info for 88 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,12n,34p,903b,464s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,12n,34p,903b,571s stack positions out of 5000i,500n,10000p,200000b,50000s
 {D:/CTEX/MiKTeX/fonts/enc/dvips/fontname/8r.enc}<D:/CTEX/MiKTeX/fon
 ts/type1/public/amsfonts/cm/cmbx9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmmi6.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><D:/CT
-EX/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><D:/CTEX/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmr8.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.
-pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/CTEX/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmsy9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmti7.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmti9.pfb><D:/C
-TEX/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/
-helvetic/uhvr8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><D:/CTEX/M
-iKTeX/fonts/type1/urw/times/utmr8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/ut
-mri8a.pfb>
-Output written on paper.pdf (3 pages, 496952 bytes).
+ts/cmextra/cmex9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
+D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><D:/CTEX/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmr5.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><D:/CTEX/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><D:/CTEX/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmr9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
+D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><D:/CTEX/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmti7.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmti9.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><D:/CTEX/MiKTeX
+/fonts/type1/urw/helvetic/uhvr8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmb
+8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><D:/CTEX/MiKTeX/fonts/t
+ype1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (5 pages, 541623 bytes).
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
+ 149 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

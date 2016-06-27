@@ -45,8 +45,11 @@
 %
 % For tracking purposes - this is V2.0 - May 2012
 
+
 \documentclass{sig-alternate-05-2015}
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \begin{document}
 
@@ -78,7 +81,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{A Failure Detection approach of Data Center Networks\titlenote{(Produces the permission block, and
+\title{A Failure Detection Approach of Data Center Networks\titlenote{(Produces the permission block, and
 copyright information). For use with
 SIG-ALTERNATE.CLS. Supported by ACM.}}
 %
@@ -106,7 +109,7 @@ SIG-ALTERNATE.CLS. Supported by ACM.}}
 % without further effort on your part as the last section in
 % the body of your article BEFORE References or any Appendices.
 
-\numberofauthors{8} %  in this sample file, there are a *total*
+%\numberofauthors{8} %  in this sample file, there are a *total*
 % of EIGHT authors. SIX appear on the 'first-page' (for formatting
 % reasons) and the remaining two appear in the \additionalauthors section.
 %
@@ -268,10 +271,10 @@ In this section, we will introduce the whole design of our failure detection app
 Different network device should have different quality of service (QoS). Gill et.al \cite{gill2011understanding} have shown the diversity of different devices' failure characteristics. Unfortunately, none of the work in Section 2 treats these devices differently. We firstly divide network devices into two categories.
 
 \begin{itemize}
-\item \textbf{Imperetative Device.} This category includes servers, ToRs and links between ToRs and servers. Typically servers run various user applications and store user data. The crash of servers may cause user-perceived faults. The crash of a ToR will make servers under it unreachable. Also Gill et.al declare that the downtime of ToRs may be very long. Thus the failure detection for these devices must be fast enough besides the accuracy requirement.
+\item \textbf{Imperative Device.} This category includes servers, ToRs and links between ToRs and servers. Typically servers run various user applications and store user data. The crash of servers may cause user-perceived faults. The crash of a ToR will make servers under it unreachable. Also Gill et.al declare that the downtime of ToRs may be very long. Thus the failure detection for these devices must be fast enough besides the accuracy requirement.
 
-\item \textbf{Non-imperetative Device.} It includes other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
-    
+\item \textbf{Non-imperative Device.} It includes other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
+
 \end{itemize}
 
 % figure
@@ -285,45 +288,140 @@ Figure 2 illustrates the entire architecture of our failure detection system. It
 
 For the detection of non-imperetative devices, \textbf{Traffic Collector} periodically collects traffic data of routers and switches and send telemetry data to \textbf{Traffic Analysis Worker}. \textbf{Traffic Analysis Worker} finally generate failure alerts by performing analysis on these data.
 
- 
+
 
 \section{Failure Detection Approach}
 In this section, we will discuss the detailed design of different modules of the failure detection system respectively.
 
-\subsection{Failure Detection for servers}
-Failure Detection for servers is responsible for reporting the crash of servers effectively and efficiently. Our detection model is based on the assumption that once the server crashes, it never recovers by itself. The QoS of failure detection for servers are as follows:
+\subsection{K-detectors Model}
+To detect the crash of servers and ToRs effectively and efficiently, this paper propose a detection model named $K$-detectors model. Our detection model is based on the assumption that once the server or ToR crashes, it never recovers by itself. The QoS of failure detection are as follows:
 
 \begin{itemize}
-\item \textbf{Efficiency.} It measures how fast the system can report the crash of the server after it crashes. The system is more efficient if it takes less time to detect a failure.
-\item \textbf{Completeness.} It measures whether the system can detect all the crashed servers. The system is more complete if it rules out fewer true crashed ones.
+\item \textbf{Efficiency.} It measures how fast the system can report the crash after it crashes. The system is more efficient if it takes less time to detect a failure.
+\item \textbf{Completeness.} It measures whether the system can detect all the crashed objects. The system is more complete if it rules out fewer true crashed ones.
 \item \textbf{Soundness.} In some scenarios, the behavior of the network may vary. For example, message loss and message delay may happen sometimes. The detection system should be sound enough to distinguish between such condition and a real crash.
 
 \end{itemize}
 
-\subsubsection{k-detector}
-To meet the requirements mentioned above, this paper proposes a detector model named $k$-detector model which means each server is monitored by $k$ FDs on different servers whereas $k$ is a parameter tuned by users. \textbf{Crash Decider} only
+In $K$-detectors model, each server is monitored by $K$ FDs on different servers where $K$ is a parameter tuned by users. When a FD considers a server crashes, it sends a crash report message to \textbf{Crash Decider}. If the output of the FD transforms from suspect to trust, it re-sends a message to revoke the most recent crash report.
+
+\begin{equation}
+S_{s,t}=\left\{
+    \begin{array}{lcl}
+    \text{suspect} & \text{if} & \|CRM_{s,t}\|\geq\left\lfloor(K+1)/2\right\rfloor \\
+
+    \text{trust} && \text{otherwise}
+    \end{array}
+\right.
+\end{equation}
+where $CRM_{s,t}$ denotes the collection of crash report messages for server $s$ until time $t$, $S_{s,t}$ denotes the status of server $s$ at time $t$. If \textbf{Crash Decider} receives $\left\lfloor(K+1)/2\right\rfloor$ crash messages of a server, it considers the server to have crashed.
+
+\subsection{Monitoring Rule Inference}
+To form the $K$-detectors model and also to meet QoS to the greatest extent, we propose the following specifications of monitoring relationships among servers:
+\begin{enumerate}
+    \item Each sever monitors $K$ servers. This balances monitor intensity of each server.
+    \item A server cannot monitor itself.
+    \item A server is monitored by $K$ different servers.
+    \item $K-1$ of the $K$ detectors are on the servers at the same rack.
+    \item The monitoring rule should ensure each link covered by heartbeat messages.
+    \item Each rack of servers monitor servers of other racks, which vary from different racks averagely.
+\end{enumerate}
 
 \paragraph{Rationale}
+Intuitively, the use of $K$ FDs is able to adapt to bursty-traffic conditions like message loss because the determination of a failure requires at least $\left\lfloor(K+1)/2\right\rfloor$ FDs' agreement. Also, $K$-detectors can prevent crashes of FDs to some extent. Theoretically, a failure can still be detected even when $K-\left\lfloor(K+1)/2\right\rfloor=\left\lfloor K/2\right\rfloor$ of its detectors crashed.
 
+On the other hand, the fourth specification above can make the best of locality of LAN, which reduces the probability of degeneration on detection time in turn.
 
-\subsubsection{Monitoring Rule Inference}
+Specification five is the presupposition of link failure detection. It is easy to see that, some links cannot be distinguished from faulty links without this specification.
 
+The last one is an extension of specification five. It is for the consideration of ToRs' detection, we will discuss it in detail in section 5.4.
 
+\subsection{FD Algorithm}
+Our FD algorithm is almost the same as \textit{Chen} FD \cite{chen2002quality} except for some minor changes.
 
+\begin{equation}
+EA_{l+1} \approx \frac{1}{n}(\sum_{i=1}^{n}A_i - \eta s_i)+(l+1)\eta
+\end{equation}
+this formula estimates the expected arriving time of next message, where $s_i$ is the sequence number of heartbeat message, $A_i$ is the receipt time of message $i$, $\eta$ is message send interval. Obviously, this formula normalizes each $A_i$ by shifting it backward $\eta s_i$ time units.
+
+After that, we utilize hyperbolic tangent function to model current suspicious level:
+
+\begin{equation} 
+\tau(t_{now}) = |tanh(t_{now}-EA_{l+1})|
+\end{equation}
+suspicious level $\tau(t_{now})$ always ranges from 0 to 1, when $t_{now}$ grows bigger, the suspicious level is closer to 1, which implies a higher failure probability. A continuous valued rather than binary valued output decouples the interpretation of failure data from the failure monitoring mechanism, user applications can set their own threshold according to their demands.
 
 \subsection{Failure Detection for ToRs}
+Apart from determination of servers' crashes, \textbf{Crash Decider} is also responsible for failure detection for ToRs. If most or even all servers in a rack is viewed as crashed, it is more likely that the top of rack switch crashes rather than the servers.
 
+\begin{equation}
+S_{ToR,t}=\left\{
+    \begin{array}{lcl}
+    \text{suspect} & \text{if} & \|\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}\| \\
+    && \geq \alpha \cdot m\\
+    \text{trust} && \text{otherwise}
+    \end{array}
+\right.
+\end{equation}
+where $m$ is the number of servers per rack, $\alpha$ is a  proportionality coefficient measuring how strict the criterion to determine failure of a ToR is. When \textbf{Crash Decider} finds more than $\alpha \cdot m$ servers under the ToR crash, it will report the crash of ToR rather than these servers. The last specification in section 5.2 ensures that once a ToR is down, each other rack has the chance to find this failure. An extreme counter-example is that if the outside detectors of rack 1 servers are all in rack 2, once ToR of rack 2 is down, \textbf{Crash Decider} never perceives the status of ToR of rack 1.
 
+To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorithm of \textbf{Crash Decider}.
 
-
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\begin{algorithm}
+	\caption{Detection Algorithm for \textbf{Crash Decider}}
+	%\label{alg0}
+	\begin{algorithmic}[1]
+		\REQUIRE $K$, $\eta$, $n$, $\alpha$, $m$, $\tau_m$
+		\ENSURE $S_{i,t}$, $i$ is an imperative device
+	       
+        \FOR{$i \text{ in imperative devices}$}
+            \STATE $S_{i,t_0} \Leftarrow trust$
+        \ENDFOR
+	    \WHILE{$True$}
+            \STATE $List<Integer> failsEachRack \Leftarrow \emptyset$
+            \FOR{each $i$ in Servers}
+                \IF{$\|CRM_{s,t_{now}}\| \geq \left\lfloor(K+1)/2\right\rfloor$}
+                    \STATE $S_{i,t_{now}} \Leftarrow suspect$
+                    \STATE $rackID \Leftarrow getRackID(i)$
+                    \STATE $failsEachRack.get(rackID)++$
+                \ELSE
+                    \STATE $S_{i,t_{now}} \Leftarrow trust$
+                \ENDIF
+            \ENDFOR
+            
+            \FOR{each i in ToRs}
+                \IF{$failsEachRack.get(i) \geq \alpha \cdot m$}
+                    \STATE $S_{i,t_{now}} \Leftarrow suspect$
+                \ELSE
+                    \STATE $S_{i,t_{now}} \Leftarrow trust$ 
+                \ENDIF
+            \ENDFOR
+		\ENDWHILE
+	\end{algorithmic}
+\end{algorithm}
+It firstly determines the status of each server (line 6 to 14), and then determines the status of ToRs (line 15 to 21).
 
 \subsection{Failure Detection for Links}
+The failure detection for links is another important part of our detection system, this paper presents the following QoS:
+\begin{itemize}
+  \item \textbf{Precision.} Precision indicates how many suspected links are true failed. 
+  \item \textbf{Completeness.} This measures whether our approach can find all the faulty links.
+  \item \textbf{Discrimination.} Because we will provide a short ranked list of suspected objects, this measures to what degree can our approach distinguish between normal links and faulty links.
+\end{itemize}
 
+The key idea of our approach is to capture network traffic changes as times going on. If the network traffic changes significantly compared with traffic in normal conditions, we believe that there exists failures somewhere in the network. The insight is that network traffic distribution is associated with routing protocol and monitoring relationships of servers, the drastic changes of traffic probably imply failures.
 
+To collect required traffic data, we simply install \textit{tcpdump} on each router and switch. These data will be sent to \textbf{Traffic Analysis Worker} for further analysis.
 
+In order to model this data analysis problem, this paper proposes a Back Propagation Neural Network (BPNN) based classifier. 
+
+\paragraph{Feature Extraction}
+The first step is to extract reasonable features from raw traffic data. To address this issue, we extract $m^2$ features, each of which denotes traffic of one direction. Because there are $m$
 
 \section{Evaluation}
-In this section, we will present how we evaluate the efficiency and effectiveness of our approach as well as the experiments results.
+In this section, we will present how we evaluate our approach in terms of efficiency and effectiveness. Experiments results will also be shown in this section.
 
 \subsection{Experiments Setup}
 
