@@ -273,7 +273,7 @@ Different network device should have different quality of service (QoS). Gill et
 \begin{itemize}
 \item \textbf{Imperative Device.} This category includes servers, ToRs and links between ToRs and servers. Typically servers run various user applications and store user data. The crash of servers may cause user-perceived faults. The crash of a ToR will make servers under it unreachable. Also Gill et.al declare that the downtime of ToRs may be very long. Thus the failure detection for these devices must be fast enough besides the accuracy requirement.
 
-\item \textbf{Non-imperative Device.} It includes other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
+\item \textbf{Non-imperative Device.} It includes links, other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
 
 \end{itemize}
 
@@ -284,7 +284,7 @@ Different network device should have different quality of service (QoS). Gill et
 \caption{Failure Detection System Architecture}
 \end{figure}
 
-Figure 2 illustrates the entire architecture of our failure detection system. It mainly contains two modules. The servers failure detection system is autonomous and combines centralized structure with decentralized structure. A server can both play the role of a detector and a monitored object. Each server is monitored by multiple FD processes installed on different servers for redundancy. A server can also monitor a group of servers. Once the FD outputs the crash of a server, it will send a crash report message to \textbf{Crash Decider}. \textbf{Crash Decider} will determine the final status of this server.
+Figure 2 illustrates the entire architecture of our failure detection system. It mainly contains two modules. The servers failure detection system combines centralized with decentralized structures. A server can both play the role of a detector and a monitored object. Each server is monitored by multiple FD processes installed on different servers for redundancy. A server can also monitor a couple of servers. Once the FD outputs the crash of a server, it will send a crash report message to \textbf{Crash Decider}. \textbf{Crash Decider} will determine the final status of this server.
 
 For the detection of non-imperetative devices, \textbf{Traffic Collector} periodically collects traffic data of routers and switches and send telemetry data to \textbf{Traffic Analysis Worker}. \textbf{Traffic Analysis Worker} finally generate failure alerts by performing analysis on these data.
 
@@ -346,7 +346,7 @@ this formula estimates the expected arriving time of next message, where $s_i$ i
 
 After that, we utilize hyperbolic tangent function to model current suspicious level:
 
-\begin{equation} 
+\begin{equation}
 \tau(t_{now}) = |tanh(t_{now}-EA_{l+1})|
 \end{equation}
 suspicious level $\tau(t_{now})$ always ranges from 0 to 1, when $t_{now}$ grows bigger, the suspicious level is closer to 1, which implies a higher failure probability. A continuous valued rather than binary valued output decouples the interpretation of failure data from the failure monitoring mechanism, user applications can set their own threshold according to their demands.
@@ -375,7 +375,7 @@ To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorit
 	\begin{algorithmic}[1]
 		\REQUIRE $K$, $\eta$, $n$, $\alpha$, $m$, $\tau_m$
 		\ENSURE $S_{i,t}$, $i$ is an imperative device
-	       
+	
         \FOR{$i \text{ in imperative devices}$}
             \STATE $S_{i,t_0} \Leftarrow trust$
         \ENDFOR
@@ -390,12 +390,12 @@ To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorit
                     \STATE $S_{i,t_{now}} \Leftarrow trust$
                 \ENDIF
             \ENDFOR
-            
+
             \FOR{each i in ToRs}
                 \IF{$failsEachRack.get(i) \geq \alpha \cdot m$}
                     \STATE $S_{i,t_{now}} \Leftarrow suspect$
                 \ELSE
-                    \STATE $S_{i,t_{now}} \Leftarrow trust$ 
+                    \STATE $S_{i,t_{now}} \Leftarrow trust$
                 \ENDIF
             \ENDFOR
 		\ENDWHILE
@@ -406,19 +406,19 @@ It firstly determines the status of each server (line 6 to 14), and then determi
 \subsection{Failure Detection for Links}
 The failure detection for links is another important part of our detection system, this paper presents the following QoS:
 \begin{itemize}
-  \item \textbf{Precision.} Precision indicates how many suspected links are true failed. 
+  \item \textbf{Precision.} Precision indicates how many suspected links are true failed.
   \item \textbf{Completeness.} This measures whether our approach can find all the faulty links.
   \item \textbf{Discrimination.} Because we will provide a short ranked list of suspected objects, this measures to what degree can our approach distinguish between normal links and faulty links.
 \end{itemize}
 
 The key idea of our approach is to capture network traffic changes as times going on. If the network traffic changes significantly compared with traffic in normal conditions, we believe that there exists failures somewhere in the network. The insight is that network traffic distribution is associated with routing protocol and monitoring relationships of servers, the drastic changes of traffic probably imply failures.
 
-To collect required traffic data, we simply install \textit{tcpdump} on each router and switch. These data will be sent to \textbf{Traffic Analysis Worker} for further analysis.
+To collect required traffic data, we simply install \textit{tcpdump} on each router and switch. These data will be collected to \textbf{Traffic Analysis Worker} for further analysis.
 
-In order to model this data analysis problem, this paper proposes a Back Propagation Neural Network (BPNN) based classifier. 
+In order to model this data analysis problem, this paper proposes a Back Propagation Neural Network (BPNN) based classifier.
 
 \paragraph{Feature Extraction}
-The first step is to extract reasonable features from raw traffic data. To address this issue, we extract $m^2$ features, each of which denotes traffic of one direction. Because there are $m$
+The first step is to extract reasonable features from raw traffic data. To address this issue, we extract $n^2$ features, each of them denotes traffic of one direction where $n$ denotes the number of racks. Obviously, for each rack, there are $n$ different traffic directions (each one corresponds to one rack), so there are $n^2$ directions in total. Formally, the traffic feature during a time period 
 
 \section{Evaluation}
 In this section, we will present how we evaluate our approach in terms of efficiency and effectiveness. Experiments results will also be shown in this section.
