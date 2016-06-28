@@ -273,7 +273,7 @@ Different network device should have different quality of service (QoS). Gill et
 \begin{itemize}
 \item \textbf{Imperative Device.} This category includes servers, ToRs and links between ToRs and servers. Typically servers run various user applications and store user data. The crash of servers may cause user-perceived faults. The crash of a ToR will make servers under it unreachable. Also Gill et.al declare that the downtime of ToRs may be very long. Thus the failure detection for these devices must be fast enough besides the accuracy requirement.
 
-\item \textbf{Non-imperative Device.} It includes other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
+\item \textbf{Non-imperative Device.} It includes links, other routers and switches. A single failure of a link or a router does not affect the functionality of a data center because of path redundancy. So administrators care more about how effective the detect service is (The ability to identify actually happening failures).
 
 \end{itemize}
 
@@ -284,7 +284,7 @@ Different network device should have different quality of service (QoS). Gill et
 \caption{Failure Detection System Architecture}
 \end{figure}
 
-Figure 2 illustrates the entire architecture of our failure detection system. It mainly contains two modules. The servers failure detection system is autonomous and combines centralized structure with decentralized structure. A server can both play the role of a detector and a monitored object. Each server is monitored by multiple FD processes installed on different servers for redundancy. A server can also monitor a group of servers. Once the FD outputs the crash of a server, it will send a crash report message to \textbf{Crash Decider}. \textbf{Crash Decider} will determine the final status of this server.
+Figure 2 illustrates the entire architecture of our failure detection system. It mainly contains two modules. The servers failure detection system combines centralized with decentralized structures. A server can both play the role of a detector and a monitored object. Each server is monitored by multiple FD processes installed on different servers for redundancy. A server can also monitor a couple of servers. Once the FD outputs the crash of a server, it will send a crash report message to \textbf{Crash Decider}. \textbf{Crash Decider} will determine the final status of this server.
 
 For the detection of non-imperetative devices, \textbf{Traffic Collector} periodically collects traffic data of routers and switches and send telemetry data to \textbf{Traffic Analysis Worker}. \textbf{Traffic Analysis Worker} finally generate failure alerts by performing analysis on these data.
 
@@ -308,7 +308,7 @@ In $K$-detectors model, each server is monitored by $K$ FDs on different servers
 \begin{equation}
 S_{s,t}=\left\{
     \begin{array}{lcl}
-    \text{suspect} & \text{if} & |CRM_{s,t}|\geq\left\lfloor(K+1)/2\right\rfloor \\
+    \text{suspect} & \text{if} & \|CRM_{s,t}\|\geq\left\lfloor(K+1)/2\right\rfloor \\
 
     \text{trust} && \text{otherwise}
     \end{array}
@@ -337,7 +337,7 @@ Specification five is the presupposition of link failure detection. It is easy t
 The last one is an extension of specification five. It is for the consideration of ToRs' detection, we will discuss it in detail in section 5.4.
 
 \subsection{FD Algorithm}
-Our FD algorithm is almost the same as Chen FD \cite{chen2002quality} except for some minor changes.
+Our FD algorithm is almost the same as \textit{Chen} FD \cite{chen2002quality} except for some minor changes.
 
 \begin{equation}
 EA_{l+1} \approx \frac{1}{n}(\sum_{i=1}^{n}A_i - \eta s_i)+(l+1)\eta
@@ -346,7 +346,7 @@ this formula estimates the expected arriving time of next message, where $s_i$ i
 
 After that, we utilize hyperbolic tangent function to model current suspicious level:
 
-\begin{equation} 
+\begin{equation}
 \tau(t_{now}) = |tanh(t_{now}-EA_{l+1})|
 \end{equation}
 suspicious level $\tau(t_{now})$ always ranges from 0 to 1, when $t_{now}$ grows bigger, the suspicious level is closer to 1, which implies a higher failure probability. A continuous valued rather than binary valued output decouples the interpretation of failure data from the failure monitoring mechanism, user applications can set their own threshold according to their demands.
@@ -357,7 +357,7 @@ Apart from determination of servers' crashes, \textbf{Crash Decider} is also res
 \begin{equation}
 S_{ToR,t}=\left\{
     \begin{array}{lcl}
-    \text{suspect} & \text{if} & |\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}| \\
+    \text{suspect} & \text{if} & \|\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}\| \\
     && \geq \alpha \cdot m\\
     \text{trust} && \text{otherwise}
     \end{array}
@@ -370,26 +370,100 @@ To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorit
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \begin{algorithm}
-	\caption{Detection Algorithm for \textbf{Crash Decider}}
+	\caption{Detection Algorithm of \textbf{Crash Decider}}
 	%\label{alg0}
 	\begin{algorithmic}[1]
 		\REQUIRE $K$, $\eta$, $n$, $\alpha$, $m$, $\tau_m$
 		\ENSURE $S_{i,t}$, $i$ is an imperative device
-		%\STATE $y \Leftarrow 1$
-	    \WHILE{True}
-            \STATE List<Integer> failsEachRack $\Leftarrow \emptyset$
+	
+        \FOR{$i \text{ in imperative devices}$}
+            \STATE $S_{i,t_0} \Leftarrow trust$
+        \ENDFOR
+	    \WHILE{$True$}
+            \STATE $List<Integer> failsEachRack \Leftarrow \emptyset$
             \FOR{each $i$ in Servers}
-                \IF{$S_{i,t_now} = \text{suspect}$}
-                    rackID $\Leftarrow getRackID(i)$
-                    failsEachRack.set()
+                \IF{$\|CRM_{s,t_{now}}\| \geq \left\lfloor(K+1)/2\right\rfloor$}
+                    \STATE $S_{i,t_{now}} \Leftarrow suspect$
+                    \STATE $rackID \Leftarrow getRackID(i)$
+                    \STATE $failsEachRack.get(rackID)\text{++}$
+                \ELSE
+                    \STATE $S_{i,t_{now}} \Leftarrow trust$
+                \ENDIF
+            \ENDFOR
+
+            \FOR{each i in ToRs}
+                \IF{$failsEachRack.get(i) \geq \alpha \cdot m$}
+                    \STATE $S_{i,t_{now}} \Leftarrow suspect$
+                \ELSE
+                    \STATE $S_{i,t_{now}} \Leftarrow trust$
                 \ENDIF
             \ENDFOR
 		\ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
+It firstly determines the status of each server (line 6 to 14), and then determines the status of ToRs (line 15 to 21).
 
 \subsection{Failure Detection for Links}
-To collect
+The failure detection for links is another important part of our detection system, this paper presents the following QoS:
+\begin{itemize}
+  \item \textbf{Precision.} Precision indicates how many suspected links are true failed.
+  \item \textbf{Completeness.} This measures whether our approach can find all the faulty links.
+  \item \textbf{Discrimination.} Because we will provide a short ranked list of suspected objects, this measures to what degree can our approach distinguish between normal links and faulty links.
+\end{itemize}
+
+The key idea of our approach is to capture network traffic changes over time. If the network traffic changes significantly compared with traffic in normal conditions, we believe that there exists failures somewhere in the network. The insight is that network traffic distribution is associated with routing protocol and monitoring relationships of servers, the drastic changes of traffic probably imply failures.
+
+To collect required traffic data, we simply install \textit{tcpdump} on each router and switch. These data will be collected to \textbf{Traffic Analysis Worker} for further analysis.
+
+In order to model this data analysis problem, this paper proposes a Back Propagation Neural Networks (BPNN) based method to compute failure probability of each link.
+
+\paragraph{Feature Extraction}
+The first step is to extract rational features from raw traffic data. To address this issue, we extract $v \cdot n^2$ features in total. $v$ is number of devices (CRs, ARs, ASs), each device has $n^2$ features where $n$ is the number of racks. In particular, each feature denotes traffic of one direction. Obviously, there are $n$ choices of sources and $n$ choices of destinations, so the total number of possible traffic directions is $n^2$. 
+Formally, the traffic features during a time period $\Delta T$ is presented as \boldmath $x$ 
+\unboldmath $=($\boldmath $x_1, x_2, ..., x_v$\unboldmath $)$, \boldmath $x_i$
+\unboldmath $=(x_i^1, x_i^2, ..., x_i^{n^2})$
+where $x_i^j$ stands for direction $j$ traffic of device $i$ in $\Delta T$.
+
+\paragraph{BPNN Model}
+Suppose the number of links is $e$, for each time period $\Delta T$, the output of our model should be
+\boldmath $y$ 
+\unboldmath $=(y_1, y_2, ..., y_e)$, where $y_i$ denotes failure probability of link $i$. We apply a BPNN model to localize the faulty link during $\Delta T$. As is shown in Figure 3, BPNN is a multi-layer perceptron architecture:
+\begin{figure}
+  \centering
+  \includegraphics{ANN}
+  \caption{Multi-layer Perceptron Architecture}
+\end{figure}
+To reduce the computational work of training, we only set one hidden layer, both the hidden layer neurons and output layer neurons utilize Sigmoid function as the activation function. Take the output layer as an example:
+$y_i = Sigmoid(\beta_i - \theta_i)$ where $\theta_i$ is a constant term of the perceptron.
+
+\paragraph{Training of BPNN}
+To train the neural network, we apply the classical error BackPropagation (BP) algorithm \cite{rumelhart1988learning}. BP algorithm is based on gradient descent strategy.
+????? % write BP algorithm?
+
+\paragraph{The Detection Algorithm}
+BPNN model is only able to identify the faulty link during one time unit, in the following part, we will introduce how we can detect multiple faults over time.
+
+First of all, we assume that there are at most one link failure during a time unit ($\Delta T$). This assumption is partially supported by the finding proposed by Gill et. al. They find that on an average, link failures tend to be separated by a period of about one week \cite{gill2011understanding}.
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\begin{algorithm}
+	\caption{\textbf{Traffic Analysis Worker} Algorithm}
+	\begin{algorithmic}[1]
+        \REQUIRE \boldmath $x^t$ \unboldmath$=($\boldmath $x_1^t, x_2^t, ..., x_v^t$\unboldmath $)$
+		\ENSURE $F_i \text{ for } i \in E$
+       
+        \STATE $\text{divide traffic data }$\boldmath $x^t$$\text{ into }$\unboldmath $t/\Delta T \text{ chunks}$
+        \FOR{$\text{each data chunk } $ \boldmath $x$}
+        \STATE \boldmath $y$\unboldmath $=BPNN($\boldmath $x$\unboldmath $)$
+        \ENDFOR
+       
+
+	\end{algorithmic}
+\end{algorithm}
+
+Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input of the algorithm is the refined traffic data over time $T$. Traffic data is then divided into chunks and each chunk represents traffic data of one time unit $\Delta T$ (line 1).
+
 
 
 

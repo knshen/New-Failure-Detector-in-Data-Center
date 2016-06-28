@@ -9,6 +9,19 @@ import java.util.*;
 
 public class Util {
 	
+	public static void normalize(List<Item> list) {
+		double total = 0;
+		for(Item item : list) 
+			if(!item.item_name.equals("normal"))
+				total += item.value;
+		
+		for(Item item : list) 
+			if(item.item_name.equals("normal"))
+				item.value = 0;
+			else
+				item.value /= total;	
+	}
+	
 	public static double residual(List<Item> list1, List<Item> list2) {
 		double res = 0;
 		for(Item i1 : list1) {

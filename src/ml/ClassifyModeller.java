@@ -65,7 +65,7 @@ public class ClassifyModeller {
 				//System.out.print(class_mapping.get(j) + ": " + pro[j] + "	");
 			}
 			
-			Collections.sort(list);
+			//Collections.sort(list);
 			ress.add(list);
 		} // end for
 

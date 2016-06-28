@@ -62,6 +62,11 @@ S.~Kandula, D.~Katabi, and J.-P. Vasseur.
 \newblock In {\em Proceedings of the 2005 ACM SIGCOMM workshop on Mining
   network data}, pages 173--178. ACM, 2005.
 
+\bibitem{rumelhart1988learning}
+D.~E. Rumelhart, G.~E. Hinton, and R.~J. Williams.
+\newblock Learning representations by back-propagating errors.
+\newblock {\em Cognitive modeling}, 5(3):1, 1988.
+
 \bibitem{satzger2007new}
 B.~Satzger, A.~Pietzowski, W.~Trumler, and T.~Ungerer.
 \newblock A new adaptive accrual failure detector for dependable distributed

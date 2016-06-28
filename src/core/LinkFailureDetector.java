@@ -84,17 +84,41 @@ public class LinkFailureDetector {
 		ClassifyModeller cm = new ClassifyModeller();
 		List<List<Item>> res = cm.classify();
 		
+		List<Item> fs = new ArrayList<Item>();
+		
+		for(int i=0; i<res.size()-1; i++) {
+			for(int j=0; j<res.get(i).size(); j++) {
+				Item item = res.get(i).get(j);		
+				if(i == 0) {
+					fs.add(item);
+				}
+				else {
+					fs.get(j).value += item.value;
+				}
+			}
+		}
+		
+		Util.normalize(fs);
+		Collections.sort(fs);
+		
+		for(Item item : fs) {	
+			System.out.println(item);
+		}
+			
 		/*
 		for(int i=0; i<res.size(); i++) {
+			System.out.println(i+3);
 			for(Item item : res.get(i))
 				System.out.println(item.item_name + ": " + item.value);
 			System.out.println();
-		} */
+		} 
+		*/
 		
-		
+		/*
 		for(int i=1; i<res.size(); i++) {
 			System.out.println(Evaluator.discrimination(res.get(i)));
-		}
+		} */
+		
 		//System.out.println(Evaluator.discrimination(res.get(i), 21));
 	
 	}
@@ -124,7 +148,7 @@ public class LinkFailureDetector {
 		LinkFailureDetector lfd = new LinkFailureDetector();
 		// lfd.try_it();
 		
-		String mark = "dump-2-1";
+		String mark = "dump-3-5";
 		lfd.detect("z://",
 				"z://LinkCrashDump//",
 				mark);
