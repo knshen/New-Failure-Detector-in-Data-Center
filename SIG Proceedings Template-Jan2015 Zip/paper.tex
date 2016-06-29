@@ -418,15 +418,15 @@ To collect required traffic data, we simply install \textit{tcpdump} on each rou
 In order to model this data analysis problem, this paper proposes a Back Propagation Neural Networks (BPNN) based method to compute failure probability of each link.
 
 \paragraph{Feature Extraction}
-The first step is to extract rational features from raw traffic data. To address this issue, we extract $v \cdot n^2$ features in total. $v$ is number of devices (CRs, ARs, ASs), each device has $n^2$ features where $n$ is the number of racks. In particular, each feature denotes traffic of one direction. Obviously, there are $n$ choices of sources and $n$ choices of destinations, so the total number of possible traffic directions is $n^2$. 
-Formally, the traffic features during a time period $\Delta T$ is presented as \boldmath $x$ 
+The first step is to extract rational features from raw traffic data. To address this issue, we extract $v \cdot n^2$ features in total. $v$ is number of devices (CRs, ARs, ASs), each device has $n^2$ features where $n$ is the number of racks. In particular, each feature denotes traffic of one direction. Obviously, there are $n$ choices of sources and $n$ choices of destinations, so the total number of possible traffic directions is $n^2$.
+Formally, the traffic features during a time period $\Delta T$ is presented as \boldmath $x$
 \unboldmath $=($\boldmath $x_1, x_2, ..., x_v$\unboldmath $)$, \boldmath $x_i$
 \unboldmath $=(x_i^1, x_i^2, ..., x_i^{n^2})$
 where $x_i^j$ stands for direction $j$ traffic of device $i$ in $\Delta T$.
 
 \paragraph{BPNN Model}
 Suppose the number of links is $e$, for each time period $\Delta T$, the output of our model should be
-\boldmath $y$ 
+\boldmath $y$
 \unboldmath $=(y_1, y_2, ..., y_e)$, where $y_i$ denotes failure probability of link $i$. We apply a BPNN model to localize the faulty link during $\Delta T$. As is shown in Figure 3, BPNN is a multi-layer perceptron architecture:
 \begin{figure}
   \centering
@@ -452,9 +452,9 @@ First of all, we assume that there are at most one link failure during a time un
 	\begin{algorithmic}[1]
         \REQUIRE \boldmath $x^t$ \unboldmath$=($\boldmath $x_1^t, x_2^t, ..., x_v^t$\unboldmath $)$
 		\ENSURE $F_i \text{ for } i \in E$
-       
+
         \STATE $\text{divide traffic data }$\boldmath $x^t$$\text{ into }$\unboldmath $t/\Delta T \text{ chunks}$
-        
+
         \FOR{$i \in E$}
             \STATE $F_i \Leftarrow 0$
         \ENDFOR
@@ -464,7 +464,7 @@ First of all, we assume that there are at most one link failure during a time un
                 \STATE $F_i \Leftarrow F_i + y_i$
             \ENDFOR
         \ENDFOR
-        
+
         \FOR{\unboldmath $i \in E$}
             \STATE $F_i \Leftarrow \frac{\Delta T F_i}{t}$
         \ENDFOR
@@ -472,7 +472,7 @@ First of all, we assume that there are at most one link failure during a time un
 	\end{algorithmic}
 \end{algorithm}
 
-Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input of the algorithm is the refined traffic data over time $T$. Traffic data is then divided into chunks and each chunk represents traffic data of one time unit $\Delta T$ (line 1).
+Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input of the algorithm is the refined traffic data over time $T$. Firstly, traffic data is divided into chunks and each chunk represents a time unit $\Delta T$ (line 1) of traffic.
 
 
 
