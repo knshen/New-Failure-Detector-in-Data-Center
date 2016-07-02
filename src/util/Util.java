@@ -8,6 +8,23 @@ import java.util.*;
 import java.util.*;
 
 public class Util {
+	public static double inverseSum(List<Integer> nums) {
+		double ret = 0;
+		for(int num : nums) {
+			ret += 1 / (double)num;
+		}
+		
+		return ret / nums.size();
+	}
+	
+	public static double average(List<Double> nums) {
+		double res = 0;
+		for(double num : nums) {
+			res += num;
+		}
+		
+		return res /= nums.size(); 
+	}
 	
 	public static void normalize(List<Item> list) {
 		double total = 0;
@@ -194,16 +211,43 @@ public class Util {
 	}
 
 	public static void main(String args[]) {
-		double p = 0.001;
+		double a[] = new double[]{0.208877,
+				0.23625,
+				0.235987,
+				0.234116,
+				0.226187,
+				0.222623,
+				0.176447,
+				0.239669,
+				0.213614,
+				0.26604,
+				0.263351,
+				0.223458,
+				0.273424
+
+
+		};
 		
-		for(int k=2; k<=6; k++) {
-			int m = 1 + k - (k+1) / 2;
-			double pro = 0;
-			for(; m<=k; m++) {
-				pro += Util.C_N_M(k, m) * Math.pow(p, m) * Math.pow(1-p, k-m);
-			}
-			System.out.println("k = " + k + ": " + pro);
+		double b[] = new double[]{0.108977,
+				0.23629,
+				0.256057,
+				0.240432,
+				0.215982,
+				0.2469,
+				0.236427,
+				0.195673,
+				0.220823,
+				0.231803,
+				0.262053,
+				0.219117,
+				0.254761
+		};
+		
+		double res = 0;
+		for(int i=0; i<a.length; i++) {
+			res += ((a[i] - b[i]) / b[i]);
 		}
-		System.out.println();
+		
+		System.out.println(res / a.length);
 	}
 }

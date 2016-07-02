@@ -11,6 +11,10 @@ class Fault {
 		this.server_id = si;
 		this.time = time;
 	}
+	
+	public String toString() {
+		return server_id + " " + time;
+	}
 }
 
 public class DeviceCrashMaker {
@@ -32,7 +36,8 @@ public class DeviceCrashMaker {
 			double time = Math.random() * (end - start) + start;
 			events.add(new Fault(si, time));
 		}
-		write(events);
+		System.out.println(events);
+		//write(events);
 	}
 
 	private static void write(List<Fault> events) throws IOException {

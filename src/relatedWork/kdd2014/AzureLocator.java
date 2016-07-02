@@ -3,6 +3,7 @@ package relatedWork.kdd2014;
 import java.util.*;
 import java.io.*;
 
+import evaluation.Evaluator;
 import util.BiTreeNode;
 import util.Item;
 import util.Route;
@@ -207,50 +208,75 @@ public class AzureLocator {
 
 	}
 
-	public void rank(List<Double> fail_score) {
+	public List<Item> rank(List<Double> fail_score) {
 		double total_score = 0;
-		for(double score : fail_score) {
+		for (double score : fail_score) {
 			total_score += score;
-		
+
 		}
 
 		List<Item> items = new ArrayList<Item>();
-		for(int i = 0; i < edges.size(); i++) {
-			items.add(new Item("link" + edges.get(i), fail_score.get(i)));
+		for (int i = 0; i < edges.size(); i++) {
+			items.add(new Item("link" + edges.get(i), fail_score.get(i) / total_score));
 		}
-		
+
 		Collections.sort(items);
 		
-		System.out.println("total: " + total_score);	
-		
-		for(Item item : items) {
-			System.out.println(item.item_name + ": " + item.value / total_score);
-		}
-			
+		/*
+		for (Item item : items) {
+			System.out.println(item.item_name + ": " + item.value);
+		} */
+
+		return items;
 	}
 
 	public void run() throws IOException {
+		List<List<String>> faults = new ArrayList<List<String>>();
+		faults.add(Arrays.asList("link2-8", "link4-9", "link5-10", "link0-5"));
+		faults.add(Arrays.asList("link3-7", "link5-11", "link0-5", "link4-10"));
+		faults.add(Arrays.asList("link2-8", "link1-2", "link0-3", "link4-10"));
+		faults.add(Arrays.asList("link0-3", "link0-2", "link1-5", "link4-9"));
+		faults.add(Arrays.asList("link2-8", "link0-2", "link0-3", "link3-6"));
+		int k = 4;
+		//////////////////////////////////////////
+		List<Double> precisions = new ArrayList<Double>();
+		List<Integer> mrrs = new ArrayList<Integer>();
+		List<Double> ds = new ArrayList<Double>();
+		
+		for (int i = 1; i <= 5; i++) {
+			AzureLocator al = new AzureLocator("z://LinkCrashDump//ping-" + k + "-" + i + "//");
+			al.getAllPath(); // get all possible shortest paths from i to j
+			al.computeEdgeAndVertexPro(); // compute pro_i_i_e && pro_i_j_v
 
+			// Util.printBiTree(al.paths.get(new Route(12, 72)));
+
+			// failure locator
+			List<Double> link_failure = al.locateLinkFailure();
+			// List<Double> device_failure = al.locateDeviceFailure();
+			List<Item> res = al.rank(link_failure);
+
+			precisions.add(Evaluator.precision_k(res, k, faults.get(i-1)));
+			mrrs.add(Evaluator.MRR(res, faults.get(i-1)));
+			System.out.println(Evaluator.DS(res));
+			ds.add(Evaluator.DS(res));
+			/*
+			 * System.out.println("------------------------------");
+			 * 
+			 * for(int i=0; i<device_failure.size(); i++) {
+			 * System.out.println("node " + i + ": " + device_failure.get(i)); }
+			 */
+
+		}
+		
+		System.out.println("precision@k: " + Util.average(precisions));
+		System.out.println("MRR: " + Util.inverseSum(mrrs));
+		System.out.println("Avg¡¡DS: " + Util.average(ds));
 	}
 
 	public static void main(String[] args) throws IOException {
 		AzureLocator al = new AzureLocator("z://LinkCrashDump//ping-1-1//");
-		al.getAllPath(); // get all possible shortest paths from i to j
-		al.computeEdgeAndVertexPro(); // compute pro_i_i_e && pro_i_j_v
-
-		// Util.printBiTree(al.paths.get(new Route(12, 72)));
-
-		// failure locator
-		List<Double> link_failure = al.locateLinkFailure();
-		//List<Double> device_failure = al.locateDeviceFailure();
-		al.rank(link_failure);
 		
-		/*
-		 * System.out.println("------------------------------");
-		 * 
-		 * for(int i=0; i<device_failure.size(); i++) {
-		 * System.out.println("node " + i + ": " + device_failure.get(i)); }
-		 */
+		al.run();
 		System.out.println();
 
 	}

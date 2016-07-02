@@ -1,13 +1,13 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2016.6.24)  28 JUN 2016 23:02
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2016.6.17)  2 JUL 2016 16:36
 entering extended mode
 **paper.tex
 
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
 aper.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for loaded.
 
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
 ig-alternate-05-2015.cls" (D:\CTEX\MiKTeX\tex\latex\graphics\epsfig.sty
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
@@ -194,7 +194,7 @@ LaTeX Info: Redefining \cite on input line 1408.
 \Urlmuskip=\muskip11
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\a
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\a
 cmcopyright.sty"
 Package: acmcopyright 2014/06/29 v1.2 Copyright statemens for ACM classes
  (D:\CTEX\MiKTeX\tex\latex\xkeyval\xkeyval.sty
@@ -245,7 +245,7 @@ Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
 \ALC@tlm=\skip44
 \algorithmicindent=\skip45
 )
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
 aper.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
 LaTeX Font Info:    ... okay on input line 54.
@@ -273,120 +273,187 @@ LaTeX Font Info:    ... okay on input line 54.
 \makeMPintoPDFobject=\count122
 \everyMPtoPDFconversion=\toks42
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 149.
+LaTeX Font Info:    Try loading font information for U+msa on input line 150.
  (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 149.
+LaTeX Font Info:    Try loading font information for U+msb on input line 150.
 
 (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 149.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 150.
 
 (D:\CTEX\MiKTeX\tex\latex\base\ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-Overfull \hbox (525.59998pt too wide) in paragraph at lines 149--149
- [][][][] 
- []
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 150.
 
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 149.
 (D:\CTEX\MiKTeX\tex\latex\psnfss\t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 149.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 150.
 
 
 (D:\CTEX\MiKTeX\tex\latex\psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 149.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 150.
 
-Overfull \hbox (1.0793pt too wide) in paragraph at lines 151--160
+Overfull \hbox (1.0793pt too wide) in paragraph at lines 153--162
 \T1/aer/m/it/9 Prepar-ing ACM SIG Pro-ceed-ings Us-ing L[]T[]X$\OT1/cmr/m/n/9 2
 []$ \T1/aer/m/it/9 and BibT[]X\T1/aer/m/n/9 .
  []
 
 Excluding 'CCSXML' comment.
-LaTeX Font Info:    Try loading font information for OMS+aer on input line 219.
+LaTeX Font Info:    Try loading font information for OMS+aer on input line 221.
 
  (D:\CTEX\MiKTeX\tex\latex\ae\omsaer.fd
 File: omsaer.fd 1999/12/27
 )
 LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 219.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 221.
  [1{D:/CTEX/UserData/pdftex/config/pdftex.map{Unicode.sfd}{UGBK.sfd}}
 
 
 ]
-Overfull \hbox (1.74832pt too wide) in paragraph at lines 251--251
+Overfull \hbox (1.74832pt too wide) in paragraph at lines 254--254
 []\secfnt DATA CEN-TER NET-WORK AR-CHI-TEC-
  []
 
-<topology.pdf, id=20, 281.88089pt x 176.26251pt>
+<topology.pdf, id=20, 265.09402pt x 172.06584pt>
 File: topology.pdf Graphic file (type pdf)
  <use topology.pdf>
-Package pdftex.def Info: topology.pdf used on input line 263.
-(pdftex.def)             Requested size: 281.8802pt x 176.26207pt.
+Package pdftex.def Info: topology.pdf used on input line 266.
+(pdftex.def)             Requested size: 265.09335pt x 172.0654pt.
 
-Overfull \hbox (41.8802pt too wide) in paragraph at lines 263--264
+Overfull \hbox (25.09335pt too wide) in paragraph at lines 266--267
  [][] 
  []
 
 <system.pdf, id=21, 243.41039pt x 211.93579pt>
 File: system.pdf Graphic file (type pdf)
  <use system.pdf>
-Package pdftex.def Info: system.pdf used on input line 283.
+Package pdftex.def Info: system.pdf used on input line 286.
 (pdftex.def)             Requested size: 243.40977pt x 211.93526pt.
 
-Overfull \hbox (3.40977pt too wide) in paragraph at lines 283--284
+Overfull \hbox (3.40977pt too wide) in paragraph at lines 286--287
  [][] 
  []
 
-[2 <E:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zip
-/topology.pdf> <E:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template
--Jan2015 Zip/system.pdf>]
-Overfull \hbox (3.47081pt too wide) in paragraph at lines 289--290
+
+Overfull \hbox (3.47081pt too wide) in paragraph at lines 292--293
 []\T1/aer/m/n/9 For the de-tec-tion of non-imperetative de-vices, \T1/aer/bx/n/
 9 Traf-fic Col-
  []
 
-
-Overfull \hbox (15.07552pt too wide) detected at line 365
+[2 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zip
+/topology.pdf>] [3 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Temp
+late-Jan2015 Zip/system.pdf>]
+Overfull \hbox (10.96443pt too wide) detected at line 368
 \OML/cmm/m/it/9 S[] \OT1/cmr/m/n/9 = []
  []
 
-[3]
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 422.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 427.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 422.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 427.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 422.
- <ANN.pdf, id=85, 235.01743pt x 162.27325pt>
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 427.
+<ANN.pdf, id=78, 235.01743pt x 162.27325pt>
 File: ANN.pdf Graphic file (type pdf)
  <use ANN.pdf>
-Package pdftex.def Info: ANN.pdf used on input line 433.
+Package pdftex.def Info: ANN.pdf used on input line 438.
 (pdftex.def)             Requested size: 235.01683pt x 162.27286pt.
+ [4]
+<metric.pdf, id=87, 174.16498pt x 70.64493pt>
+File: metric.pdf Graphic file (type pdf)
+ <use metric.pdf>
+Package pdftex.def Info: metric.pdf used on input line 507.
+(pdftex.def)             Requested size: 174.16454pt x 70.64473pt.
 
-Underfull \vbox (badness 1270) has occurred while \output is active []
+Overfull \hbox (2.79883pt too wide) in paragraph at lines 513--514
+[]\T1/aer/bx/n/9 Number of Un-de-tect-ed Crash-es \T1/aer/m/n/9 mea-sures the n
+um-
+ []
 
- [4 <E:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zi
-p/ANN.pdf>]
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
-aper.bbl") [5]
-("E:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+[5 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zip
+/ANN.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2
+015 Zip/metric.pdf>] <r1.pdf, id=158, 235.45164pt x 156.75665pt>
+File: r1.pdf Graphic file (type pdf)
+ <use r1.pdf>
+Package pdftex.def Info: r1.pdf used on input line 554.
+(pdftex.def)             Requested size: 164.81502pt x 109.7289pt.
+
+<r2.pdf, id=159, 239.89424pt x 156.75563pt>
+File: r2.pdf Graphic file (type pdf)
+ <use r2.pdf>
+Package pdftex.def Info: r2.pdf used on input line 555.
+(pdftex.def)             Requested size: 167.92482pt x 109.72818pt.
+
+<r3.pdf, id=160, 231.64442pt x 156.12126pt>
+File: r3.pdf Graphic file (type pdf)
+ <use r3.pdf>
+Package pdftex.def Info: r3.pdf used on input line 564.
+(pdftex.def)             Requested size: 162.15pt x 109.28412pt.
+
+<r4.pdf, id=161, 237.99013pt x 157.391pt>
+File: r4.pdf Graphic file (type pdf)
+ <use r4.pdf>
+Package pdftex.def Info: r4.pdf used on input line 565.
+(pdftex.def)             Requested size: 166.59193pt x 110.17294pt.
+
+<r5.pdf, id=162, 243.0681pt x 161.19923pt>
+File: r5.pdf Graphic file (type pdf)
+ <use r5.pdf>
+Package pdftex.def Info: r5.pdf used on input line 566.
+(pdftex.def)             Requested size: 170.1465pt x 112.83868pt.
+
+<r6.pdf, id=163, 231.64342pt x 156.75665pt>
+File: r6.pdf Graphic file (type pdf)
+ <use r6.pdf>
+Package pdftex.def Info: r6.pdf used on input line 574.
+(pdftex.def)             Requested size: 162.14928pt x 109.7289pt.
+
+<precision.pdf, id=164, 238.6255pt x 161.83362pt>
+File: precision.pdf Graphic file (type pdf)
+ <use precision.pdf>
+Package pdftex.def Info: precision.pdf used on input line 600.
+(pdftex.def)             Requested size: 167.0367pt x 113.28275pt.
+ [6 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zi
+p/r1.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2
+015 Zip/r2.pdf>] <mrr.pdf, id=251, 231.00905pt x 159.29512pt>
+File: mrr.pdf Graphic file (type pdf)
+ <use mrr.pdf>
+Package pdftex.def Info: mrr.pdf used on input line 608.
+(pdftex.def)             Requested size: 161.70522pt x 111.50581pt.
+
+<ds.pdf, id=252, 231.00905pt x 162.46797pt>
+File: ds.pdf Graphic file (type pdf)
+ <use ds.pdf>
+Package pdftex.def Info: ds.pdf used on input line 616.
+(pdftex.def)             Requested size: 161.70522pt x 113.72679pt.
+ [7 <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2015 Zi
+p/r3.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Template-Jan2
+015 Zip/r4.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings Templat
+e-Jan2015 Zip/r5.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceedings T
+emplate-Jan2015 Zip/r6.pdf> <F:/New-Failure-Detector-in-Data-Center/SIG Proceed
+ings Template-Jan2015 Zip/precision.pdf> <F:/New-Failure-Detector-in-Data-Cente
+r/SIG Proceedings Template-Jan2015 Zip/mrr.pdf> <F:/New-Failure-Detector-in-Dat
+a-Center/SIG Proceedings Template-Jan2015 Zip/ds.pdf>]
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
+aper.bbl") [8]
+("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\p
 aper.aux") ) 
 Here is how much of TeX's memory you used:
- 3192 strings out of 495354
- 38250 string characters out of 3183859
- 107164 words of memory out of 3000000
- 6249 multiletter control sequences out of 15000+200000
+ 3251 strings out of 495354
+ 38974 string characters out of 3183859
+ 108192 words of memory out of 3000000
+ 6298 multiletter control sequences out of 15000+200000
  65668 words of font info for 96 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,12n,34p,903b,571s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,12n,34p,969b,641s stack positions out of 5000i,500n,10000p,200000b,50000s
 {D:/CTEX/MiKTeX/fonts/enc/dvips/fontname/8r.enc}<D:/CTEX/MiKTeX/fon
 ts/type1/public/amsfonts/cm/cmbx6.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmbx9.pfb><D:/CTEX/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><
@@ -403,9 +470,9 @@ s/type1/public/amsfonts/cm/cmti9.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/helvetic/u
 hvb8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><D:/CTEX/MiKTeX/f
 onts/type1/urw/times/utmb8a.pfb><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmr8a.pf
 b><D:/CTEX/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (5 pages, 697942 bytes).
+Output written on paper.pdf (8 pages, 936206 bytes).
 PDF statistics:
- 222 PDF objects out of 1000 (max. 8388607)
+ 645 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
 

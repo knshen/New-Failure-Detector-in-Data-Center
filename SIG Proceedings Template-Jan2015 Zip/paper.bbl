@@ -50,17 +50,43 @@ N.~Hayashibara, X.~Defago, R.~Yared, and T.~Katayama.
 \newblock In {\em Reliable Distributed Systems, 2004. Proceedings of the 23rd
   IEEE International Symposium on}, pages 66--78. IEEE, 2004.
 
+\bibitem{henderson2008network}
+T.~R. Henderson, M.~Lacage, G.~F. Riley, C.~Dowell, and J.~Kopena.
+\newblock Network simulations with the ns-3 simulator.
+\newblock {\em SIGCOMM demonstration}, 15:17, 2008.
+
 \bibitem{herodotou2014scalable}
 H.~Herodotou, B.~Ding, S.~Balakrishnan, G.~Outhred, and P.~Fitter.
 \newblock Scalable near real-time failure localization of data center networks.
 \newblock In {\em Proceedings of the 20th ACM SIGKDD international conference
   on Knowledge discovery and data mining}, pages 1689--1698. ACM, 2014.
 
+\bibitem{jensen1996introduction}
+F.~V. Jensen.
+\newblock {\em An introduction to Bayesian networks}, volume 210.
+\newblock UCL press London, 1996.
+
 \bibitem{kandula2005shrink}
 S.~Kandula, D.~Katabi, and J.-P. Vasseur.
 \newblock Shrink: A tool for failure diagnosis in ip networks.
 \newblock In {\em Proceedings of the 2005 ACM SIGCOMM workshop on Mining
   network data}, pages 173--178. ACM, 2005.
+
+\bibitem{mogotsi2010christopher}
+I.~Mogotsi.
+\newblock Christopher d. manning, prabhakar raghavan, and hinrich sch{\"u}tze:
+  Introduction to information retrieval.
+\newblock {\em Information Retrieval}, 13(2):192--195, 2010.
+
+\bibitem{quinlan2014c4}
+J.~R. Quinlan.
+\newblock {\em C4. 5: programs for machine learning}.
+\newblock Elsevier, 2014.
+
+\bibitem{radev2002evaluating}
+D.~R. Radev, H.~Qi, H.~Wu, and W.~Fan.
+\newblock Evaluating web-based question answering systems.
+\newblock {\em Ann Arbor}, 1001:48109, 2002.
 
 \bibitem{rumelhart1988learning}
 D.~E. Rumelhart, G.~E. Hinton, and R.~J. Williams.
@@ -73,6 +99,17 @@ B.~Satzger, A.~Pietzowski, W.~Trumler, and T.~Ungerer.
   systems.
 \newblock In {\em Proceedings of the 2007 ACM symposium on Applied computing},
   pages 551--555. ACM, 2007.
+
+\bibitem{scholkopf1999advances}
+B.~Sch{\"o}lkopf and C.~J. Burges.
+\newblock {\em Advances in kernel methods: support vector learning}.
+\newblock MIT press, 1999.
+
+\bibitem{shannon2001mathematical}
+C.~E. Shannon.
+\newblock A mathematical theory of communication.
+\newblock {\em ACM SIGMOBILE Mobile Computing and Communications Review},
+  5(1):3--55, 2001.
 
 \bibitem{van1998gossip}
 R.~Van~Renesse, Y.~Minsky, and M.~Hayden.

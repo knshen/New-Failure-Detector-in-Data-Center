@@ -64,6 +64,8 @@ public class ServerFailureDetector {
 		br.close();
 	}
 	
+	Map<Integer, List<TimePeriod>> raw_reports = new HashMap<Integer, List<TimePeriod>>();
+	
 	public Map<Integer, List<TimePeriod>> detect(int K, boolean haveLoss, double loss_rate) throws IOException {
 		/**
 		 * i: time periods that report crash of node i 
@@ -81,6 +83,7 @@ public class ServerFailureDetector {
 			// i: slave (monitorable object)
 			// crash report for the server i
 			List<TimePeriod> crash_report = new ArrayList<TimePeriod>();
+			List<TimePeriod> raw_report = new ArrayList<TimePeriod>();
 			
 			List<List<TimePeriod>> ress = new ArrayList<List<TimePeriod>>();
 			for(int master : alr.send_rule.get(i)) {
@@ -88,8 +91,9 @@ public class ServerFailureDetector {
 				ress.add(res);
 			}
 				
-			for(double time = 2; time <= end_time; time += time_unit) {
+			for(double time = 2; time <= end_time; time += time_unit) {			
 				int alerts = 0;
+				int detector_id = -1;
 				for(int k = 0; k < ress.size(); k++) {
 					// k = 0,1,2
 					int master_id = alr.send_rule.get(i).get(k);
@@ -99,10 +103,23 @@ public class ServerFailureDetector {
 							Util.isInPeriod(ress.get(k), time)) {
 						//System.out.println(master_id + " report crash of " + i + " at time: " + time);
 						alerts++;
+						detector_id = master_id;
 					}
 						
 				}
-				
+				if(alerts == 1 && Util.getRackIdByServerId(detector_id) != Util.getRackIdByServerId(i)) {
+					if(raw_report.size() == 0)
+						raw_report.add(new TimePeriod(time, time));
+					else {
+						if((time - raw_report.get(raw_report.size()-1).end) > 1.1 * time_unit) {
+							raw_report.add(new TimePeriod(time, time));
+						}
+						else {
+							raw_report.get(raw_report.size()-1).end = time;
+						}
+					}
+				}
+					
 				if(alerts >= (K+1) / 2) {
 					// server i is decided to be crash !!!	
 					if(crash_report.size() == 0)
@@ -117,7 +134,7 @@ public class ServerFailureDetector {
 					}
 				}
 			}
-			
+			raw_reports.put(i, raw_report);
 			final_report.put(i, crash_report);
 			//System.out.println(i + "  " + crash_report);
 		}
@@ -126,6 +143,8 @@ public class ServerFailureDetector {
 	}
 
 	public Map<Integer, List<TimePeriod>> detectToRCrash(Map<Integer, List<TimePeriod>> alerts) {
+		final double alpha = 0.9;
+		
 		Map<Integer, List<TimePeriod>> tor_alerts = new HashMap<Integer, List<TimePeriod>>();
 		
 		for(double time = 2; time <= end_time; time += time_unit) {
@@ -140,7 +159,7 @@ public class ServerFailureDetector {
 			}
 
 			for(int i=0; i<rack_alerts.size(); i++) {
-				if(rack_alerts.get(i) >= 10) {
+				if(rack_alerts.get(i) >= (int)(20 * alpha)) {
 					if(tor_alerts.containsKey(i)) {
 						List<TimePeriod> list = tor_alerts.get(i);
 						if((time - list.get(list.size()-1).end) >= 1.1 * time_unit) {
@@ -177,18 +196,20 @@ public class ServerFailureDetector {
 	}
 	
 	public void run() throws IOException {
-		int[] num_crash = new int[]{1,5,10,15,20,25,30,35,40,45,50,55,60};
-		for(int i = 0; i < num_crash.length; i++) {
+		double rates[] = new double[]{0.012, 0.014, 0.016, 0.018, 0.02, 0.025 ,0.03 ,0.035 ,0.04};
+		
+		for(int i = 0; i < rates.length; i++) {
 			ServerFailureDetector sfd = new ServerFailureDetector(
-					"z://serverCrashDump//k-5//dump-" + num_crash[i], 
-					true, 
-					"z://crashFile//server-crash-" + num_crash[i] + ".txt",
+					"z://serverCrashDump//k-5//dump-0", 
+					false, 
+					"z://crashFile//server-crash-" + /*num_crash[i] +*/ ".txt",
 					false,
 					null);
 			
-			Map<Integer, List<TimePeriod>> alerts = sfd.detect(5, true, 0.001);	
+			Map<Integer, List<TimePeriod>> alerts = sfd.detect(5, true, rates[i]);	
 			
-			System.out.println("crashes: " + num_crash[i]);
+			System.out.println("loss rate: " + rates[i]);
+			//System.out.println("crashes: " + num_crash[i]);
 			System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, sfd.crashes));
 			System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, sfd.crashes));
 			System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, sfd.crashes));
@@ -197,23 +218,65 @@ public class ServerFailureDetector {
 		}
 	}
 	
+	public void run1() throws IOException {
+		for(int i = 1; i <= 1; i++) {
+			ServerFailureDetector sfd = new ServerFailureDetector(
+					"z://torCrashDump//tor-1-" + i +"//", 
+					false, 
+					"z://crashFile//server-crash-1.txt",
+					true,
+					"z://crashFile//tor-crash-1-" + i + ".txt");
+			
+			Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, 0.001);	
+			
+			/*
+			for(Map.Entry<Integer, List<TimePeriod>> entry : sfd.raw_reports.entrySet()) {
+				if(entry.getValue().size() > 0)
+					System.out.println(entry.getKey() + "  " + entry.getValue());
+			}*/
+			
+			Map<Integer, List<TimePeriod>> tor_alerts = sfd.detectToRCrash(sfd.raw_reports);
+			
+			for(Map.Entry<Integer, List<TimePeriod>> entry : tor_alerts.entrySet()) {
+				if(entry.getValue().size() > 0)
+					System.out.println(entry.getKey() + "  " + entry.getValue());
+			}
+			
+			System.out.println("average detection time: " + Evaluator.avgDetectionTime(tor_alerts, sfd.tor_crashes));
+			System.out.println("mistake rate: " + Evaluator.faultCrashReportRate4ToR(tor_alerts, sfd.tor_crashes));
+			System.out.println("average query accuracy: " + Evaluator.avgQueryAccuracyPro4ToR(tor_alerts, sfd.tor_crashes));
+
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
 		ServerFailureDetector sfd = new ServerFailureDetector(
-				"z://torCrashDump//tor-1//", 
+				"z://torCrashDump//tor-2-1//", 
 				false, 
 				"z://crashFile//server-crash-1.txt",
 				true,
-				"z://crashFile//tor-crash-1.txt");
+				"z://crashFile//tor-crash-2-1.txt");
+		
 		/*
-		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, false, 0.0001);	
-		Map<Integer, List<TimePeriod>> tor_alerts = sfd.detectToRCrash(alerts);
+		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, 0.001);	
+		
+		/*
+		for(Map.Entry<Integer, List<TimePeriod>> entry : sfd.raw_reports.entrySet()) {
+			if(entry.getValue().size() > 0)
+				System.out.println(entry.getKey() + "  " + entry.getValue());
+		}*/
+		
+		/*
+		Map<Integer, List<TimePeriod>> tor_alerts = sfd.detectToRCrash(sfd.raw_reports);
 		
 		for(Map.Entry<Integer, List<TimePeriod>> entry : tor_alerts.entrySet()) {
 			if(entry.getValue().size() > 0)
 				System.out.println(entry.getKey() + "  " + entry.getValue());
 		} 
 		*/
-		sfd.run();
+		
+		sfd.run1();
+		System.out.println();
 	}
 
 }

@@ -255,7 +255,7 @@ A data center is a facility used to house computer systems and associated compon
 
 To limit overheads and to isolate different services, servers are partitioned into virtual LANs (VLANs). All links in the data center use Ethernet as link layer protocol and physical connections are a mix of copper and fiber cables. In addition to the devices in Figure 1, there may exist other devices like load balancers (LBs) and firewalls.
 
-Modern data center usually employs \textit{Equal Cost MultiPath} (ECMP) routing within the data center for fault tolerance, which means that there are multiple paths from source to destination. Thus in this work, we will apply ECMP routing to the simulated network by enabling ECMP routing configurations in NS-3.
+Modern data center usually employs \textit{Equal Cost MultiPath} (ECMP) routing within the data center for fault tolerance, which means that there are multiple paths from source to destination. Thus in this work, we will apply ECMP routing to the simulated network by enabling ECMP routing configurations in ns-3.
 
 % figure
 \begin{figure}
@@ -308,7 +308,7 @@ In $K$-detectors model, each server is monitored by $K$ FDs on different servers
 \begin{equation}
 S_{s,t}=\left\{
     \begin{array}{lcl}
-    \text{suspect} & \text{if} & \|CRM_{s,t}\|\geq\left\lfloor(K+1)/2\right\rfloor \\
+    \text{suspect} & \text{if} & |CRM_{s,t}|\geq\left\lfloor(K+1)/2\right\rfloor \\
 
     \text{trust} && \text{otherwise}
     \end{array}
@@ -327,8 +327,8 @@ To form the $K$-detectors model and also to meet QoS to the greatest extent, we 
     \item Each rack of servers monitor servers of other racks, which vary from different racks averagely.
 \end{enumerate}
 
-\paragraph{Rationale}
-Intuitively, the use of $K$ FDs is able to adapt to bursty-traffic conditions like message loss because the determination of a failure requires at least $\left\lfloor(K+1)/2\right\rfloor$ FDs' agreement. Also, $K$-detectors can prevent crashes of FDs to some extent. Theoretically, a failure can still be detected even when $K-\left\lfloor(K+1)/2\right\rfloor=\left\lfloor K/2\right\rfloor$ of its detectors crashed.
+\subsubsection*{Rationale}
+\quad Intuitively, the use of $K$ FDs is able to adapt to bursty-traffic conditions like message loss because the determination of a failure requires at least $\left\lfloor(K+1)/2\right\rfloor$ FDs' agreement. Also, $K$-detectors can prevent crashes of FDs to some extent. Theoretically, a failure can still be detected even when $K-\left\lfloor(K+1)/2\right\rfloor=\left\lfloor K/2\right\rfloor$ of its detectors crashed.
 
 On the other hand, the fourth specification above can make the best of locality of LAN, which reduces the probability of degeneration on detection time in turn.
 
@@ -337,7 +337,7 @@ Specification five is the presupposition of link failure detection. It is easy t
 The last one is an extension of specification five. It is for the consideration of ToRs' detection, we will discuss it in detail in section 5.4.
 
 \subsection{FD Algorithm}
-Our FD algorithm is almost the same as \textit{Chen} FD \cite{chen2002quality} except for some minor changes.
+FD algorithm is used to decide the status of one monitored object by one FD. Our FD algorithm is almost the same as \textit{Chen} FD \cite{chen2002quality} except for some minor changes.
 
 \begin{equation}
 EA_{l+1} \approx \frac{1}{n}(\sum_{i=1}^{n}A_i - \eta s_i)+(l+1)\eta
@@ -357,7 +357,7 @@ Apart from determination of servers' crashes, \textbf{Crash Decider} is also res
 \begin{equation}
 S_{ToR,t}=\left\{
     \begin{array}{lcl}
-    \text{suspect} & \text{if} & \|\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}\| \\
+    \text{suspect} & \text{if} & |\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}| \\
     && \geq \alpha \cdot m\\
     \text{trust} && \text{otherwise}
     \end{array}
@@ -411,22 +411,22 @@ The failure detection for links is another important part of our detection syste
   \item \textbf{Discrimination.} Because we will provide a short ranked list of suspected objects, this measures to what degree can our approach distinguish between normal links and faulty links.
 \end{itemize}
 
-The key idea of our approach is to capture network traffic changes over time. If the network traffic changes significantly compared with traffic in normal conditions, we believe that there exists failures somewhere in the network. The insight is that network traffic distribution is associated with routing protocol and monitoring relationships of servers, the drastic changes of traffic probably imply failures.
+The key idea of our approach is to capture network traffic changes over time. If the network traffic changes significantly compared with traffic in normal conditions, we believe that there exists failures somewhere in the network. The insight is that network traffic distribution is associated with routing protocol and monitoring relationships of servers, the drastic changes of traffic probably imply failures. For example, if the network topology is just as Figure 1 shows, when the link between the leftmost AR and the leftmost AS fails, the traffic on the leftmost AR will decrease and the rightmost AR's traffic will increase according to ECMP routing.
 
 To collect required traffic data, we simply install \textit{tcpdump} on each router and switch. These data will be collected to \textbf{Traffic Analysis Worker} for further analysis.
 
 In order to model this data analysis problem, this paper proposes a Back Propagation Neural Networks (BPNN) based method to compute failure probability of each link.
 
-\paragraph{Feature Extraction}
-The first step is to extract rational features from raw traffic data. To address this issue, we extract $v \cdot n^2$ features in total. $v$ is number of devices (CRs, ARs, ASs), each device has $n^2$ features where $n$ is the number of racks. In particular, each feature denotes traffic of one direction. Obviously, there are $n$ choices of sources and $n$ choices of destinations, so the total number of possible traffic directions is $n^2$. 
-Formally, the traffic features during a time period $\Delta T$ is presented as \boldmath $x$ 
+\subsubsection*{Feature Extraction}
+\quad The first step is to extract rational features from raw traffic data. To address this issue, we extract $v \cdot n^2$ features in total. $v$ is number of devices (CRs, ARs, ASs), each device has $n^2$ features where $n$ is the number of racks. In particular, each feature denotes traffic of one direction. Obviously, there are $n$ choices of sources and $n$ choices of destinations, so the total number of possible traffic directions is $n^2$.
+Formally, the traffic features during a time period $\Delta T$ is presented as \boldmath $x$
 \unboldmath $=($\boldmath $x_1, x_2, ..., x_v$\unboldmath $)$, \boldmath $x_i$
 \unboldmath $=(x_i^1, x_i^2, ..., x_i^{n^2})$
 where $x_i^j$ stands for direction $j$ traffic of device $i$ in $\Delta T$.
 
-\paragraph{BPNN Model}
-Suppose the number of links is $e$, for each time period $\Delta T$, the output of our model should be
-\boldmath $y$ 
+\subsubsection*{BPNN Model}
+\quad Suppose the number of links is $e$, for each time period $\Delta T$, the output of our model should be
+\boldmath $y$
 \unboldmath $=(y_1, y_2, ..., y_e)$, where $y_i$ denotes failure probability of link $i$. We apply a BPNN model to localize the faulty link during $\Delta T$. As is shown in Figure 3, BPNN is a multi-layer perceptron architecture:
 \begin{figure}
   \centering
@@ -436,12 +436,13 @@ Suppose the number of links is $e$, for each time period $\Delta T$, the output 
 To reduce the computational work of training, we only set one hidden layer, both the hidden layer neurons and output layer neurons utilize Sigmoid function as the activation function. Take the output layer as an example:
 $y_i = Sigmoid(\beta_i - \theta_i)$ where $\theta_i$ is a constant term of the perceptron.
 
-\paragraph{Training of BPNN}
-To train the neural network, we apply the classical error BackPropagation (BP) algorithm \cite{rumelhart1988learning}. BP algorithm is based on gradient descent strategy.
-????? % write BP algorithm?
+\subsubsection*{Training of BPNN}
+\quad To train the neural network, we apply the classical error BackPropagation (BP) algorithm \cite{rumelhart1988learning}. BP algorithm is based on gradient descent strategy.% write BP algorithm?
 
-\paragraph{The Detection Algorithm}
-BPNN model is only able to identify the faulty link during one time unit, in the following part, we will introduce how we can detect multiple faults over time.
+To get train data, we manually disable links to simulate real link failures. To be specific, each time we disable one link for some time. After that, we collect dump data from each router and switch, extracting direction features just as mentioned above. The next step is to split the traffic data into different chunks, with each chunk representing the traffic data within one time unit ($\Delta T$). Each traffic chunk forms one train instance.
+
+\subsubsection*{The Detection Algorithm}
+\quad BPNN model is only able to identify the faulty link during one time unit, in the following part, we will introduce how we can detect multiple faults over time.
 
 First of all, we assume that there are at most one link failure during a time unit ($\Delta T$). This assumption is partially supported by the finding proposed by Gill et. al. They find that on an average, link failures tend to be separated by a period of about one week \cite{gill2011understanding}.
 
@@ -452,36 +453,139 @@ First of all, we assume that there are at most one link failure during a time un
 	\begin{algorithmic}[1]
         \REQUIRE \boldmath $x^t$ \unboldmath$=($\boldmath $x_1^t, x_2^t, ..., x_v^t$\unboldmath $)$
 		\ENSURE $F_i \text{ for } i \in E$
-       
-        \STATE $\text{divide traffic data }$\boldmath $x^t$$\text{ into }$\unboldmath $t/\Delta T \text{ chunks}$
-        
-        \FOR{$\text{each data chunk } $ \boldmath $x$}
-        \STATE \boldmath $y$\unboldmath $=BPNN($\boldmath $x$\unboldmath $)$
-        \ENDFOR
-        \IF
-        
-        \ENDIF
 
+        \STATE $\text{divide traffic data }$\boldmath $x^t$$\text{ into }$\unboldmath $t/\Delta T \text{ chunks}$
+
+        \FOR{$i \in E$}
+            \STATE $F_i \Leftarrow 0$
+        \ENDFOR
+        \FOR{$\text{each data chunk } $ \boldmath $x$}
+        \STATE \boldmath $y$\unboldmath $\Leftarrow BPNN($\boldmath $x$\unboldmath $)$
+            \FOR{$i \in E$}
+                \STATE $F_i \Leftarrow F_i + y_i$
+            \ENDFOR
+        \ENDFOR
+
+        \FOR{\unboldmath $i \in E$}
+            \STATE $F_i \Leftarrow \frac{\Delta T F_i}{t}$
+        \ENDFOR
+        \STATE $\text{sort }$\boldmath $F$\unboldmath$\text{ in descending order}$
 	\end{algorithmic}
 \end{algorithm}
 
-Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input of the algorithm is the refined traffic data over time $T$. Traffic data is then divided into chunks and each chunk represents traffic data of one time unit $\Delta T$ (line 1).
-
-
+Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input of the algorithm is the refined time series traffic data over time $T$. Firstly, traffic data is divided into chunks from beginning to end. Each chunk represents a time unit $\Delta T$ (line 1) of traffic. For each of traffic data chunk, we utilize the trained BPNN model to compute failure score of links during this time unit. The final failure score over $t$ is computed as the arithmetic mean of failure scores of all time units (line 5 to 13). This solution inevitably benefits the early happened faulty links. For example, when there are only one faulty links in the network, the failure score of the sole faulty link will be very high, which in turn makes its final failure score higher. However, it does not matter because we care more about whether it can find as many failures rather than the ranking.
 
 
 \section{Evaluation}
 In this section, we will present how we evaluate our approach in terms of efficiency and effectiveness. Experiments results will also be shown in this section.
 
-\subsection{Experiments Setup}
+\subsection{Experimental Settings}
+To build up a data center network, we deploy ns-3 on PC. ns-3 is a discrete-event network simulator for Internet systems, targeted primarily for research and educational use \cite{henderson2008network}. we install ns-3 on single PC with 2 cores, 3.4 GHz CPU and 4GB RAM. The version of ns-3 we use is ns-3.24.
+
+We set up a simulated data center network following the topology in Figure 1. There are a total of 120 servers (20 servers $\times$ 6 racks), 14 routers and switches and 140 links.
+
+\subsection{Research Questions}
+The objective of our experiments is to validate the effectiveness and efficiency of the proposed approach compared with baselines. For this purpose, we set up the following research questions:
+
+\subsubsection*{RQ1: How about the QoS of K-detectors model?}
+\quad RQ1 evaluates QoS of failure detection for servers. To answer this question, we firstly set four metrics \cite{chen2002quality} corresponding to the QoS in Section 5.1.
+\begin{itemize}
+  \item \textbf{Average Detection Time ($AT_D$)} is the average time that elapses from the crash of a server until the crash is reported.
+  \begin{equation}
+    AT_D = \frac{\sum_i(T_{D,i} - T_{C,i})}{n}
+  \end{equation}
+  where $n$ is the number of detected crashes, $T_{D,i}$ is the detection time of $i$th crash $i$, $T_{C,i}$ is the crash time of $i$th crash.
+
+  \item \textbf{Average Mistake Rate ($AR_M$)} measures the average rate at which a FD suspects a correct object. It equals the number of such mistakes per unit of time. Suppose Figure 4 depicts the monitoring of the object in one time unit, the mistake rate of this FD is two.
+\begin{figure}
+  \centering
+  \includegraphics{metric}
+  \caption{Average Mistake Rate}
+\end{figure}
+
+  \item \textbf{Query Accuracy Probability ($P_A$)} is the probability that the detection system outputs the correct results when queried at a random time.
+
+  \item \textbf{Number of Undetected Crashes} measures the number of ignored real crash servers.
+\end{itemize}
+
+We compare our work with the traditional hierarchical architecture \cite{felber1999failure} in terms of the metrics above.
+
+\subsubsection*{RQ2: Can K-detectors model identify ToR crash effectively?}
+\quad The evaluation of failure detection for ToRs is almost the same as servers. We will evaluate the impact of different values of $\alpha$.
+
+\subsubsection*{RQ3: How about the QoS of BPNN based model?}
+\quad This RQ evaluates whether the proposed approach is more effective in detecting link failures. We make another three metrics:
+\begin{itemize}
+    \item \textbf{Precision@k.} We make the use of this metric in order to evaluate to what degree the detection is accurate. This metric is appropriate because it does not take into account the positions in the list which caters to our requirements \cite{mogotsi2010christopher}.
+    \begin{equation}
+        precision@k = \frac{1}{n}\sum_{i=1}^n \frac{fail_{i,k}}{k}
+    \end{equation}
+    where $fail_{i,k}$ denotes the number of true failures for failure event $i$ in the top $k$ returned results. $n$ is the number of failure events, $k$ equals to the number of true failures. A perfect result is all the $k$ failures are ranked at the top $k$ positions.
+
+    \item \textbf{MRR.} We also make use of Mean Reciprocal Rank (MRR), which is a statistic measure for evaluating a process that produces a ranked list to a sample of queries, the list contains items ordered by probabilities \cite{radev2002evaluating}. It is the average multiplicative inverse of the rank of the first faulty link:
+        \begin{equation}
+            MRR = \frac{1}{n}\sum_{i=1}^n \frac{1}{rank_i}
+        \end{equation}
+
+    \item \textbf{Discriminative Significance} (DS). DS is based on the notion of entropy. Entropy is a measure of unpredictability of information content \cite{shannon2001mathematical}.
+        \begin{equation}
+            DS = -\sum_{i=1}^e F_i \cdot log_2 F_i
+        \end{equation}
+        where $F_i$ is a normalized failure score of link $i$. A smaller DS implies that the results of ranked list is more determinate, which makes it easier for further troubleshooting.
+
+
+\end{itemize}
+
+We will compare this part of our approach with the work of Herodotou et.al \cite{herodotou2014scalable}.
+
+\subsection{Experiments Results}
+
+\subsubsection*{RQ1: QoS of K-detectors Model}
+\quad We evaluate our approach in the presence of different degrees of message loss and server crashes. To be fair, FD parameters of all the methods are set to the same: $\tau_m=0.001$, slide window size $n=100$. Heartbeat message send interval $\eta$ is 100 ms.
+
+\begin{figure}
+  \centering
+  \begin{tabular}{c}
+  \includegraphics[scale=0.7]{r1} \\
+  \includegraphics[scale=0.7]{r2}
+  \end{tabular}
+  \caption{Effect of Message Loss on $P_A$ and $AM_R$}
+\end{figure}
+Figure 5 depicts $P_A$ and $AR_M$ of K-detectors and hierarchical architecture under different number of message loss without server crashes. Both the time and channel of message loss is chosen randomly. When loss rate is under 1\%, 5-detectors has about an 8.2\% improvement in $P_A$ compared with hierarchical architecture. When loss rate is over 0.6\%, 5-detectors makes more mistakes than others, this is probably because other methods make mistakes with relatively longer time. In a nutshell, with a larger parameter $K$, our approach behaves better in the presence of normal message loss. However, it cannot maintain with the increasing number of message loss.
+
+\begin{figure}
+  \centering
+  \begin{tabular}{c}
+  \includegraphics[scale=0.7]{r3} \\
+  \includegraphics[scale=0.7]{r4} \\
+  \includegraphics[scale=0.7]{r5} \\
+  \end{tabular}
+  \caption{Effect of Crashes on $P_A$, $AR_M$ and $AT_D$}
+\end{figure}
+Subsequently, we investigate it when there exists server crashes. We set message loss rate to 0.1\%, both the time and server ID of crashes are selected randomly. As is shown in Figure 6, 5-detectors has a better $P_A$ and $AR_M$ than others in most cases. In terms of $AD_T$, a smaller $K$ results in a quicker detection because it needs fewer FDs to reach an agreement. In general, $AD_T$ of 5-detectors has a 22.4\% increase, while 2-detectors only has a 7.3\% increase compared with hierarchical architecture. Figure 7 shows the number of undetected crashes, hierarchical architecture tends to behave worse than K-detectors, which reveals the \textit{Single Point of Failure} problem of hierarchical architecture.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.7]{r6}
+  \caption{Number of Undetected Crash Servers}
+\end{figure}
+
+\subsubsection*{RQ2: ToR crash Detection}
+\quad To answer this question, 
+
+
+\subsubsection*{RQ3: QoS of BPNN Based Model?}
+\quad To answer this question, we 
+
+
 
 \section{Conclusions}
-This paper proposes a failure detector model for data center networks.
+This paper proposes a complete failure detection approach for data center networks.
 %\end{document}  % This is where a 'short' article might terminate
 
 
 \section{Acknowledgments}
-This work is partially supported by the National High-Technology Research and Development Program of China (Grant No.2014AA01A301).
+This work is partially supported by the National High-Technology Research and Development Program of China under Grant No.2014AA01A301.
 
 %
 % The following two commands are all you need in the

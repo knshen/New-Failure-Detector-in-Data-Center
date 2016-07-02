@@ -73,7 +73,7 @@ public class LinkFailureDetector {
 		//System.out.println();
 	}
 
-	public void detect(String train_dump_dir, String test_dump_dir, String mark) throws Exception {	
+	public List<Item> detect(String train_dump_dir, String test_dump_dir, String mark) throws Exception {	
 		// load train data
 		//dataConstructor(train_dump_dir, "link", true);	
 		// ArffMaker.make("train.arff", instances, classes, class_values); 
@@ -101,10 +101,11 @@ public class LinkFailureDetector {
 		Util.normalize(fs);
 		Collections.sort(fs);
 		
+		/*
 		for(Item item : fs) {	
 			System.out.println(item);
-		}
-			
+		}*/
+		
 		/*
 		for(int i=0; i<res.size(); i++) {
 			System.out.println(i+3);
@@ -120,7 +121,7 @@ public class LinkFailureDetector {
 		} */
 		
 		//System.out.println(Evaluator.discrimination(res.get(i), 21));
-	
+		return fs;	
 	}
 	
 	public void try_it() throws IOException {
@@ -144,14 +145,44 @@ public class LinkFailureDetector {
 		}
 	}
 
+	public void run() throws Exception {
+		List<List<String>> faults = new ArrayList<List<String>>();
+		faults.add(Arrays.asList("link2-8", "link4-9", "link5-10", "link0-5"));
+		faults.add(Arrays.asList("link3-7", "link5-11", "link0-5", "link4-10"));
+		faults.add(Arrays.asList("link2-8", "link1-2", "link0-3", "link4-10"));
+		faults.add(Arrays.asList("link0-3", "link0-2", "link1-5", "link4-9"));
+		faults.add(Arrays.asList("link2-8", "link0-2", "link0-3", "link3-6"));
+		int k = 4;
+		
+		//////////////////////////////////////////
+		List<Double> precisions = new ArrayList<Double>();
+		List<Integer> mrrs = new ArrayList<Integer>();
+		List<Double> ds = new ArrayList<Double>();
+		
+		for (int i = 1; i <= 5; i++) {
+			LinkFailureDetector lfd = new LinkFailureDetector();
+			String mark = "dump-" + k + "-" + i;
+			List<Item> res = lfd.detect("z://",
+					"z://LinkCrashDump//",
+					mark);
+
+			precisions.add(Evaluator.precision_k(res, k, faults.get(i-1)));
+			mrrs.add(Evaluator.MRR(res, faults.get(i-1)));
+			//System.out.println(Evaluator.DS(res));
+			ds.add(Evaluator.DS(res));
+
+		}
+
+		System.out.println("precision@k: " + Util.average(precisions));
+		System.out.println("MRR: " + Util.inverseSum(mrrs));
+		System.out.println("Avg¡¡DS: " + Util.average(ds));
+	}
+	
 	public static void main(String[] args) throws Exception {
 		LinkFailureDetector lfd = new LinkFailureDetector();
 		// lfd.try_it();
 		
-		String mark = "dump-3-5";
-		lfd.detect("z://",
-				"z://LinkCrashDump//",
-				mark);
+		lfd.run();
 		
 		System.out.println();
 	}

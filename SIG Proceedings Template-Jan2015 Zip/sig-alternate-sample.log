@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (MiKTeX 2.9) (preloaded format=xelatex 2016.6.17)  27 JUN 2016 10:37
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (MiKTeX 2.9) (preloaded format=xelatex 2016.6.17)  1 JUL 2016 17:07
 entering extended mode
 **sig-alternate-sample.tex
 
@@ -251,18 +251,18 @@ Requested font "aer9" at 9.0pt
 ))
 ("F:\New-Failure-Detector-in-Data-Center\SIG Proceedings Template-Jan2015 Zip\s
 ig-alternate-sample.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
 Requested font "cmr6" at 6.0pt
  -> cmr6
 Requested font "cmmi9" at 9.0pt
@@ -279,7 +279,7 @@ Requested font "cmex7" at 6.0pt
  -> cmex7
 Requested font "cmex7" at 5.0pt
  -> cmex7
-LaTeX Font Info:    Try loading font information for U+msa on input line 183.
+LaTeX Font Info:    Try loading font information for U+msa on input line 182.
  (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
@@ -289,7 +289,7 @@ Requested font "msam7" at 6.0pt
  -> msam7
 Requested font "msam5" at 5.0pt
  -> msam5
-LaTeX Font Info:    Try loading font information for U+msb on input line 183.
+LaTeX Font Info:    Try loading font information for U+msb on input line 182.
 
 (D:\CTEX\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
@@ -300,7 +300,7 @@ Requested font "msbm7" at 6.0pt
  -> msbm7
 Requested font "msbm5" at 5.0pt
  -> msbm5
-LaTeX Font Info:    Try loading font information for U+lasy on input line 183.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 182.
 
 (D:\CTEX\MiKTeX\tex\latex\base\ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
@@ -312,24 +312,24 @@ Requested font "lasy6" at 6.0pt
 Requested font "lasy5" at 5.0pt
  -> lasy5
 
-Overfull \hbox (10.71048pt too wide) in paragraph at lines 183--183
+Overfull \hbox (10.71048pt too wide) in paragraph at lines 182--182
  []\eaddfnt lleipuner@researchlabs.org| 
  []
 
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 183.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 182.
 (D:\CTEX\MiKTeX\tex\latex\psnfss\t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
 Requested font "ptmr8t" at 7.0pt
  -> ptmr8t
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 183.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 182.
 
 
 (D:\CTEX\MiKTeX\tex\latex\psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 183.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 182.
 Requested font "aer8" at 8.0pt
  -> aer8
 Requested font "cmr8" at 8.0pt
@@ -350,7 +350,7 @@ Requested font "aeti9" at 9.0pt
  -> aeti9
 Requested font "aeti7" at 6.0pt
  -> aeti7
-LaTeX Font Info:    Try loading font information for T1+aett on input line 184.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 183.
 
 
 (D:\CTEX\MiKTeX\tex\latex\ae\t1aett.fd
@@ -361,23 +361,23 @@ Requested font "aett9" at 9.0pt
 Requested font "aer6" at 6.0pt
  -> aer6
 
-Overfull \hbox (1.0793pt too wide) in paragraph at lines 185--194
+Overfull \hbox (1.0793pt too wide) in paragraph at lines 184--193
 \T1/aer/m/it/9 Prepar-ing ACM SIG Pro-ceed-ings Us-ing L[]T[]X$\OT1/cmr/m/n/9 2
 []$ \T1/aer/m/it/9 and BibT[]X\T1/aer/m/n/9 .
  []
 
 Excluding 'CCSXML' comment.
-LaTeX Font Info:    Try loading font information for OMS+aer on input line 253.
+LaTeX Font Info:    Try loading font information for OMS+aer on input line 252.
 
  (D:\CTEX\MiKTeX\tex\latex\ae\omsaer.fd
 File: omsaer.fd 1999/12/27
 )
 LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 253.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 252.
 Requested font "aebx9" at 9.0pt
  -> aebx9
 
-Underfull \hbox (badness 1360) in paragraph at lines 278--278
+Underfull \hbox (badness 1360) in paragraph at lines 277--277
 [][]\T1/aer/m/n/9 Two of these, the \T1/aett/m/n/9 \num-bero-fau-thors \T1/aer/
 m/n/9 and \T1/aett/m/n/9 \alig-nau-
  []
@@ -388,7 +388,7 @@ m/n/9 and \T1/aett/m/n/9 \alig-nau-
 ] [2]
 File: flies.eps Graphic file (type eps)
  <flies.eps>
-Overfull \hbox (67.14749pt too wide) in paragraph at lines 472--473
+Overfull \hbox (67.14749pt too wide) in paragraph at lines 471--472
  [][] 
  []
 
@@ -396,7 +396,7 @@ File: fly.eps Graphic file (type eps)
 <fly.eps>
 
 LaTeX Font Warning: Font shape `T1/aett/bx/n' undefined
-(Font)              using `T1/aett/m/n' instead on input line 480.
+(Font)              using `T1/aett/m/n' instead on input line 479.
 
 File: flies.eps Graphic file (type eps)
 <flies.eps>
@@ -407,7 +407,7 @@ Requested font "aecsc10" at 9.0pt
  -> aecsc10
 \c@definition=\count112
 
-Overfull \hbox (15.60826pt too wide) detected at line 557
+Overfull \hbox (15.60826pt too wide) detected at line 556
 \OML/cmm/m/it/9 l \OT1/cmr/m/n/9 = [] \OML/cmm/m/it/9 f\OT1/cmr/m/n/9 (\OML/cmm
 /m/it/9 x\OT1/cmr/m/n/9 ) = [] [] = [] \OML/cmm/m/it/9 g\OT1/cmr/m/n/9 (\OML/cm
 m/m/it/9 x\OT1/cmr/m/n/9 ) \OMS/cmsy/m/n/9 ^^A [] [] \OT1/cmr/m/n/9 = 0 \OMS/cm

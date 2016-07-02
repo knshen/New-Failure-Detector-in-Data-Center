@@ -8,7 +8,7 @@ import util.Util;
 
 public class DumpAnalyzer {
 	// parameters:
-	public static final String rule_path = "z://ruleFile//rule-5.txt";
+	public static final String rule_path = "z://ruleFile//rule-3.txt";
 	
 	public static String dir;
 

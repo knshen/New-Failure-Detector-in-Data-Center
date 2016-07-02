@@ -133,15 +133,17 @@ public class HierarchyServerDetector extends ServerFailureDetector {
 	}
 
 	public void run() throws IOException {
-		int crash_num[] = new int[]{1,5,10,15,20,25,30,35,40,45,50,55,60};
-		for(int k : crash_num) {
+		double rates[] = new double[]{0.012, 0.014, 0.016, 0.018, 0.02, 0.025 ,0.03 ,0.035 ,0.04};
+
+		for(double rate : rates) {
 			HierarchyServerDetector hsd = new HierarchyServerDetector(
-					"z://serverCrashDump//hie-" + k + "//", 
-					true,
-					"z://crashFile//server-crash-" + k + ".txt");
+					"z://serverCrashDump//hie-0", 
+					false,
+					"z://crashFile//server-crash-" + ".txt");
 			//// enable message loss? loss rate?
-			Map<Integer, List<TimePeriod>> alerts = hsd.detectInHierarchy(true, 0.001);
-			System.out.println(k + ":");
+			Map<Integer, List<TimePeriod>> alerts = hsd.detectInHierarchy(true, rate);
+			
+			System.out.println("rate: " + rate);
 			System.out.println("avg query accurate pro: " + Evaluator.avgQueryAccuracyPro(alerts, hsd.crashes));
 			System.out.println("avg mistake rate: " + Evaluator.faultCrashReportRate(alerts, hsd.crashes));
 			System.out.println("avg detection time: " + Evaluator.avgDetectionTime(alerts, hsd.crashes));
