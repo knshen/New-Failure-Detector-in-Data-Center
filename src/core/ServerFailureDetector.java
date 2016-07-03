@@ -143,7 +143,7 @@ public class ServerFailureDetector {
 	}
 
 	public Map<Integer, List<TimePeriod>> detectToRCrash(Map<Integer, List<TimePeriod>> alerts) {
-		final double alpha = 0.9;
+		final double alpha = 0.4;
 		
 		Map<Integer, List<TimePeriod>> tor_alerts = new HashMap<Integer, List<TimePeriod>>();
 		
@@ -218,14 +218,18 @@ public class ServerFailureDetector {
 		}
 	}
 	
+	// run for ToR detection
 	public void run1() throws IOException {
-		for(int i = 1; i <= 1; i++) {
+		final int num_tor_crash = 3;
+		int server_crash[] = new int[]{0};
+		
+		for(int i : server_crash) {
 			ServerFailureDetector sfd = new ServerFailureDetector(
-					"z://torCrashDump//tor-1-" + i +"//", 
+					"z://torCrashDump//tor-" + num_tor_crash + "-" + i +"//", 
 					false, 
-					"z://crashFile//server-crash-1.txt",
+					"z://crashFile//server-crash-" + i +".txt",
 					true,
-					"z://crashFile//tor-crash-1-" + i + ".txt");
+					"z://crashFile//tor-crash-" + num_tor_crash + ".txt");
 			
 			Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, 0.001);	
 			
@@ -236,26 +240,27 @@ public class ServerFailureDetector {
 			}*/
 			
 			Map<Integer, List<TimePeriod>> tor_alerts = sfd.detectToRCrash(sfd.raw_reports);
-			
+			/*
 			for(Map.Entry<Integer, List<TimePeriod>> entry : tor_alerts.entrySet()) {
 				if(entry.getValue().size() > 0)
 					System.out.println(entry.getKey() + "  " + entry.getValue());
-			}
+			}*/
 			
+			System.out.println("# server crash: " + i + "# tor crash " + num_tor_crash);
 			System.out.println("average detection time: " + Evaluator.avgDetectionTime(tor_alerts, sfd.tor_crashes));
 			System.out.println("mistake rate: " + Evaluator.faultCrashReportRate4ToR(tor_alerts, sfd.tor_crashes));
 			System.out.println("average query accuracy: " + Evaluator.avgQueryAccuracyPro4ToR(tor_alerts, sfd.tor_crashes));
-
+			System.out.println();
 		}
 	}
 	
 	public static void main(String[] args) throws IOException {
 		ServerFailureDetector sfd = new ServerFailureDetector(
-				"z://torCrashDump//tor-2-1//", 
+				"z://torCrashDump//tor-1-1//", 
 				false, 
 				"z://crashFile//server-crash-1.txt",
 				true,
-				"z://crashFile//tor-crash-2-1.txt");
+				"z://crashFile//tor-crash-1.txt");
 		
 		/*
 		Map<Integer, List<TimePeriod>> alerts = sfd.detect(3, true, 0.001);	

@@ -179,3 +179,38 @@
   year={2014},
   publisher={Elsevier}
 }
+
+@book{jensen1996introduction,
+  title={An introduction to Bayesian networks},
+  author={Jensen, Finn V},
+  volume={210},
+  year={1996},
+  publisher={UCL press London}
+}
+
+@inproceedings{tomsic20152w,
+  title={2w-fd: A failure detector algorithm with qos},
+  author={Tomsic, Alejandro and Sens, Pierre and Garcia, Joao and Arantes, Luciana and Sopena, Julien},
+  booktitle={Parallel and Distributed Processing Symposium (IPDPS), 2015 IEEE International},
+  pages={885--893},
+  year={2015},
+  organization={IEEE}
+}
+
+@inproceedings{gillen2007scalable,
+  title={Scalable, adaptive, time-bounded node failure detection},
+  author={Gillen, Matthew and Rohloff, Kurt and Manghwani, Prakash and Schantz, Richard},
+  booktitle={High Assurance Systems Engineering Symposium, 2007. HASE'07. 10th IEEE},
+  pages={179--186},
+  year={2007},
+  organization={IEEE}
+}
+
+@inproceedings{xu2012smart,
+  title={Smart Ring: A Model of Node Failure Detection in High Available Cloud Data Center},
+  author={Xu, Lei and Chen, Wenzhi and Wang, Zonghui and Ni, Huafei and Wu, Jiajie},
+  booktitle={IFIP International Conference on Network and Parallel Computing},
+  pages={279--288},
+  year={2012},
+  organization={Springer}
+}

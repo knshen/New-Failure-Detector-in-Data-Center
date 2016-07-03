@@ -226,9 +226,18 @@ is available on the web page to help you with the
 \keywords{Failure detection; Quality of Service; Data center networks}
 
 \section{Introduction}
-Data center.
+Data center is a pool of resources interconnected using a communication network, a broad range of services (e.g., Web search, data analytic, storage backup) are hosted on data centers. Data center networks play a pivotal role in data centers as they integrate various resources and connect hundreds of thousands devices together (e.g. routers, switches, servers). Due to the scale of data center networks, failures are common and hence automated failure detection can help reduce mean-time-to-recovery and service disruption.
 
-The rest of the paper is organized as follows. Section 2 discusses related work. Section 3 presents data center networks architecture. Section 4 provides an overview of our approach, while the details are described in Section 5. The experimental evaluation along with experiments results is presented in Section 6. Finally, Section 7 concludes this paper.
+However, failure detection in data center networks should not be simplex. On one hand, data center networks are reliable \cite{gill2011understanding} due to the built-in redundancy in data center networks,
+
+This paper makes the following contributions:
+\begin{itemize}
+  \item To the best of our knowledge, 
+  \item 
+  \item 
+\end{itemize}
+
+The rest of the paper is organized as follows. Section 2 discusses related work. Section 3 presents data center networks architecture. Section 4 provides an overview of our approach, while the details are described in Section 5. The experimental evaluation along with experimental results is presented in Section 6. Finally, Section 7 concludes this paper.
 
 \section{Related Work}
 In this section, we will present various relevant works including failure detectors, failure detection architecture in distributed systems and failure detection in data center networks.
@@ -360,16 +369,29 @@ Apart from determination of servers' crashes, \textbf{Crash Decider} is also res
 \begin{equation}
 S_{ToR,t}=\left\{
     \begin{array}{lcl}
-    \text{suspect} & \text{if} & |\left\{s|s\in ToR\right\} \cap \left\{s|S_{s,t}=\text{suspect}\right\}| \\
-    && \geq \alpha \cdot m\\
+    \text{suspect} & \text{if} & | \{s | s \in ToR, \\
+    && CRMO_{s,t} \not = \emptyset, \\
+    && |CRM_{s,t}|=1\} | \geq \alpha \cdot m \\
+
     \text{trust} && \text{otherwise}
     \end{array}
 \right.
 \end{equation}
-where $m$ is the number of servers per rack, $\alpha$ is a  proportionality coefficient measuring how strict the criterion is to determine failure of a ToR. When \textbf{Crash Decider} gets more than $\alpha \cdot m$ crash report messages of servers under the ToR crash, it will report the crash of ToR. The last specification in Section 5.2 ensures that once a ToR is down, each other rack has the chance to find this failure. An extreme counter-example is that if the outside detectors of rack 1 servers are all in rack 2, once ToR of rack 2 is down, \textbf{Crash Decider} never perceives the status of ToR of rack 1.
+where $m$ is the number of servers per rack, $\alpha$ is a  proportionality coefficient measuring how strict the criterion is to determine failure of a ToR. $CRMO_{s,t}$ denotes the collection of crash report messages of $s$ coming from outside racks until time $t$. When \textbf{Crash Decider} gets more than $\alpha \cdot m$ crash report messages of servers under the ToR crash, it will report the crash of ToR. The last specification in Section 5.2 ensures that once a ToR is down, each other rack has the chance to find this failure. An extreme counter-example is that if the outside detectors of rack 1 servers are all in rack 2, once ToR of rack 2 is down, \textbf{Crash Decider} never perceives the status of ToR of rack 1.
 
+\subsubsection*{Upper Bound of $\alpha$}
+Theoretically, a smaller $\alpha$ means a more aggressive detection. We can set an appropriate $\alpha$ empirically by looking back on historical data on ToR crashes. Suppose we have known the ToR crash probability $p$, there are $n$ racks (each one has a ToR) and crashes of ToRs are subject to \textit{binomial distribution}:
+\begin{equation}
+    \begin{aligned}
+        &m_0  = \frac{m}{n-1}(n-k_0) = \frac{m(n-k_0)}{n-1}\\
+        &\alpha \leq \alpha_0  = \frac{m_0}{m} = \frac{n-k_0}{n-1}\\
+        &\text{where } k_0 \text{ is the minimum of } k\\
+        & s.t. \quad Pr(x\leq k) = \sum_{r=0}^k C_n^r p^r(1-p)^{n-r} \geq p_0 \\
+    \end{aligned}
+\end{equation}
+$Pr(x\leq k)$ denotes the probability of number of ToR crashes is no more than $k$, $m_0$ is the number of observed crash report messages, it equals to number of alive ToRs times number of detectors per rack. Consequently, given $p$ and $p_0$, the theoretical upper bound of $\alpha$ should be $\alpha_0$.
+ 
 To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorithm of \textbf{Crash Decider}.
-
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \begin{algorithm}
@@ -390,7 +412,7 @@ To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorit
                     \STATE $S_{i,t_{now}} \leftarrow suspect$
                 \ELSE
                     \STATE $S_{i,t_{now}} \leftarrow trust$
-                    \IF{$|CRM_{s,t_{now}}| = 1$}
+                    \IF{$\text{only one CRM coming from other rack}$}
                     \STATE $failsEachRack.get(rackID)\text{++}$
                     \ENDIF
                 \ENDIF
@@ -406,7 +428,7 @@ To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorit
 		\ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
-It firstly determines the status of each server (line 6 to 14), and then determines the status of ToRs (line 15 to 21).
+It firstly determines the status of each server (line 6 to 16), and then determines the status of ToRs (line 17 to 23). When detecting server failures, \textbf{Crash Decider} also records necessary information to find potential ToR crashes (line 12 to 13).
 
 \subsection{Failure Detection for Links}
 The failure detection for links is another important part of our detection system, this paper presents the following QoS:
@@ -482,7 +504,7 @@ Algorithm 2 shows the algorithm of \textbf{Traffic Analysis Worker}. The input o
 
 
 \section{Evaluation}
-In this section, we will present how we evaluate our approach in terms of efficiency and effectiveness. Experiments results will also be shown in this section.
+In this section, we will present how we evaluate our approach in terms of efficiency and effectiveness. Experimental results will also be shown in this section.
 
 \subsection{Experimental Settings}
 To build up a data center network, we deploy ns-3 on PC. ns-3 is a discrete-event network simulator for Internet systems, targeted primarily for research and educational use \cite{henderson2008network}. we install ns-3 on single PC with 2 cores, 3.4 GHz CPU and 4GB RAM. The version of ns-3 we use is ns-3.24.
@@ -515,8 +537,8 @@ The objective of our experiments is to validate the effectiveness and efficiency
 
 We compare our work with the traditional hierarchical architecture \cite{felber1999failure} in terms of the metrics above.
 
-\subsubsection*{RQ2: Can K-detectors model identify ToR crash effectively?}
-\quad The evaluation of failure detection for ToRs is almost the same as servers. We will evaluate the impact of different values of $\alpha$.
+\subsubsection*{RQ2: Can K-detectors model benefit ToR failure detection?}
+\quad The evaluation of failure detection for ToRs is similar to servers. We will evaluate the impact of different number of server crashes, that is to say, we want to see whether server failures affect the QoS of ToR failure detection. The evaluation metrics are the same as servers.
 
 \subsubsection*{RQ3: How about the QoS of BPNN based model?}
 \quad This RQ evaluates whether the proposed approach is more effective in detecting link failures. We make another three metrics:
@@ -543,7 +565,7 @@ We compare our work with the traditional hierarchical architecture \cite{felber1
 
 We will compare this part of our approach with the work of Herodotou et al. \cite{herodotou2014scalable}.
 
-\subsection{Experiments Results}
+\subsection{Experimental Results}
 
 \subsubsection*{RQ1: QoS of K-detectors Model}
 \quad We evaluate our approach in the presence of different degrees of message loss and server crashes. To be fair, FD parameters of all the methods are set to the same: $\tau_m=0.001$, slide window size $n=100$. Heartbeat message send interval $\eta$ is 100 ms. The whole application is run for 1 min.
@@ -576,10 +598,23 @@ Subsequently, we investigate it when there exists server crashes. We set message
 \end{figure}
 
 \subsubsection*{RQ2: ToR crash Detection}
-\quad To answer this question, 
+\quad To answer this question, we compute the metrics of ToRs failure detection in the presence of different server crashes. On top of this, we randomly make three ToR failure events with failure group size equals to 1, 2 and 3 respectively. In particular, $\alpha$ is set to 0.9, 0.6 and 0.4 when failure group size is 1, 2 and 3 respectively.
+
+The $P_A$ and $AD_T$ are shown in Figure 8. Roughly speaking, size of server crashes has little impact on QoS of ToR failure detection. With the increasing of ToR crashes number, $AD_T$ is better due to a smaller $\alpha$, which means \textbf{Crash Decider} needs fewer crash report messages to determine the failure of a ToR.  
+
+\begin{figure}
+  \centering
+  \begin{tabular}{c}
+  \includegraphics[scale=0.7]{tor-r1} \\
+  \includegraphics[scale=0.7]{tor-r2} \\
+  \end{tabular}
+  \caption{Effect of Server Crashes on $P_A$ and $AT_D$ of ToRs}
+\end{figure}
+
+The main drawback of our approach is that once occurring ToR failures, we cannot detect server crashes within the rack before the ToR recovers.
 
 
-\subsubsection*{RQ3: QoS of BPNN Based Model?}
+\subsubsection*{RQ3: QoS of BPNN Based Model}
 \quad To answer this question, we wants to firstly explain why we select BPNN rather other popular classifiers. We select 3 other algorithms including Decision Tree (C4.5) \cite{quinlan2014c4}, Bayesian Networks (BN) \cite{jensen1996introduction} and Support Vector Machine (SVM) \cite{scholkopf1999advances}. We apply these algorithms to train data by 10-fold cross-validation. Results are all shown in Table 1. Obviously BPNN outperforms other algorithms.
 
 \begin{table}
@@ -619,7 +654,7 @@ We manually make some link failures by disabling links in ns-3, we make 5 random
 
 Figure 8,9 and 10 show the results of out experiments. Our approach has a better performance in terms of percision@k and MRR. In particular, there is an at least 73.3\% precision@k performance, which indicates 73.3\% of the failures can be found at the most top of the suspects averagely.
 
-On the other hand, there is a huge improvement in terms of DS. The approach proposed by Herodotou et al. tends to assign a wider range of failure scores to multiple links, while our approach is better at finding the relevant links. It mainly stems from the fact that our approach is based on a multi-layer perceptron architecture, it can precisely capture the characteristic of each link failure. But one of the drawbacks of our approach is that it requires much data and time to train BPNN offline to ensure its generalization ability, it cannot adapt to network topology changes as well.
+On the other hand, there is a huge improvement in terms of DS. The approach proposed by Herodotou et al. tends to assign a wider range of failure scores to multiple links, while our approach is better at finding the relevant links. It mainly stems from the fact that our approach is based on a multi-layer perceptron architecture, it can precisely capture the characteristic of each link failure. But one of the drawbacks of our approach is that it requires much data and time to train BPNN offline to ensure its generalization ability, it cannot adapt to network topology changes either.
 
 
 

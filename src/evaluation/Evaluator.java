@@ -18,11 +18,14 @@ public class Evaluator {
 			double real_time = entry.getValue();
 			
 			double suspect_time = -1;
-			for(TimePeriod tp : alerts.get(crash_id)) {
-				if(tp.end >= real_time) {
-					suspect_time = tp.begin;
-					break;
+			if(alerts.containsKey(crash_id)) {
+				for(TimePeriod tp : alerts.get(crash_id)) {
+					if(tp.end >= real_time) {
+						suspect_time = tp.begin;
+						break;
+					}
 				}
+
 			}
 			if(suspect_time == -1) {
 				num_crash--;

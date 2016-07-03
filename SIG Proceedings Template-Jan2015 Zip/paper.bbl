@@ -37,6 +37,12 @@ P.~Gill, N.~Jain, and N.~Nagappan.
 \newblock In {\em ACM SIGCOMM Computer Communication Review}, volume~41, pages
   350--361. ACM, 2011.
 
+\bibitem{gillen2007scalable}
+M.~Gillen, K.~Rohloff, P.~Manghwani, and R.~Schantz.
+\newblock Scalable, adaptive, time-bounded node failure detection.
+\newblock In {\em High Assurance Systems Engineering Symposium, 2007. HASE'07.
+  10th IEEE}, pages 179--186. IEEE, 2007.
+
 \bibitem{greenberg2009vl2}
 A.~Greenberg, J.~R. Hamilton, N.~Jain, S.~Kandula, C.~Kim, P.~Lahiri, D.~A.
   Maltz, P.~Patel, and S.~Sengupta.
@@ -111,9 +117,22 @@ C.~E. Shannon.
 \newblock {\em ACM SIGMOBILE Mobile Computing and Communications Review},
   5(1):3--55, 2001.
 
+\bibitem{tomsic20152w}
+A.~Tomsic, P.~Sens, J.~Garcia, L.~Arantes, and J.~Sopena.
+\newblock 2w-fd: A failure detector algorithm with qos.
+\newblock In {\em Parallel and Distributed Processing Symposium (IPDPS), 2015
+  IEEE International}, pages 885--893. IEEE, 2015.
+
 \bibitem{van1998gossip}
 R.~Van~Renesse, Y.~Minsky, and M.~Hayden.
 \newblock A gossip-style failure detection service.
 \newblock In {\em Middleware¡¯98}, pages 55--70. Springer, 1998.
+
+\bibitem{xu2012smart}
+L.~Xu, W.~Chen, Z.~Wang, H.~Ni, and J.~Wu.
+\newblock Smart ring: A model of node failure detection in high available cloud
+  data center.
+\newblock In {\em IFIP International Conference on Network and Parallel
+  Computing}, pages 279--288. Springer, 2012.
 
 \end{thebibliography}
