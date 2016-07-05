@@ -214,3 +214,32 @@
   year={2012},
   organization={Springer}
 }
+
+@inproceedings{xu2012smart,
+  title={Smart Ring: A Model of Node Failure Detection in High Available Cloud Data Center},
+  author={Xu, Lei and Chen, Wenzhi and Wang, Zonghui and Ni, Huafei and Wu, Jiajie},
+  booktitle={IFIP International Conference on Network and Parallel Computing},
+  pages={279--288},
+  year={2012},
+  organization={Springer}
+}
+
+@book{DBLP:series/sbcs/LiuMVLH13,
+  author    = {Yang Liu and
+               Jogesh K. Muppala and
+               Malathi Veeraraghavan and
+               Dong Lin and
+               Mounir Hamdi},
+  title     = {Data Center Networks - Topologies, Architectures and Fault-Tolerance
+               Characteristics},
+  series    = {Springer Briefs in Computer Science},
+  publisher = {Springer},
+  year      = {2013},
+  url       = {http://dx.doi.org/10.1007/978-3-319-01949-9},
+  doi       = {10.1007/978-3-319-01949-9},
+  isbn      = {978-3-319-01948-2},
+  timestamp = {Tue, 26 Nov 2013 16:42:48 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/series/sbcs/LiuMVLH13},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+homebrowsesearchabout

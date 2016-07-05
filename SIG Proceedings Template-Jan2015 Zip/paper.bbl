@@ -78,6 +78,12 @@ S.~Kandula, D.~Katabi, and J.-P. Vasseur.
 \newblock In {\em Proceedings of the 2005 ACM SIGCOMM workshop on Mining
   network data}, pages 173--178. ACM, 2005.
 
+\bibitem{DBLP:series/sbcs/LiuMVLH13}
+Y.~Liu, J.~K. Muppala, M.~Veeraraghavan, D.~Lin, and M.~Hamdi.
+\newblock {\em Data Center Networks - Topologies, Architectures and
+  Fault-Tolerance Characteristics}.
+\newblock Springer Briefs in Computer Science. Springer, 2013.
+
 \bibitem{mogotsi2010christopher}
 I.~Mogotsi.
 \newblock Christopher d. manning, prabhakar raghavan, and hinrich sch{\"u}tze:
