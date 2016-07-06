@@ -186,6 +186,54 @@ def draw_ds(labels, data):
 
     plt.show()
 
+##########################################################
+def draw_tor_accuracy(names):
+    crashes = readData('z://plotData//#server-crash.txt')
+    data1 = readData('z://plotData//accurate-1.txt')
+    data2 = readData('z://plotData//accurate-2.txt')
+    data3 = readData('z://plotData//accurate-3.txt')
+
+    p1, = plt.plot(crashes, data1, 'k.-', linewidth=0.8)
+    p2, = plt.plot(crashes, data2, 'bo--', linewidth=0.8)
+    p3, = plt.plot(crashes, data3, 'r^-.', linewidth=0.8)
+
+    plt.xlabel('Number of Crash Servers', fontsize=7)  # make axis labels
+    plt.ylabel('Query Accuracy Probability', fontsize=7)
+
+    # plt.xlim(0, 0.05)
+    plt.ylim(0.5, 1)
+
+    leg = plt.legend((p1, p2, p3), (names[0], names[1], names[2]), loc='upper left', prop={'size': 5})
+    leg.draggable(state=True)
+
+    plt.tick_params(axis='x', labelsize=5)
+    plt.tick_params(axis='y', labelsize=5)
+    plt.show()
+
+def draw_tor_time(names):
+    crashes = readData('z://plotData//#server-crash.txt')
+    data1 = readData('z://plotData//time-1.txt')
+    data2 = readData('z://plotData//time-2.txt')
+    data3 = readData('z://plotData//time-3.txt')
+
+    p1, = plt.plot(crashes, data1, 'k.-', linewidth=0.8)
+    p2, = plt.plot(crashes, data2, 'bo--', linewidth=0.8)
+    p3, = plt.plot(crashes, data3, 'r^-.', linewidth=0.8)
+
+    plt.xlabel('Number of Crash Servers', fontsize=7)  # make axis labels
+    plt.ylabel('Average Detection Time', fontsize=7)
+
+    # plt.xlim(0, 0.05)
+    plt.ylim(0.3, 0.65)
+
+    leg = plt.legend((p1, p2, p3), (names[0], names[1], names[2]), loc='upper left', prop={'size': 5})
+    leg.draggable(state=True)
+
+    plt.tick_params(axis='x', labelsize=5)
+    plt.tick_params(axis='y', labelsize=5)
+    plt.show()
+
+
 names = ['Hierarchical Architecture',
          'K = 2',
          'K = 3',
@@ -208,5 +256,11 @@ data_ds = [[5.4978, 6.2113, 6.1604, 6.2652],
            [0.1933, 1.0314, 0.7975, 1.4277]]
 
 #draw_pre(labels, data_precision)
-draw_mrr(labels, data_mrr)
+#draw_mrr(labels, data_mrr)
 #draw_ds(labels, data_ds)
+
+tor_labels = ['Number of ToR Crashes is 1',
+                   'Number of ToR Crashes is 2',
+                   'Number of ToR Crashes is 3']
+#draw_tor_accuracy(tor_labels)
+draw_tor_time(tor_labels)

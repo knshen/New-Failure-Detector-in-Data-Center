@@ -362,7 +362,7 @@ S_{ToR,t}=\left\{
 where $m$ is the number of servers per rack, $\alpha$ is a  proportionality coefficient measuring how strict the criterion is to determine failure of a ToR. $CRMO_{s,t}$ denotes the collection of crash report messages of $s$ coming from outside racks until time $t$. When \textbf{Crash Decider} gets more than $\alpha \cdot m$ crash report messages of servers under the ToR crash, it will report the crash of ToR. The last specification in Section 5.2 ensures that once a ToR is down, each other rack has the chance to find this failure. Suppose there are $n$ racks in total, according to this specification, for each rack $r$, each other rack will monitor $m/(n-1)$ servers of rack $r$. An extreme counter-example is that if the outside detectors of rack 1 servers are all in rack 2, once ToR of rack 2 is down, \textbf{Crash Decider} never perceives the status of ToR of rack 1.
 
 \subsubsection*{Upper Bound of $\alpha$}
-Theoretically, a smaller $\alpha$ means a more aggressive detection. We can set an appropriate $\alpha$ empirically by looking back on historical data on ToR crashes. Suppose we have known the ToR crash probability $p$, there are $n$ racks (each one has a ToR) and crashes of ToRs are subject to \textit{binomial distribution}. When there are $k$ ToR crashes, the number of server crash report messages we can observe $m^\prime$ should be 
+Theoretically, a smaller $\alpha$ means a more aggressive detection. We can set an appropriate $\alpha$ empirically by looking back on historical data on ToR crashes. Suppose we have known the ToR crash probability $p$, there are $n$ racks (each one has a ToR) and crashes of ToRs are subject to \textit{binomial distribution}. When there are $k$ ToR crashes, the number of server crash report messages we can observe $m^\prime$ should be
 \begin{equation}
     m^\prime  = \frac{m}{n-1}(n-k) = \frac{m(n-k)}{n-1}
 \end{equation}
@@ -379,7 +379,7 @@ Next, if given a confidence parameter $p_0$,
     \end{aligned}
 \end{equation}
 $Pr(x\leq k)$ denotes the probability of number of ToR crashes is no more than $k$. Hence the theoretical upper bound of $\alpha$ is $\alpha_0$. Actually, because of server crashes, the number of crash report messages \textbf{Crash Decider} can receive may less than observe $m_0^\prime$, so the value of $\alpha$ should be less than its upper bound.
- 
+
 To sum up, Algorithm 1 illustrates the pseudo-code for overall detection algorithm of \textbf{Crash Decider}.
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -556,7 +556,7 @@ We will compare this part of our approach with the work of Herodotou et al. \cit
 
 \subsection{Experimental Results}
 
-\subsubsection*{RQ1: Server crash detection}
+\subsubsection*{RQ1: Server failure detection}
 \quad We evaluate our approach in the presence of different degrees of message loss and server crashes. To be fair, FD parameters of all the methods are set to the same: $\tau_m=0.001$, slide window size $n=100$. Heartbeat message send interval $\eta$ is 100 ms. The whole application is run for 1 min.
 
 \begin{figure}[t]
@@ -588,10 +588,10 @@ Subsequently, we investigate it when there exists server crashes. We set message
   \caption{Number of Undetected Crash Servers}
 \end{figure}
 
-\subsubsection*{RQ2: ToR crash Detection}
+\subsubsection*{RQ2: ToR failure Detection}
 \quad To answer this question, we compute the metrics of ToRs failure detection in the presence of different server crashes. On top of this, we randomly make three ToR failure events with failure group size equals to 1, 2 and 3 respectively. In particular, $\alpha$ is set to 0.9, 0.6 and 0.4 when failure group size is 1, 2 and 3 respectively.
 
-The $P_A$ and $AD_T$ are shown in Figure 8. Roughly speaking, size of server crashes has little impact on QoS of ToR failure detection. With the increasing of ToR crashes number, $AD_T$ is better due to a smaller $\alpha$, which means \textbf{Crash Decider} needs fewer crash report messages to determine the failure of a ToR.  
+$AR_M$ is all 0 for all the failure events. The $P_A$ and $AD_T$ are shown in Figure 8. Roughly speaking, size of server crashes has little impact on QoS of ToR failure detection. With the increasing of ToR crashes number, $AD_T$ is better due to a smaller $\alpha$, which means \textbf{Crash Decider} needs fewer crash report messages to determine the failure of a ToR.
 
 \begin{figure}[t]
   \centering
@@ -605,7 +605,7 @@ The $P_A$ and $AD_T$ are shown in Figure 8. Roughly speaking, size of server cra
 The main drawback of our approach is that once occurring ToR failures, we cannot detect server crashes within the rack before the ToR recovers.
 
 
-\subsubsection*{RQ3: QoS of BPNN Based Model}
+\subsubsection*{RQ3: Link failure detection}
 \quad To answer this question, we wants to firstly explain why we select BPNN rather other popular classifiers. We select 3 other algorithms including Decision Tree (C4.5) \cite{quinlan2014c4}, Bayesian Networks (BN) \cite{jensen1996introduction} and Support Vector Machine (SVM) \cite{scholkopf1999advances}. We apply these algorithms to train data by 10-fold cross-validation. Results are all shown in Table 1. Obviously BPNN outperforms other algorithms.
 
 \begin{table}
@@ -636,7 +636,7 @@ The main drawback of our approach is that once occurring ToR failures, we cannot
   \includegraphics[scale=0.7]{ds} \\
   \caption{DS of Different Failure Group Size}
 \end{figure}
-Empirically, parameters for BPNN is set as follows: learning rate equals 0.3, number of iterations equals 500, momentum equals 0.2, number of neurons at the hidden layer is $(\# attributes + \# classes) / 2$, $\Delta T = 1 $ s. The selection of $\Delta T$ is a tradeoff, when $\Delta T$ grows bigger, it may contain multiple failures which violates our assumption, while a smaller $\Delta T$ may add more occasionality to traffic data. 
+Empirically, parameters for BPNN is set as follows: learning rate equals 0.3, number of iterations equals 500, momentum equals 0.2, number of neurons at the hidden layer is $(\# attributes + \# classes) / 2$, $\Delta T = 1 $ s. The selection of $\Delta T$ is a tradeoff, when $\Delta T$ grows bigger, it may contain multiple failures which violates our assumption, while a smaller $\Delta T$ may add more occasionality to traffic data.
 
 We manually make some link failures by disabling links in ns-3, we make 5 random failure events for different size of failure group respectively. Both the link ID and failure time are selected randomly. As Gill et al. finds that link failures tend to be isolated \cite{gill2011understanding}. Only 41\% of the link failure groups contain more than one faults, only 10\% contain more than four faults. Consequently we only make failure events whose failure group size is no more than four.
 
@@ -655,7 +655,7 @@ This work is partially supported by the National High-Technology Research and De
 
 
 \bibliographystyle{abbrv}
-\bibliography{paper}  
+\bibliography{paper}
 
 \end{document}
 
